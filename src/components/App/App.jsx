@@ -1,16 +1,18 @@
 import './App.scss';
+import { ThemeProvider } from '@mui/material/styles';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
+import theme from '../../styles/theme';
 
 function App() {
   return (
-    <div>
-      <Header />
-      <div className="container">
-        <p>milieu</p>
+    <ThemeProvider theme={theme}>
+      <div>
+        <Header color="primary" />
+        <div />
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </ThemeProvider>
   );
 }
 
