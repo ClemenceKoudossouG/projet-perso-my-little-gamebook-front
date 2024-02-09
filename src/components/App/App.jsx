@@ -1,7 +1,12 @@
 import './App.scss';
+import PlayStories from '../PlayStories/PlayStories';
 
 function App() {
-  return <div className="container">Hello World</div>;
+  return (
+    <div>
+      <PlayStories />
+    </div>
+  );
 }
 
 export default App;

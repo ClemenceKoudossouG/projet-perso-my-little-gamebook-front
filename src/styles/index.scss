@@ -1,9 +1,10 @@
-@use "reset";
-@use "variables" as v;
+@use 'reset';
+@use 'variables' as v;
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+  font-family: 'Bree Serif', serif;
+  font-family: 'Jomhuria', serif;
+  line-height: 1rem;
   font-weight: 400;
 
   font-synthesis: none;

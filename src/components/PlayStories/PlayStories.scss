@@ -1,0 +1,15 @@
+@use '@scssVariables' as v;
+
+.img {
+  width: 100%;
+}
+
+.container {
+  width: 100%;
+  margin: auto;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-evenly;
+}
