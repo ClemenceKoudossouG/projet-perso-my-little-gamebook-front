@@ -1,9 +1,19 @@
 import './App.scss';
 import { ThemeProvider } from '@mui/material/styles';
-import SignUpSide from '../SignUp/SignUp';
+import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
+import theme from '../../styles/theme';
 
 function App() {
-  return <SignUpSide />;
+  return (
+    <ThemeProvider theme={theme}>
+      <div>
+        <Header color="primary" />
+        <div />
+        <Footer />
+      </div>
+    </ThemeProvider>
+  );
 }
 
 export default App;
