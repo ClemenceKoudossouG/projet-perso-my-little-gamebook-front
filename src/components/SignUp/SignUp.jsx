@@ -94,10 +94,10 @@ export default function SignUpSide() {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
+                id="pseudo"
                 label="Pseudo"
-                name="email"
-                autoComplete="email"
+                name="pseudo"
+                autoComplete="pseudo "
                 autoFocus
               />
               <TextField
