@@ -1,7 +1,9 @@
 import './App.scss';
+import { ThemeProvider } from '@mui/material/styles';
+import SignUpSide from '../SignUp/SignUp';
 
 function App() {
-  return <div className="container">Hello World</div>;
+  return <SignUpSide />;
 }
 
 export default App;
