@@ -1,10 +1,10 @@
 import './App.scss';
-import PlayStories from '../PlayStories/PlayStories';
+import SignIn from '../SignIn/SignIn';
 
 function App() {
   return (
     <div>
-      <PlayStories />
+      <SignIn />
     </div>
   );
 }
