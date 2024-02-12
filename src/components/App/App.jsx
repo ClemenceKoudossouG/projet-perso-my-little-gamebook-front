@@ -5,6 +5,7 @@ import Footer from '../Footer/Footer';
 import theme from '../../styles/theme';
 import SignUpSide from '../SignUp/SignUp';
 import Home from '../Home/Home';
+import SignIn from '../SignIn/SignIn';
 import { Routes, Route } from 'react-router-dom';
 
 function App() {
