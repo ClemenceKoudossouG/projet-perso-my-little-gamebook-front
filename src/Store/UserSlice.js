@@ -1,4 +1,3 @@
-
 import { createSlice } from '@reduxjs/toolkit';
 
 
@@ -13,6 +12,13 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    SubmitLogin: (state, action) => {
+      return {
+        ...state,
+        email: action.payload.email,
+        password: action.payload.password,
+      };
+    },
     ChangeFieldValue: (state, action) => {
       if (action.payload.inputName === 'logged') {
         return {
@@ -35,7 +41,8 @@ const userSlice = createSlice({
   },
 });
 
-export const { ChangeFieldValue, handleSuccessfulLogin } = userSlice.actions;
+export const { ChangeFieldValue, handleSuccessfulLogin, SubmitLogin } =
+  userSlice.actions;
 
 // Définition des types pour chaque action
 export const ChangeFieldValueType = 'user/ChangeFieldValue';
@@ -43,9 +50,8 @@ export const HandleSuccessfulLoginType = 'user/handleSuccessfulLogin';
 export const SubmitLoginType = 'user/submitLogin';
 
 // Ajout d'une action pour la soumission du formulaire de connexion
-export const submitLogin = () => ({
-  type: SubmitLoginType,
-});
+// export const submitLogin = () => ({
+//   type: SubmitLoginType,
+// });
 
-
-export default userSlice.reducer; 
+export default userSlice.reducer;

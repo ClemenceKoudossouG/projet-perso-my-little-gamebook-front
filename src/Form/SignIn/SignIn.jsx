@@ -11,33 +11,33 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { ChangeFieldValue } from '@/Store/UserSlice'; // Importer l'action ChangeFieldValue depuis votre slice Redux
+import { SubmitLogin } from '@/Store/UserSlice';
 
 const defaultTheme = createTheme();
 
 export default function SignInSide() {
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState({
+  const [formValues, setFormValues] = useState({
     email: '',
     password: '',
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
+    console.log(name);
+    console.log(value);
+
+    setFormValues({
+      ...formValues,
       [name]: value,
-    }));
+    });
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(
-      ChangeFieldValue({ inputName: 'email', inputValue: formData.email })
-    );
-    dispatch(
-      ChangeFieldValue({ inputName: 'password', inputValue: formData.password })
-    );
+    console.log(formValues);
+    dispatch(SubmitLogin(formValues));
+    dispatch({ type: 'SUBMIT_LOGIN' });
   };
 
   return (
@@ -91,7 +91,7 @@ export default function SignInSide() {
                 name="email"
                 autoComplete="email"
                 autoFocus
-                value={formData.email}
+                value={formValues.email}
                 onChange={handleChange}
               />
               <TextField
@@ -103,7 +103,7 @@ export default function SignInSide() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                value={formData.password}
+                value={formValues.password}
                 onChange={handleChange}
               />
               <Button

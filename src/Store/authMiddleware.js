@@ -1,8 +1,10 @@
-import { handleSuccessfulLogin } from './UserSlice';
-import { submitLogin } from './UserSlice'; // Ajout de l'action de soumission du formulaire
+import { handleSuccessfulLogin, SubmitLogin, SubmitLoginType } from './UserSlice';
 
 const authMiddleware = (store) => (next) => (action) => {
-  if (action.type === submitLogin.type) { // Utilisation du type d'action correct
+  if (action.type === 'SUBMIT_LOGIN') {
+    console.log('middleware after if?');
+    console.log(store.getState().user);
+    // Utilisation du type d'action correct
     fetch('http://localhost:3002/login', {
       method: 'POST',
       headers: {
