@@ -9,10 +9,25 @@ import MenuBookRoundedIcon from '@mui/icons-material/MenuBookRounded';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useTheme } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
+import { handleLogOut } from '@/Store/UserSlice';
+import store from '@/Store/index';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 export default function ButtonAppBar() {
   const theme = useTheme();
-  let isLogged = false;
+
+  const logged = useSelector((state) => state.user.logged);
+
+  const handleClickLogOut = () => {
+    console.log('here');
+    handleLogOut();
+  };
+
+  // useEffect(() => {
+  //  console.log('render header');
+  //  const Logged = store.getState().user.logged;
+  // }, []);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -26,7 +41,7 @@ export default function ButtonAppBar() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             My Little GameBook
           </Typography>
-          {!isLogged && (
+          {!logged && (
             <>
               <Button color="inherit">
                 <Link to="SignInSide">Sign In</Link>
@@ -36,7 +51,7 @@ export default function ButtonAppBar() {
               </Button>
             </>
           )}
-          {isLogged && (
+          {logged && (
             <>
               <IconButton
                 size="large"
@@ -48,8 +63,8 @@ export default function ButtonAppBar() {
                   <AccountCircleIcon />
                 </Link>
               </IconButton>
-              <Button color="inherit">
-                <Link to="LogOut">Log Out</Link>
+              <Button onClick={handleClickLogOut} color="inherit">
+                Log Out
               </Button>
             </>
           )}

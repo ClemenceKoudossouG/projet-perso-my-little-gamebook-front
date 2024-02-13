@@ -14,17 +14,38 @@ import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { SubmitNewUser } from '@/Store/UserSlice';
 
 const defaultTheme = createTheme();
 
 export default function SignUpSide() {
+  const dispatch = useDispatch();
+  const [formValues, setFormValues] = useState({
+    email: '',
+    password: '',
+    firstName: '',
+    lastName: '',
+    pseudo: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    console.log(name);
+    console.log(value);
+
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    console.log(formValues);
+    dispatch(SubmitNewUser(formValues));
+    dispatch({ type: 'SUBMIT_NEWUSER' });
   };
 
   return (
@@ -79,6 +100,8 @@ export default function SignUpSide() {
                     id="firstName"
                     label="First Name"
                     autoFocus
+                    value={formValues.firstName}
+                    onChange={handleChange}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -89,6 +112,8 @@ export default function SignUpSide() {
                     label="Last Name"
                     name="lastName"
                     autoComplete="family-name"
+                    value={formValues.lastName}
+                    onChange={handleChange}
                   />
                 </Grid>
               </Grid>
@@ -101,6 +126,8 @@ export default function SignUpSide() {
                 name="pseudo"
                 autoComplete="pseudo "
                 autoFocus
+                value={formValues.pseudo}
+                onChange={handleChange}
               />
               <TextField
                 margin="normal"
@@ -111,6 +138,8 @@ export default function SignUpSide() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                value={formValues.email}
+                onChange={handleChange}
               />
               <TextField
                 margin="normal"
@@ -121,6 +150,8 @@ export default function SignUpSide() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={formValues.password}
+                onChange={handleChange}
               />
 
               <Button

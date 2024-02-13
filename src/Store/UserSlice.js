@@ -6,6 +6,9 @@ export const initialState = {
   email: '',
   password: '',
   token: '',
+  firstName: '',
+  lastName: '',
+  pseudo: '',
 };
 
 const userSlice = createSlice({
@@ -19,39 +22,44 @@ const userSlice = createSlice({
         password: action.payload.password,
       };
     },
-    ChangeFieldValue: (state, action) => {
-      if (action.payload.inputName === 'logged') {
-        return {
-          ...state,
-          logged: action.payload.inputValue,
-        };
-      }
+    handleSuccessfulLogin: (state, action) => {
       return {
         ...state,
-        [action.payload.inputName]: action.payload.inputValue,
+        ...action.payload,
+        logged: true,
+        password: '',
       };
     },
-    handleSuccessfulLogin: (state, action) => {
+    SubmitNewUser: (state, action) => {
+      return {
+        ...state,
+        email: action.payload.email,
+        password: action.payload.password,
+        firstName: action.payload.firstName,
+        lastName: action.payload.lastName,
+        pseudo: action.payload.pseudo,
+      };
+    },
+    handleSuccessufUserCreation: (state, action) => {
       return {
         ...state,
         ...action.payload,
         logged: true,
       };
     },
+    handleLogOut: () => {
+      console.log('here');
+      return {
+        initialState,
+      };
+    },
   },
 });
 
-export const { ChangeFieldValue, handleSuccessfulLogin, SubmitLogin } =
-  userSlice.actions;
+export const { handleSuccessfulLogin, SubmitLogin, SubmitNewUser, handleSuccessufUserCreation, handleLogOut } = userSlice.actions;
 
 // Définition des types pour chaque action
-export const ChangeFieldValueType = 'user/ChangeFieldValue';
 export const HandleSuccessfulLoginType = 'user/handleSuccessfulLogin';
 export const SubmitLoginType = 'user/submitLogin';
-
-// Ajout d'une action pour la soumission du formulaire de connexion
-// export const submitLogin = () => ({
-//   type: SubmitLoginType,
-// });
 
 export default userSlice.reducer;
