@@ -9,7 +9,7 @@ function Home() {
       <div>
         <HomeBg />
       </div>
-      <div className="container">
+      <div className="HomePageContainer">
         <PlayStory />
         <ReviewStory />
       </div>

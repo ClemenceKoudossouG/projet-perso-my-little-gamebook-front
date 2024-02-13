@@ -1,10 +1,7 @@
-import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
@@ -12,37 +9,35 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
-// TODO remove, this demo shouldn't need to reset the theme.
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { ChangeFieldValue } from '@/Store/UserSlice'; // Importer l'action ChangeFieldValue depuis votre slice Redux
 
 const defaultTheme = createTheme();
 
 export default function SignInSide() {
+  const dispatch = useDispatch();
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    dispatch(
+      ChangeFieldValue({ inputName: 'email', inputValue: formData.email })
+    );
+    dispatch(
+      ChangeFieldValue({ inputName: 'password', inputValue: formData.password })
+    );
   };
 
   return (
@@ -96,6 +91,8 @@ export default function SignInSide() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                value={formData.email}
+                onChange={handleChange}
               />
               <TextField
                 margin="normal"
@@ -106,10 +103,8 @@ export default function SignInSide() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-              />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
+                value={formData.password}
+                onChange={handleChange}
               />
               <Button
                 type="submit"
@@ -131,7 +126,6 @@ export default function SignInSide() {
                   </Link>
                 </Grid>
               </Grid>
-              <Copyright sx={{ mt: 5 }} />
             </Box>
           </Box>
         </Grid>

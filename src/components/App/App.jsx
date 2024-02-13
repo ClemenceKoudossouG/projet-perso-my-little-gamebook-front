@@ -1,12 +1,12 @@
 import './App.scss';
 import { ThemeProvider } from '@mui/material/styles';
+import { Routes, Route } from 'react-router-dom';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import theme from '../../styles/theme';
-import SignUpSide from '../SignUp/SignUp';
-import Home from '../Home/Home';
-import SignIn from '../SignIn/SignIn';
-import { Routes, Route } from 'react-router-dom';
+import SignUpSide from '@/Form/SignUp/SignUp';
+import HomePage from '../HomePage/HomePage';
+import SignInSide from '@/Form/SignIn/SignIn';
 
 function App() {
   return (
@@ -17,7 +17,8 @@ function App() {
         </div>
         <Routes>
           <Route path="/SignUpSide" element={<SignUpSide />} />
-          <Route path="/" element={<Home />} />
+          <Route path="/SignInSide" element={<SignInSide />} />
+          <Route path="/" element={<HomePage />} />
         </Routes>
         <Footer />
       </div>
