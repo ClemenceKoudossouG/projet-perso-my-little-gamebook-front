@@ -25,9 +25,9 @@ export default function SignUpSide() {
   const [formValues, setFormValues] = useState({
     email: '',
     password: '',
-    firstName: '',
-    lastName: '',
-    pseudo: '',
+    firstname: '',
+    lastname: '',
+    alias: '',
   });
 
   const handleChange = (e) => {
@@ -94,13 +94,13 @@ export default function SignUpSide() {
                 <Grid item xs={12} sm={6}>
                   <TextField
                     autoComplete="given-name"
-                    name="firstName"
+                    name="firstname"
                     required
                     fullWidth
-                    id="firstName"
+                    id="firstname"
                     label="First Name"
                     autoFocus
-                    value={formValues.firstName}
+                    value={formValues.firstname}
                     onChange={handleChange}
                   />
                 </Grid>
@@ -108,11 +108,11 @@ export default function SignUpSide() {
                   <TextField
                     required
                     fullWidth
-                    id="lastName"
+                    id="lastname"
                     label="Last Name"
-                    name="lastName"
+                    name="lastname"
                     autoComplete="family-name"
-                    value={formValues.lastName}
+                    value={formValues.lastname}
                     onChange={handleChange}
                   />
                 </Grid>
@@ -121,12 +121,12 @@ export default function SignUpSide() {
                 margin="normal"
                 required
                 fullWidth
-                id="pseudo"
-                label="Pseudo"
-                name="pseudo"
-                autoComplete="pseudo "
+                id="alias"
+                label="alias"
+                name="alias"
+                autoComplete="alias"
                 autoFocus
-                value={formValues.pseudo}
+                value={formValues.alias}
                 onChange={handleChange}
               />
               <TextField

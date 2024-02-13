@@ -5,7 +5,7 @@ const authMiddleware = (store) => (next) => (action) => {
     console.log('middleware after if?');
     console.log(store.getState().user);
     // Utilisation du type d'action correct
-    fetch('http://localhost:3002/user/signin', {
+    fetch('http://localhost:3000/user/signin', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -21,7 +21,7 @@ const authMiddleware = (store) => (next) => (action) => {
         store.dispatch(loginAction);
       });
   } else if (action.type === 'SUBMIT_NEWUSER') {
-    fetch('http://localhost:3002/user/signup', {
+    fetch('http://localhost:3000/user/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -29,9 +29,9 @@ const authMiddleware = (store) => (next) => (action) => {
       body: JSON.stringify({
         email: store.getState().user.email,
         password: store.getState().user.password,
-        firstName: store.getState().user.firstName,
-        lastName: store.getState().user.lastName,
-        pseudo: store.getState().user.pseudo,
+        firstname: store.getState().user.firstname,
+        lastname: store.getState().user.lastname,
+        alias: store.getState().user.alias,
       }),
     })
       .then((res) => res.json())

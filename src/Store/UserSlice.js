@@ -6,9 +6,9 @@ export const initialState = {
   email: '',
   password: '',
   token: '',
-  firstName: '',
-  lastName: '',
-  pseudo: '',
+  firstname: '',
+  lastname: '',
+  alias: '',
 };
 
 const userSlice = createSlice({
@@ -35,9 +35,9 @@ const userSlice = createSlice({
         ...state,
         email: action.payload.email,
         password: action.payload.password,
-        firstName: action.payload.firstName,
-        lastName: action.payload.lastName,
-        pseudo: action.payload.pseudo,
+        firstname: action.payload.firstname,
+        lastname: action.payload.lastname,
+        alias: action.payload.alias,
       };
     },
     handleSuccessufUserCreation: (state, action) => {
@@ -50,7 +50,8 @@ const userSlice = createSlice({
     handleLogOut: () => {
       console.log('here');
       return {
-        initialState,
+        ...initialState,
+        logged: false,
       };
     },
   },
