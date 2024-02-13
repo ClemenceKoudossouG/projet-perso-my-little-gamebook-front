@@ -12,16 +12,16 @@ import { Link } from 'react-router-dom';
 import { handleLogOut } from '@/Store/UserSlice';
 import store from '@/Store/index';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 export default function ButtonAppBar() {
   const theme = useTheme();
+  const dispatch = useDispatch();
 
   const logged = useSelector((state) => state.user.logged);
 
   const handleClickLogOut = () => {
-    console.log('here');
-    handleLogOut();
+    dispatch(handleLogOut());
   };
 
   // useEffect(() => {
