@@ -1,45 +1,29 @@
 import './Game1.scss';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 function Game1() {
   return (
-    <div
-      className="image-container"
-      style={{ backgroundImage: `url(${imageURL})`, position: 'relative' }}
-    >
-      <img
-        src="/path/to/overlay-image.png"
-        alt="Overlay"
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          zIndex: 1,
-        }}
-      />
+    <div>
+      <div className="image-container">
+        <img src="/public/img/home/home-01.png" alt="Overlay" />
 
-      <p
-        style={{
-          position: 'absolute',
-          top: '20px',
-          left: '20px',
-          color: 'white',
-          zIndex: 2,
-        }}
-      >
-        Votre texte ici
-      </p>
+        <div className="content-container">
+          <div className="textbox">
+            <Typography variant="h4" gutterBottom sx={{ color: 'white' }}>
+              Vous etes sur un bateau pirate que faites vous ?{' '}
+            </Typography>
+          </div>
 
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '20px',
-          right: '20px',
-          zIndex: 2,
-        }}
-      >
-        <button style={{ marginRight: '10px' }}>Action 1</button>
-        <button>Action 2</button>
+          <div>
+            <Button variant="contained" size="large">
+              Action 1
+            </Button>
+            <Button variant="contained" size="large">
+              Action 2
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );
