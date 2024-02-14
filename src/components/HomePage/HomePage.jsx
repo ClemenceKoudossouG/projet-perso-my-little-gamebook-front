@@ -2,6 +2,7 @@ import './HomePage.scss';
 import PlayStory from '../PlayStory/PlayStory';
 import ReviewStory from '../ReviewStory/ReviewStory';
 import HomeBg from '../HomeBg/HomeBg';
+import SeeStories from '../SeeStories/SeeStories';
 
 function Home() {
   return (
@@ -12,6 +13,7 @@ function Home() {
       <div className="HomePageContainer">
         <PlayStory />
         <ReviewStory />
+        <SeeStories />
       </div>
     </div>
   );

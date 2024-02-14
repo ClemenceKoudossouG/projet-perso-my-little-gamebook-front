@@ -1,17 +1,20 @@
-import './Game1.scss';
+import { useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import './Game2.scss';
 
-function Game1() {
+function Game2() {
+  const place = useSelector((state) => state.place.place);
+
   return (
-    <div>
-      <div className="image-container">
+    <div className="image-container">
+      <div className={`image-container ${place ? place : ''}`}>
         <img src="/public/img/home/home-01.png" alt="PNJ" />
 
         <div className="content-container">
           <div className="textbox">
             <Typography variant="h4" gutterBottom sx={{ color: 'white' }}>
-              Vous etes sur un bateau pirate que faites vous ?{' '}
+              Vous êtes sur {place} que faites vous ?{' '}
             </Typography>
           </div>
 
@@ -29,4 +32,4 @@ function Game1() {
   );
 }
 
-export default Game1;
+export default Game2;

@@ -8,6 +8,8 @@ import SignUpSide from '@/components/Form/SignUp/SignUp';
 import HomePage from '../HomePage/HomePage';
 import SignInSide from '@/components/Form/SignIn/SignIn';
 import Game1 from '../Game1/Game1';
+import Game2 from '../Game2/Game2';
+import Stories from '../Stories/Stories';
 
 function App() {
   return (
@@ -20,7 +22,9 @@ function App() {
           <Route path="/SignUpSide" element={<SignUpSide />} />
           <Route path="/SignInSide" element={<SignInSide />} />
           <Route path="/game" element={<Game1 />} />
+          <Route path="/gameDynamic" element={<Game2 />} />
           <Route path="/" element={<HomePage />} />
+          <Route path="/stories" element={<Stories />} />
         </Routes>
         <Footer />
       </div>
