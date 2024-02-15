@@ -1,13 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userSlice from './UserSlice';
 import authMiddleware from './authMiddleware';
-import placeSlice from './placeSlice';
+import compartmentSlice from './compartmentSlice';
 import storyMiddleware from './storyMiddleware';
 
 const store = configureStore({
     reducer: {
         user: userSlice,
-        place: placeSlice,
+        compartment: compartmentSlice,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(authMiddleware, storyMiddleware),

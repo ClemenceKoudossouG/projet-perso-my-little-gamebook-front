@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import './Footer.scss';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import { Link } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 
 export default function Footer() {
@@ -24,8 +25,18 @@ export default function Footer() {
         className="footer"
         sx={{ bgcolor: theme.palette.primary.main }}
       >
-        <BottomNavigationAction label=" À propos" sx={{ color: 'white' }} />
-        <BottomNavigationAction label="Contact" sx={{ color: 'white' }} />
+        <BottomNavigationAction
+          label="À propos"
+          component={Link}
+          to="/About"
+          sx={{ color: 'white' }}
+        />
+        <BottomNavigationAction
+          label="Contact"
+          component={Link}
+          to="/Contact"
+          sx={{ color: 'white' }}
+        />
       </BottomNavigation>
     </Box>
   );

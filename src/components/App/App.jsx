@@ -10,6 +10,8 @@ import SignInSide from '@/components/Form/SignIn/SignIn';
 import Game1 from '../Game1/Game1';
 import Game2 from '../Game2/Game2';
 import Stories from '../Stories/Stories';
+import Contact from '../Contact/Contact';
+import About from '../About/About';
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
           <Route path="/gameDynamic" element={<Game2 />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/stories" element={<Stories />} />
+          <Route path="/Contact" element={<Contact />} />
+          <Route path="/About" element={<About />} />
         </Routes>
         <Footer />
       </div>
