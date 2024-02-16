@@ -54,10 +54,24 @@ const userSlice = createSlice({
         logged: false,
       };
     },
+    handleLoginError: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        logged: false,
+      };
+    },
+    handleUserCreationError: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        logged: false,
+      };
+    },
   },
 });
 
-export const { handleSuccessfulLogin, SubmitLogin, SubmitNewUser, handleSuccessufUserCreation, handleLogOut } = userSlice.actions;
+export const { handleSuccessfulLogin, SubmitLogin, SubmitNewUser, handleSuccessufUserCreation, handleLogOut, handleUserCreationError, handleLoginError } = userSlice.actions;
 
 // Définition des types pour chaque action
 export const HandleSuccessfulLoginType = 'user/handleSuccessfulLogin';

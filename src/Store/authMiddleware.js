@@ -1,10 +1,7 @@
-import { handleSuccessfulLogin, handleSuccessufUserCreation, SubmitLogin, SubmitLoginType } from './UserSlice';
+import { handleSuccessfulLogin, handleSuccessufUserCreation, handleLoginError, handleUserCreationError } from './UserSlice';
 
 const authMiddleware = (store) => (next) => (action) => {
   if (action.type === 'SUBMIT_LOGIN') {
-    console.log('middleware after if?');
-    console.log(store.getState().user);
-    // Utilisation du type d'action correct
     fetch('http://localhost:3000/user/signin', {
       method: 'POST',
       headers: {
@@ -15,10 +12,19 @@ const authMiddleware = (store) => (next) => (action) => {
         password: store.getState().user.password,
       }),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Erreur lors de la connexion');
+        }
+        return res.json();
+      })
       .then((data) => {
         const loginAction = handleSuccessfulLogin(data);
         store.dispatch(loginAction);
+      })
+      .catch((error) => {
+        const errorAction = handleLoginError(error.message);
+        store.dispatch(errorAction);
       });
   } else if (action.type === 'SUBMIT_NEWUSER') {
     fetch('http://localhost:3000/user/signup', {
@@ -34,10 +40,19 @@ const authMiddleware = (store) => (next) => (action) => {
         alias: store.getState().user.alias,
       }),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Erreur lors de la création de l\'utilisateur');
+        }
+        return res.json();
+      })
       .then((data) => {
         const signUpAction = handleSuccessufUserCreation(data);
         store.dispatch(signUpAction);
+      })
+      .catch((error) => {
+        const errorAction = handleUserCreationError(error.message);
+        store.dispatch(errorAction);
       });
   }
 

@@ -10,13 +10,14 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SubmitLogin } from '@/Store/UserSlice';
 
 const defaultTheme = createTheme();
 
 export default function SignInSide() {
   const dispatch = useDispatch();
+  const loginError = useSelector((state) => state.user.error);
   const [formValues, setFormValues] = useState({
     email: '',
     password: '',
@@ -76,6 +77,11 @@ export default function SignInSide() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
+            {loginError && (
+              <Typography color="error" variant="body2">
+                {loginError} {/* Afficher le message d'erreur */}
+              </Typography>
+            )}
             <Box
               component="form"
               noValidate
@@ -115,14 +121,9 @@ export default function SignInSide() {
                 Sign In
               </Button>
               <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
+                  <Link href="/SignUp" variant="body2">
+                    "Don't have an account? Sign Up"
                   </Link>
                 </Grid>
               </Grid>
