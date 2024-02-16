@@ -13,11 +13,14 @@ function Game2() {
     <div
       className="image-container"
       style={{
-        backgroundImage: `url(img/${compartmentData.place_img}.jpg)`,
+        backgroundImage: `url(public/img/bg/${compartmentData.place_img}.jpg)`,
       }}
     >
       <div className="image-container">
-        <img src="/public/img/home/home-01.png" alt="PNJ" />
+        <img
+          src={`public/img/pnj/${compartmentData.npc_img}`}
+          alt={compartmentData.npc_img}
+        />
 
         <div className="content-container">
           <div className="textbox">

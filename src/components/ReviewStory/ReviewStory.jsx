@@ -9,7 +9,9 @@ function ReviewStory() {
   const dispatch = useDispatch();
 
   const handleClickButton = () => {
+    // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données
     dispatch(getCompartment(1));
+    // Appel de l'action.type qui va déclencher le switch du middleware Story
     dispatch({ type: 'FETCH_COMPARTMENT' });
   };
 
