@@ -2,14 +2,14 @@ import './ReviewStory.scss';
 import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
 import { Link } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
-import { GetCompartment } from '@/Store/compartmentSlice';
+import { getCompartment, loadCompartment } from '@/Store/compartmentSlice';
 import { useDispatch } from 'react-redux';
 
 function ReviewStory() {
   const dispatch = useDispatch();
 
   const handleClickButton = () => {
-    dispatch(GetCompartment(1));
+    dispatch(getCompartment(1));
     dispatch({ type: 'FETCH_COMPARTMENT' });
   };
 
