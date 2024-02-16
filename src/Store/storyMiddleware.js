@@ -10,10 +10,10 @@ const storyMiddleware = (store) => (next) => (action) => {
       fetch(`http://localhost:3000/compartments/${id}`)
         .then((res) => res.json())
         .then((data) => {
-          const { compartment_by_id } = data;
-          console.log(compartment_by_id);
+          // à voir selon retour back si obligatoire
+          console.log(data);
           // on déclenche le reducer loadCompartment qui va charger les données du compartment dans le state (compartment).
-          store.dispatch(loadCompartment(compartment_by_id));
+          store.dispatch(loadCompartment(data));
         });
       break;
     }

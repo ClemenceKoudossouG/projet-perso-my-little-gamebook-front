@@ -8,9 +8,6 @@ import Typography from '@mui/material/Typography';
 function Game2() {
   const compartment = useSelector((state) => state.compartment);
   const { compartmentData } = compartment;
-  // console.log(compartment.place_id);
-  // console.log(compartment.class);
-  // console.log(compartment.story_id);
 
   return (
     <div
@@ -25,16 +22,16 @@ function Game2() {
         <div className="content-container">
           <div className="textbox">
             <Typography variant="h4" gutterBottom sx={{ color: 'white' }}>
-              Vous êtes sur {compartmentData.place_id} que faites vous ?
+              Vous êtes sur {compartmentData.place_label} que faites vous ?
             </Typography>
           </div>
 
           <div>
             <Button variant="contained" size="large">
-              Action {compartmentData.children}
+              {compartmentData.action1_label}
             </Button>
             <Button variant="contained" size="large">
-              Action {compartmentData.class}
+              {compartmentData.action2_label}
             </Button>
           </div>
         </div>
