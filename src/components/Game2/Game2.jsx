@@ -3,11 +3,43 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getCompartment, loadCompartment } from '@/Store/compartmentSlice';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { Link } from 'react-router-dom';
+import * as React from 'react';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 function Game2() {
   const dispatch = useDispatch();
   const compartment = useSelector((state) => state.compartment);
   const { compartmentData } = compartment;
+
+  console.log(compartmentData.class);
+
+  const ending =
+    compartmentData.class === 'ending' ||
+    compartmentData.class === 'bonus_ending';
+
+  const consequence =
+    compartmentData.action1_consequence !== '' ||
+    compartmentData.action2_consequence !== '';
+
+  console.log(
+    compartmentData.action1_consequence,
+    compartmentData.action2_consequence
+  );
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleClickButton1 = () => {
     // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données
@@ -20,7 +52,17 @@ function Game2() {
     dispatch(getCompartment(compartmentData.action2_child));
     // Appel de l'action.type qui va déclencher le switch du middleware Story
     dispatch({ type: 'FETCH_COMPARTMENT' });
+    handleClose();
   };
+  const handleClickButtonCompartment = () => {
+    // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données
+    dispatch(getCompartment(1));
+    // Appel de l'action.type qui va déclencher le switch du middleware Story
+    dispatch({ type: 'FETCH_COMPARTMENT' });
+
+    handleClose();
+  };
+
   return (
     <div
       className="image-container"
@@ -41,23 +83,105 @@ function Game2() {
               {compartmentData.npc_label} que faites vous ?
             </Typography>
           </div>
+          {!ending && !consequence && (
+            <div>
+              <Button
+                variant="contained"
+                size="large"
+                onClick={handleClickButton1}
+              >
+                {compartmentData.action1_label}
+              </Button>
+              <Button
+                variant="contained"
+                size="large"
+                onClick={handleClickButton2}
+              >
+                {compartmentData.action2_label}
+              </Button>
+            </div>
+          )}
+          {ending && (
+            <div>
+              <div>
+                <Button
+                  variant="contained"
+                  size="large"
+                  onClick={handleClickOpen}
+                >
+                  {compartmentData.action1_label}
+                </Button>
+                <Button
+                  variant="contained"
+                  size="large"
+                  onClick={handleClickOpen}
+                >
+                  {compartmentData.action2_label}
+                </Button>
+              </div>
 
-          <div>
-            <Button
-              variant="contained"
-              size="large"
-              onClick={handleClickButton1}
-            >
-              {compartmentData.action1_label}
-            </Button>
-            <Button
-              variant="contained"
-              size="large"
-              onClick={handleClickButton2}
-            >
-              {compartmentData.action2_label}
-            </Button>
-          </div>
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">C'est fini !</DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    {compartmentData.action1_consequence}
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Link to="/">
+                    <Button onClick={handleClose}>Quitter</Button>
+                  </Link>
+                  <Button onClick={handleClickButtonCompartment} autoFocus>
+                    Recommencer
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </div>
+          )}
+          {consequence && !ending && (
+            <div>
+              <div>
+                <Button
+                  variant="contained"
+                  size="large"
+                  onClick={handleClickButton1}
+                >
+                  {compartmentData.action1_label}
+                </Button>
+                <Button
+                  variant="contained"
+                  size="large"
+                  onClick={handleClickOpen}
+                >
+                  {compartmentData.action2_label}
+                </Button>
+              </div>
+
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    Le {compartmentData.npc_label} te dit :{' '}
+                    {compartmentData.action2_consequence}
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClickButton2} autoFocus>
+                    Continuer
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </div>
+          )}
         </div>
       </div>
     </div>
