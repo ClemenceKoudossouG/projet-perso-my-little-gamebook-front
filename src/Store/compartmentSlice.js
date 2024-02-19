@@ -10,14 +10,12 @@ const compartmentSlice = createSlice({
   initialState,
   reducers: {
     getCompartment: (state, action) => {
-      console.log("this is sugar ", action.payload);
       return {
         ...state,
         id: action.payload,
       };
     },
     loadCompartment: (state, action) => {
-      console.log('this is soda ', action.payload);
       return {
         ...state,
         compartmentData: action.payload,
