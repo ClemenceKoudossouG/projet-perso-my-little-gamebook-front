@@ -12,6 +12,7 @@ import Game2 from '../Game2/Game2';
 import Stories from '../Stories/Stories';
 import Contact from '../Contact/Contact';
 import About from '../About/About';
+import Profile from '../Profile/Profile';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/stories" element={<Stories />} />
           <Route path="/Contact" element={<Contact />} />
           <Route path="/About" element={<About />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
         <Footer />
       </div>
