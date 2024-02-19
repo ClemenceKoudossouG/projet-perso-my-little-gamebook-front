@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 function ReviewStory() {
   const dispatch = useDispatch();
 
-  const handleClickButton = () => {
+  const handleClickButtonCompartment = () => {
     // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données
     dispatch(getCompartment(1));
     // Appel de l'action.type qui va déclencher le switch du middleware Story
@@ -22,7 +22,7 @@ function ReviewStory() {
         edge="start"
         color="inherit"
         sx={{ mr: 2 }}
-        onClick={handleClickButton}
+        onClick={handleClickButtonCompartment}
       >
         <Link to="/gameDynamic">
           <PlayCircleFilledWhiteIcon className="icon" sx={{ fontSize: 100 }} />
