@@ -1,3 +1,4 @@
+import { getAllStories } from './StoriesSlice';
 import { getCompartment, loadCompartment } from './compartmentSlice';
 
 const storyMiddleware = (store) => (next) => (action) => {
@@ -26,6 +27,8 @@ const storyMiddleware = (store) => (next) => (action) => {
         .then((data) => {
           // Traiter les données reçues si nécessaire
           console.log(data);
+          store.dispatch(getAllStories(data));
+
         });
       break;
     }

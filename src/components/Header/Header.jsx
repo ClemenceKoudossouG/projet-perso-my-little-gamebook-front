@@ -31,7 +31,7 @@ export default function ButtonAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{ bgcolor: theme.palette.primary.main }}>
+      <AppBar position="fixed" sx={{ bgcolor: theme.palette.primary.main }}>
         <Toolbar>
           <IconButton size="large" edge="start" color="inherit" sx={{ mr: 2 }}>
             <Link to="/">
@@ -59,8 +59,8 @@ export default function ButtonAppBar() {
                 color="inherit"
                 sx={{ mr: 2 }}
               >
-                <Link to="/">
-                  <AccountCircleIcon />
+                <Link to="/profile">
+                  <AccountCircleIcon color="cyan" />
                 </Link>
               </IconButton>
               <Button onClick={handleClickLogOut} color="inherit">

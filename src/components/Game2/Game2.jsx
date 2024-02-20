@@ -79,8 +79,8 @@ function Game2() {
         <div className="content-container">
           <div className="textbox">
             <Typography variant="h4" gutterBottom sx={{ color: 'white' }}>
-              Vous êtes sur {compartmentData.place_label} avec{' '}
-              {compartmentData.npc_label} que faites vous ?
+              Tu es sur {compartmentData.place_label} avec{' '}
+              {compartmentData.npc_label} que fais-tu ?
             </Typography>
           </div>
           {!ending && !consequence && (

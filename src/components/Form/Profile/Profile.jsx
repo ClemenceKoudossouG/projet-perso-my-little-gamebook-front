@@ -1,3 +1,4 @@
+import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -6,17 +7,20 @@ import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import Typography from '@mui/material/Typography';
-import { useTheme } from '@mui/material/styles';
+import Radio from '@mui/material/Radio';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { SubmitNewUser } from '@/Store/UserSlice';
+import Stack from '@mui/material/Stack';
 
 const defaultTheme = createTheme();
 
-export default function SignUpSide() {
+export default function Profile() {
   const dispatch = useDispatch();
   const [formValues, setFormValues] = useState({
     email: '',
@@ -26,7 +30,13 @@ export default function SignUpSide() {
     alias: '',
   });
 
-  const handleChange = (e) => {
+  // Radio group
+  const [selectedValue, setSelectedValue] = React.useState('a');
+  const handleChange = (event) => {
+    setSelectedValue(event.target.value);
+  };
+
+  /* const handleChange = (e) => {
     const { name, value } = e.target;
     console.log(name);
     console.log(value);
@@ -35,7 +45,8 @@ export default function SignUpSide() {
       ...formValues,
       [name]: value,
     });
-  };
+  }; 
+  */
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -54,7 +65,7 @@ export default function SignUpSide() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(public/pirate_bateau_voile.jpg)',
+            backgroundImage: 'url(public/img/bg/village.jpg)',
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light'
@@ -75,10 +86,10 @@ export default function SignUpSide() {
             }}
           >
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-              <LockOutlinedIcon />
+              <ManageAccountsIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign Up
+              Profile
             </Typography>
             <Box
               component="form"
@@ -125,6 +136,64 @@ export default function SignUpSide() {
                 value={formValues.alias}
                 onChange={handleChange}
               />
+              <FormControl>
+                <FormLabel id="demo-row-radio-buttons-group-label">
+                  Avatar
+                </FormLabel>
+              </FormControl>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="flex-start"
+              >
+                <Radio
+                  checked={selectedValue === 'a'}
+                  onChange={handleChange}
+                  value="a"
+                  name="radio-buttons"
+                  inputProps={{ 'aria-label': 'A' }}
+                />
+                <Radio
+                  checked={selectedValue === 'b'}
+                  onChange={handleChange}
+                  value="b"
+                  name="radio-buttons"
+                  inputProps={{ 'aria-label': 'B' }}
+                />
+                <Radio
+                  checked={selectedValue === 'c'}
+                  onChange={handleChange}
+                  value="c"
+                  name="radio-buttons"
+                  inputProps={{ 'aria-label': 'C' }}
+                />
+                <Radio
+                  checked={selectedValue === 'd'}
+                  onChange={handleChange}
+                  value="d"
+                  name="radio-buttons"
+                  inputProps={{ 'aria-label': 'D' }}
+                />
+                <Radio
+                  checked={selectedValue === 'e'}
+                  onChange={handleChange}
+                  value="e"
+                  name="radio-buttons"
+                  inputProps={{ 'aria-label': 'E' }}
+                />
+              </Stack>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="flex-start"
+              >
+                <Avatar alt="Remy Sharp" src="public/img/profile/et1.png" />
+                <Avatar alt="Travis Howard" src="public/img/profile/et2.png" />
+                <Avatar alt="Cindy Baker" src="public/img/profile/et3.png" />
+                <Avatar alt="Cindy Baker" src="public/img/profile/et4.png" />
+                <Avatar alt="Cindy Baker" src="public/img/profile/et5.png" />
+              </Stack>
+
               <TextField
                 margin="normal"
                 required
@@ -156,15 +225,8 @@ export default function SignUpSide() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign Up
+                Register
               </Button>
-              <Grid container>
-                <Grid item>
-                  <Link href="/SignInSide" variant="body2">
-                    {'Already have an account? Sign in'}
-                  </Link>
-                </Grid>
-              </Grid>
             </Box>
           </Box>
         </Grid>

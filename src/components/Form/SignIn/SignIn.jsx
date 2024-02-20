@@ -12,11 +12,13 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SubmitLogin } from '@/Store/UserSlice';
+import { Link as RouterLink } from 'react-router-dom';
 
 const defaultTheme = createTheme();
 
 export default function SignInSide() {
   const dispatch = useDispatch();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const loginError = useSelector((state) => state.user.error);
   const [formValues, setFormValues] = useState({
     email: '',
@@ -25,9 +27,6 @@ export default function SignInSide() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(name);
-    console.log(value);
-
     setFormValues({
       ...formValues,
       [name]: value,
@@ -36,9 +35,9 @@ export default function SignInSide() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(formValues);
     dispatch(SubmitLogin(formValues));
     dispatch({ type: 'SUBMIT_LOGIN' });
+    setIsLoggedIn(true);
   };
 
   return (
@@ -122,7 +121,7 @@ export default function SignInSide() {
               </Button>
               <Grid container>
                 <Grid item>
-                  <Link href="/SignUp" variant="body2">
+                  <Link component={RouterLink} to="/SignUpSide" variant="body2">
                     "Don't have an account? Sign Up"
                   </Link>
                 </Grid>
