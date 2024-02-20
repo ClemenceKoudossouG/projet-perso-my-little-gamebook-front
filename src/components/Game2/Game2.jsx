@@ -16,50 +16,46 @@ function Game2() {
   const compartment = useSelector((state) => state.compartment);
   const { compartmentData } = compartment;
 
-  console.log(compartmentData.class);
-
+  // Vérifier si la classe du compartiment est une fin ou un bonus de fin
   const ending =
     compartmentData.class === 'ending' ||
     compartmentData.class === 'bonus_ending';
 
+  // Vérifier si le compartiment a une conséquence pour les actions
   const consequence =
     compartmentData.action1_consequence !== '' ||
     compartmentData.action2_consequence !== '';
 
-  console.log(
-    compartmentData.action1_consequence,
-    compartmentData.action2_consequence
-  );
-
+  // État du dialogue (ouvert ou fermé)
   const [open, setOpen] = React.useState(false);
 
+  // Ouvrir le dialogue
   const handleClickOpen = () => {
     setOpen(true);
   };
 
+  // Fermer le dialogue
   const handleClose = () => {
     setOpen(false);
   };
 
+  // Gérer le clic sur le premier bouton d'action
   const handleClickButton1 = () => {
-    // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données
     dispatch(getCompartment(compartmentData.action1_child));
-    // Appel de l'action.type qui va déclencher le switch du middleware Story
     dispatch({ type: 'FETCH_COMPARTMENT' });
   };
+
+  // Gérer le clic sur le deuxième bouton d'action
   const handleClickButton2 = () => {
-    // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données
     dispatch(getCompartment(compartmentData.action2_child));
-    // Appel de l'action.type qui va déclencher le switch du middleware Story
     dispatch({ type: 'FETCH_COMPARTMENT' });
     handleClose();
   };
-  const handleClickButtonCompartment = () => {
-    // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données
-    dispatch(getCompartment(1));
-    // Appel de l'action.type qui va déclencher le switch du middleware Story
-    dispatch({ type: 'FETCH_COMPARTMENT' });
 
+  // Gérer le clic sur le bouton de recommencer
+  const handleClickButtonCompartment = () => {
+    dispatch(getCompartment(1));
+    dispatch({ type: 'FETCH_COMPARTMENT' });
     handleClose();
   };
 
@@ -74,15 +70,19 @@ function Game2() {
         <img
           src={`public/img/pnj/${compartmentData.npc_img}.png`}
           alt={compartmentData.npc_img}
+          style={{ maxWidth: '100%', height: 'auto' }}
         />
 
         <div className="content-container">
           <div className="textbox">
             <Typography variant="h4" gutterBottom sx={{ color: 'white' }}>
-              Tu es sur {compartmentData.place_label} avec{' '}
-              {compartmentData.npc_label} que fais-tu ?
+              Tu es sur {compartmentData.place_label}{' '}
+              {compartmentData.npc_label && `avec ${compartmentData.npc_label}`}{' '}
+              que fais-tu ?
             </Typography>
           </div>
+
+          {/* Afficher les boutons d'action si ce n'est pas une fin ou une conséquence */}
           {!ending && !consequence && (
             <div>
               <Button
@@ -101,6 +101,8 @@ function Game2() {
               </Button>
             </div>
           )}
+
+          {/* Afficher le dialogue de fin s'il s'agit d'une fin */}
           {ending && (
             <div>
               <div>
@@ -143,6 +145,8 @@ function Game2() {
               </Dialog>
             </div>
           )}
+
+          {/* Afficher le dialogue de conséquence s'il y a une conséquence */}
           {consequence && !ending && (
             <div>
               <div>
