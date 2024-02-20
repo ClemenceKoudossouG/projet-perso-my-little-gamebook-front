@@ -13,6 +13,7 @@ import Game2 from '../Game2/Game2';
 import Stories from '../Stories/Stories';
 import Contact from '../Contact/Contact';
 import About from '../About/About';
+import VisitorHomePage from '../VisitorHomePage/VisitorHomePage';
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
           <Route path="/SignInSide" element={<SignInSide />} />
           <Route path="/game" element={<Game1 />} />
           <Route path="/gameDynamic" element={<Game2 />} />
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<VisitorHomePage />} />
           <Route path="/stories" element={<Stories />} />
           <Route path="/Contact" element={<Contact />} />
           <Route path="/About" element={<About />} />
