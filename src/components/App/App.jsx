@@ -1,18 +1,18 @@
 import './App.scss';
 import { ThemeProvider } from '@mui/material/styles';
 import { Routes, Route } from 'react-router-dom';
+import SignUpSide from '@/components/Form/SignUp/SignUp';
+import SignInSide from '@/components/Form/SignIn/SignIn';
+import Profile from '../Form/Profile/Profile';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import theme from '../../styles/theme';
-import SignUpSide from '@/components/Form/SignUp/SignUp';
 import HomePage from '../HomePage/HomePage';
-import SignInSide from '@/components/Form/SignIn/SignIn';
 import Game1 from '../Game1/Game1';
 import Game2 from '../Game2/Game2';
 import Stories from '../Stories/Stories';
 import Contact from '../Contact/Contact';
 import About from '../About/About';
-import Profile from '../Profile/Profile';
 
 function App() {
   return (

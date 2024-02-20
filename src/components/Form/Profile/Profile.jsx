@@ -183,8 +183,9 @@ export default function Profile() {
                 />
               </Stack>
               <Stack
-                direction={{ xs: 'column', sm: 'row' }}
-                spacing={{ xs: 1, sm: 2, md: 4 }}
+                direction="row"
+                justifyContent="space-between"
+                alignItems="flex-start"
               >
                 <Avatar alt="Remy Sharp" src="public/img/profile/et1.png" />
                 <Avatar alt="Travis Howard" src="public/img/profile/et2.png" />
