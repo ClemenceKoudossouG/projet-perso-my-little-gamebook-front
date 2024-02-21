@@ -26,15 +26,15 @@ function Game2() {
     compartmentData.action1_consequence !== '' ||
     compartmentData.action2_consequence !== '';
 
-  // État du dialogue (ouvert ou fermé)
+  // État de la modale de dialogue
   const [open, setOpen] = React.useState(false);
 
-  // Ouvrir le dialogue
+  // Ouvrir la modale
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  // Fermer le dialogue
+  // Fermer la modale
   const handleClose = () => {
     setOpen(false);
   };

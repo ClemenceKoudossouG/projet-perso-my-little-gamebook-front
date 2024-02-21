@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-
 export const initialState = {
   logged: false,
   email: '',
@@ -23,10 +22,12 @@ const userSlice = createSlice({
       };
     },
     handleSuccessfulLogin: (state, action) => {
+      localStorage.setItem('token', action.payload.token);
       return {
         ...state,
         ...action.payload,
         logged: true,
+        token: action.payload.token,
         password: '',
       };
     },
@@ -41,17 +42,21 @@ const userSlice = createSlice({
       };
     },
     handleSuccessufUserCreation: (state, action) => {
+      localStorage.setItem('token', action.payload.token);
+
       return {
         ...state,
         ...action.payload,
         logged: true,
+        token: action.payload.token,
       };
     },
     handleLogOut: () => {
-      console.log('here');
+      localStorage.removeItem('token');
       return {
         ...initialState,
         logged: false,
+        token: '',
       };
     },
     handleLoginError: (state, action) => {
@@ -71,7 +76,15 @@ const userSlice = createSlice({
   },
 });
 
-export const { handleSuccessfulLogin, SubmitLogin, SubmitNewUser, handleSuccessufUserCreation, handleLogOut, handleUserCreationError, handleLoginError } = userSlice.actions;
+export const {
+  handleSuccessfulLogin,
+  SubmitLogin,
+  SubmitNewUser,
+  handleSuccessufUserCreation,
+  handleLogOut,
+  handleUserCreationError,
+  handleLoginError,
+} = userSlice.actions;
 
 // Définition des types pour chaque action
 export const HandleSuccessfulLoginType = 'user/handleSuccessfulLogin';

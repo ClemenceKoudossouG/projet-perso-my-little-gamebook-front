@@ -1,4 +1,3 @@
-// ActionAreaCard.jsx
 import React from 'react';
 import './Stories.scss';
 import Card from '@mui/material/Card';
@@ -11,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { getAllStories } from '@/Store/StoriesSlice.js';
 
 export default function ActionAreaCard() {
-  const stories = useSelector(getAllStories);
+  const { stories } = useSelector((state) => state.stories) || { stories: [] };
 
   return (
     <div className="content-container-stories">
@@ -19,77 +18,33 @@ export default function ActionAreaCard() {
         container
         spacing={2}
         className="card-container"
-        style={{ marginTop: '20px', marginBottom: '20px' }}
+        style={{ marginTop: '40px', marginBottom: '20px' }}
       >
-        <Grid item xs={12} sm={6} md={4} style={{ marginTop: '40px' }}>
-          <Card sx={{ maxWidth: 345 }}>
-            <CardActionArea>
-              <CardMedia
-                component="img"
-                height="140"
-                image="public/img/bg/espace_exterieur_planete.jpg"
-                alt="space"
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  L'histoire des 4 créateur
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Dans "L'histoire des 4 créateurs", explorez des îles, des
-                  bateaux, des villages et des forêts. Rencontrez des pirates,
-                  des poulpes, des sirènes et des robots. Dévoilez les mystères
-                  de l'espace et des planètes rouge et bleue.
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={4} style={{ marginTop: '40px' }}>
-          <Card sx={{ maxWidth: 345 }}>
-            <CardActionArea>
-              <CardMedia
-                component="img"
-                height="140"
-                image="public/img/bg/espace_exterieur_planete.jpg"
-                alt="space"
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  L'histoire des 4 créateur
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Dans "L'histoire des 4 créateurs", explorez des îles, des
-                  bateaux, des villages et des forêts. Rencontrez des pirates,
-                  des poulpes, des sirènes et des robots. Dévoilez les mystères
-                  de l'espace et des planètes rouge et bleue.
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={4}>
-          <Card sx={{ maxWidth: 345 }}>
-            <CardActionArea>
-              <CardMedia
-                component="img"
-                height="140"
-                image="public/img/bg/espace_exterieur_planete.jpg"
-                alt="space"
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  L'histoire des 4 créateur
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Dans "L'histoire des 4 créateurs", explorez des îles, des
-                  bateaux, des villages et des forêts. Rencontrez des pirates,
-                  des poulpes, des sirènes et des robots. Dévoilez les mystères
-                  de l'espace et des planètes rouge et bleue.
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Grid>
+        {stories.map((story) => (
+          <Grid item xs={12} sm={6} md={4} key={story.id}>
+            <Card sx={{ maxWidth: 345 }}>
+              <CardActionArea>
+                <CardMedia
+                  component="img"
+                  height="140"
+                  image="public/pirate_bateau_voile.jpg"
+                  alt={story.title}
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {story.name}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Dans "L'histoire des 4 créateurs", explorez des îles, des
+                    bateaux, des villages et des forêts. Rencontrez des pirates,
+                    des poulpes, des sirènes et des robots. Dévoilez les
+                    mystères de l'espace et des planètes rouge et bleues.
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          </Grid>
+        ))}
       </Grid>
     </div>
   );
