@@ -25,9 +25,9 @@ const userSlice = createSlice({
       localStorage.setItem('token', action.payload.token);
       return {
         ...state,
-        ...action.payload,
+        ...action.payload.verify_user,
         logged: true,
-        token: action.payload.token,
+        token: action.payload.verify_user.token,
         password: '',
       };
     },
