@@ -9,9 +9,13 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'center',
     alignItems: 'center',
     height: '100vh',
+    width: '100vw', // Ajoutez cette ligne
     backgroundImage: `url(public/img/bg/cabine.jpg)`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
+  },
+  text: {
+    color: '#ffffff', // Ajoutez cette ligne
   },
 }));
 
@@ -19,14 +23,16 @@ function NotFoundPage() {
   const classes = useStyles();
 
   return (
-    <Container className={classes.root}>
-      <Typography variant="h3" component="h1">
-        404 - Page Not Found
-      </Typography>
-      <Typography variant="h5" component="h2">
-        Désolé, la page que vous cherchez n'existe pas.
-      </Typography>
-    </Container>
+    <div className={classes.root}>
+      <Container>
+        <Typography variant="h3" component="h1" className={classes.text}>
+          404 - Page Not Found
+        </Typography>
+        <Typography variant="h5" component="h2" className={classes.text}>
+          Désolé, la page que vous cherchez n'existe pas.
+        </Typography>
+      </Container>
+    </div>
   );
 }
 

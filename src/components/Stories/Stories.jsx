@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './Stories.scss';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -6,11 +6,21 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import { CardActionArea } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { getAllStories } from '@/Store/StoriesSlice.js';
 
 export default function ActionAreaCard() {
-  const { stories } = useSelector((state) => state.stories) || { stories: [] };
+  const dispatch = useDispatch();
+  const { stories } = useSelector((state) => state.stories) || []; // Gérer le cas où stories est undefined
+
+  useEffect(() => {
+    // Charger les histoires lorsque le composant est monté
+    dispatch(getAllStories());
+  }, [dispatch]);
+
+  if (!stories) {
+    return <div>Loading...</div>; // Afficher un message de chargement si les histoires ne sont pas encore disponibles
+  }
 
   return (
     <div className="content-container-stories">
