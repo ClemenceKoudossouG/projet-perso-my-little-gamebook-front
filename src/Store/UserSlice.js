@@ -22,7 +22,7 @@ const userSlice = createSlice({
       };
     },
     handleSuccessfulLogin: (state, action) => {
-      localStorage.setItem('token', action.payload.token);
+      localStorage.setItem('token', action.payload.verify_user.token);
       return {
         ...state,
         ...action.payload.verify_user,
@@ -42,7 +42,7 @@ const userSlice = createSlice({
       };
     },
     handleSuccessufUserCreation: (state, action) => {
-      localStorage.setItem('token', action.payload.token);
+      localStorage.setItem('token', action.payload.verify_user.token);
 
       return {
         ...state,
