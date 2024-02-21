@@ -9,13 +9,13 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'center',
     alignItems: 'center',
     height: '100vh',
-    width: '100vw', // Ajoutez cette ligne
+    width: '100vw',
     backgroundImage: `url(public/img/bg/cabine.jpg)`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
   },
   text: {
-    color: '#ffffff', // Ajoutez cette ligne
+    color: '#ffffff',
   },
 }));
 

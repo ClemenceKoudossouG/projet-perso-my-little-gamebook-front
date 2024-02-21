@@ -5,21 +5,24 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
+import CardActions from '@mui/material/CardActions';
+import Button from '@mui/material/Button';
 import { CardActionArea } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllStories } from '@/Store/StoriesSlice.js';
 
 export default function ActionAreaCard() {
   const dispatch = useDispatch();
-  const { stories } = useSelector((state) => state.stories) || []; // Gérer le cas où stories est undefined
+  const { stories } = useSelector((state) => state.stories) || [];
 
+  // Charger les histoires lorsque le composant est monté
   useEffect(() => {
-    // Charger les histoires lorsque le composant est monté
     dispatch(getAllStories());
   }, [dispatch]);
 
+  // Gérer le cas où stories est undefined
   if (!stories) {
-    return <div>Loading...</div>; // Afficher un message de chargement si les histoires ne sont pas encore disponibles
+    return <div>Loading...</div>;
   }
 
   return (
@@ -51,6 +54,9 @@ export default function ActionAreaCard() {
                     mystères de l'espace et des planètes rouge et bleues.
                   </Typography>
                 </CardContent>
+                <CardActions>
+                  <Button size="small">Jouer cette histoire</Button>
+                </CardActions>
               </CardActionArea>
             </Card>
           </Grid>
