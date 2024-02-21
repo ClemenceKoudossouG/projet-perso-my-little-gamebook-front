@@ -43,23 +43,19 @@ function Game2() {
 
   const handleClickButton1 = () => {
     // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données
-    dispatch(getCompartment(compartmentData.action1_child));
-    // Appel de l'action.type qui va déclencher le switch du middleware Story
+    dispatch(getCompartment(compartmentData.action1_child)); // Appel de l'action.type qui va déclencher le switch du middleware Story
     dispatch({ type: 'FETCH_COMPARTMENT' });
   };
   const handleClickButton2 = () => {
     // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données
-    dispatch(getCompartment(compartmentData.action2_child));
-    // Appel de l'action.type qui va déclencher le switch du middleware Story
+    dispatch(getCompartment(compartmentData.action2_child)); // Appel de l'action.type qui va déclencher le switch du middleware Story
     dispatch({ type: 'FETCH_COMPARTMENT' });
     handleClose();
   };
   const handleClickButtonCompartment = () => {
     // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données
-    dispatch(getCompartment(1));
-    // Appel de l'action.type qui va déclencher le switch du middleware Story
+    dispatch(getCompartment(1)); // Appel de l'action.type qui va déclencher le switch du middleware Story
     dispatch({ type: 'FETCH_COMPARTMENT' });
-
     handleClose();
   };
 

@@ -28,7 +28,6 @@ const storyMiddleware = (store) => (next) => (action) => {
           // Traiter les données reçues si nécessaire
           console.log(data);
           store.dispatch(getAllStories(data));
-
         });
       break;
     }

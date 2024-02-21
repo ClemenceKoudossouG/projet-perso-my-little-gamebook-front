@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-
 export const initialState = {
   logged: false,
   email: '',
@@ -9,25 +8,63 @@ export const initialState = {
   firstname: '',
   lastname: '',
   alias: '',
+  avatar: '',
 };
 
 const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    SubmitLogin: (state, action) => {
+    getUser: (state, action) => {
       return {
         ...state,
         email: action.payload.email,
         password: action.payload.password,
+        firstname: action.payload.firstname,
+        lastname: action.payload.lastname,
+        alias: action.payload.alias,
+        avatar: action.payload.avatar,
       };
     },
+    /* loadUser: (state, action) => {
+      return {
+        ...state,
+        email: action.payload.email,
+        password: action.payload.password,
+        firstname: action.payload.firstname,
+        lastname: action.payload.lastname,
+        alias: action.payload.alias,
+        avatar: action.payload.avatar,
+      };
+    }, */
     handleSuccessfulLogin: (state, action) => {
       return {
         ...state,
         ...action.payload,
         logged: true,
         password: '',
+      };
+    },
+    handleSuccessufUserCreation: (state, action) => {
+      return {
+        ...state,
+        ...action.payload,
+        logged: true,
+      };
+    },
+    handleSuccessufProfileEdition: (state, action) => {
+      return {
+        ...state,
+        ...action.payload,
+        logged: true,
+      };
+    },
+
+    SubmitLogin: (state, action) => {
+      return {
+        ...state,
+        email: action.payload.email,
+        password: action.payload.password,
       };
     },
     SubmitNewUser: (state, action) => {
@@ -40,11 +77,15 @@ const userSlice = createSlice({
         alias: action.payload.alias,
       };
     },
-    handleSuccessufUserCreation: (state, action) => {
+    PatchProfile: (state, action) => {
       return {
         ...state,
-        ...action.payload,
-        logged: true,
+        email: action.payload.email,
+        password: action.payload.password,
+        firstname: action.payload.firstname,
+        lastname: action.payload.lastname,
+        alias: action.payload.alias,
+        avatar: action.payload.avatar,
       };
     },
     handleLogOut: () => {
@@ -68,10 +109,30 @@ const userSlice = createSlice({
         logged: false,
       };
     },
+    handleProfileEditionError: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        logged: false,
+      };
+    },
   },
 });
 
-export const { handleSuccessfulLogin, SubmitLogin, SubmitNewUser, handleSuccessufUserCreation, handleLogOut, handleUserCreationError, handleLoginError } = userSlice.actions;
+export const {
+  getUser,
+  loadUser,
+  handleSuccessfulLogin,
+  handleSuccessufUserCreation,
+  handleSuccessufProfileEdition,
+  SubmitLogin,
+  SubmitNewUser,
+  PatchProfile,
+  handleLogOut,
+  handleLoginError,
+  handleUserCreationError,
+  handleProfileEditionError,
+} = userSlice.actions;
 
 // Définition des types pour chaque action
 export const HandleSuccessfulLoginType = 'user/handleSuccessfulLogin';
