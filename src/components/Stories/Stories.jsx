@@ -40,7 +40,7 @@ export default function ActionAreaCard() {
                 <CardMedia
                   component="img"
                   height="140"
-                  image="public/pirate_bateau_voile.jpg"
+                  image="/pirate_bateau_voile.jpg"
                   alt={story.title}
                 />
                 <CardContent>

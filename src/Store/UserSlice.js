@@ -18,12 +18,7 @@ const userSlice = createSlice({
     getUser: (state, action) => {
       return {
         ...state,
-        email: action.payload.email,
-        password: action.payload.password,
-        firstname: action.payload.firstname,
-        lastname: action.payload.lastname,
-        alias: action.payload.alias,
-        avatar: action.payload.avatar,
+        ...action.payload,
       };
     },
     /* loadUser: (state, action) => {
