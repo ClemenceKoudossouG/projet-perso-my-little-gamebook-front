@@ -10,10 +10,6 @@ const storyMiddleware = (store) => (next) => (action) => {
       // Récupérer le jeton depuis le state Redux
       const { token } = store.getState().user;
       console.log(store.getState().user);
-      if (!token) {
-        console.log("L'utilisateur n'est pas connecté");
-        break;
-      }
       // On appel la route la route avec l'id provenant du state
       fetch(`http://localhost:3000/compartments/${id}`, {
         // Ajouter l'en-tête d'autorisation
@@ -34,10 +30,7 @@ const storyMiddleware = (store) => (next) => (action) => {
       console.log("Déclencher l'appel API pour récupérer des histoires");
       // Récupérer le jeton depuis le state Redux
       const { token } = store.getState().user;
-      if (!token) {
-        console.log("L'utilisateur n'est pas connecté");
-        break;
-      }
+
       // Utilisation du type d'action correct pour récupérer des histoires
       fetch('http://localhost:3000/stories', {
         // Ajouter l'en-tête d'autorisation

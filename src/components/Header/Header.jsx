@@ -13,15 +13,18 @@ import { handleLogOut } from '@/Store/UserSlice';
 import store from '@/Store/index';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 export default function ButtonAppBar() {
   const theme = useTheme();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const logged = useSelector((state) => state.user.logged);
 
   const handleClickLogOut = () => {
     dispatch(handleLogOut());
+    navigate('/');
   };
 
   // useEffect(() => {

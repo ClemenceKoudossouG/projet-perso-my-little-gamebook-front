@@ -20,7 +20,6 @@ export default function SignInSide() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const loginError = useSelector((state) => state.user.error);
-  const user = useSelector((state) => state.user.id);
   const [formValues, setFormValues] = useState({
     email: '',
     password: '',
@@ -39,7 +38,6 @@ export default function SignInSide() {
     dispatch(SubmitLogin(formValues));
     dispatch({ type: 'SUBMIT_LOGIN' });
     navigate('/');
-    console.log(user);
   };
 
   return (
