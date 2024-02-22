@@ -42,13 +42,11 @@ const userSlice = createSlice({
       };
     },
     handleSuccessufUserCreation: (state, action) => {
-      localStorage.setItem('token', action.payload.verify_user.token);
 
       return {
         ...state,
         ...action.payload,
         logged: true,
-        token: action.payload.token,
       };
     },
     handleLogOut: () => {
