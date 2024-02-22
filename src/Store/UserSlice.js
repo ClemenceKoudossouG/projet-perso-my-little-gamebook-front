@@ -38,7 +38,7 @@ const userSlice = createSlice({
       };
     }, */
     handleSuccessfulLogin: (state, action) => {
-      localStorage.setItem('token', action.payload.verify_user.token);
+      localStorage.setItem('token', action.payload.token);
       return {
         ...state,
         ...action.payload.token,
