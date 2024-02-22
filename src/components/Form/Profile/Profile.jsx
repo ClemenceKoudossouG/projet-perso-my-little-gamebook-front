@@ -25,6 +25,7 @@ const defaultTheme = createTheme();
 export default function Profile() {
   const logged = useSelector((state) => state.user.logged);
   const user = useSelector((state) => state.user);
+  console.log(user);
 
   const [formValues, setFormValues] = useState({
     email: user.email || '',
@@ -41,7 +42,7 @@ export default function Profile() {
 
     console.log('GET data user >', user.firstname);
     dispatch(getData(dataUser));
-    dispatch({ type: 'GET_PROFILE' });
+    dispatch({ type: 'GET_USER' });
   };
 
   const dataUser = () => {
