@@ -14,11 +14,13 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { SubmitNewUser } from '@/Store/UserSlice';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 const defaultTheme = createTheme();
 
 export default function SignUpSide() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
     email: '',
     password: '',
@@ -43,6 +45,7 @@ export default function SignUpSide() {
     console.log(formValues);
     dispatch(SubmitNewUser(formValues));
     dispatch({ type: 'SUBMIT_NEWUSER' });
+    navigate('/');
   };
 
   return (
