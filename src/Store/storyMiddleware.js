@@ -7,8 +7,16 @@ const storyMiddleware = (store) => (next) => (action) => {
       console.log("Déclencher l'appel API pour récupérer le compartment");
       // On récupére l'id chargé dans le state dans le composant reviewStory.jsx (getCompartment)
       const { id } = store.getState().compartment;
+      // Récupérer le jeton depuis le state Redux
+      const token = localStorage.getItem('token');
+      console.log(store.getState().user);
       // On appel la route la route avec l'id provenant du state
-      fetch(`http://localhost:3000/compartments/${id}`)
+      fetch(`http://localhost:3000/compartments/${id}`, {
+        // Ajouter l'en-tête d'autorisation
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
         .then((res) => res.json())
         .then((data) => {
           // à voir selon retour back si obligatoire
@@ -20,20 +28,24 @@ const storyMiddleware = (store) => (next) => (action) => {
     }
     case 'FETCH_STORIES': {
       console.log("Déclencher l'appel API pour récupérer des histoires");
-
+      // Récupérer le jeton depuis le state Redux
+      const token = localStorage.getItem('token');
       // Utilisation du type d'action correct pour récupérer des histoires
-      fetch('http://localhost:3000/stories')
+      fetch('http://localhost:3000/stories', {
+        // Ajouter l'en-tête d'autorisation
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
         .then((res) => res.json())
         .then((data) => {
-          // Traiter les données reçues si nécessaire
           console.log(data);
           store.dispatch(getAllStories(data));
-
         });
       break;
     }
     default:
-      // Si l'action n'est pas gérée, passez à l'action suivante dans le middleware
+
       return next(action);
   }
 };

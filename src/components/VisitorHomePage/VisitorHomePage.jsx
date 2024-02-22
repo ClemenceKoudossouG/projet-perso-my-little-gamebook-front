@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     color: '#fff',
     margin: theme.spacing(4, 0),
-    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+    textShadow: '7px 7px 8px rgba(80, 10, 20, 0.4)',
   },
   button: {
     margin: theme.spacing(1),

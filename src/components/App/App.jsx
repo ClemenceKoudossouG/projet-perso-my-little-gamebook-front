@@ -14,6 +14,7 @@ import Stories from '../Stories/Stories';
 import Contact from '../Contact/Contact';
 import About from '../About/About';
 import VisitorHomePage from '../VisitorHomePage/VisitorHomePage';
+import NotFoundPage from '../NotFoundPage/NotFoundPage';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="/Contact" element={<Contact />} />
           <Route path="/About" element={<About />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <Footer />
       </div>

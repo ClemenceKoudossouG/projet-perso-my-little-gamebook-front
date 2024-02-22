@@ -14,30 +14,61 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { SubmitNewUser } from '@/Store/UserSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { PatchProfile, getUser } from '@/Store/UserSlice';
+// import { useHistory } from 'react-router-dom';
+
 import Stack from '@mui/material/Stack';
 
 const defaultTheme = createTheme();
 
 export default function Profile() {
-  const dispatch = useDispatch();
+  const logged = useSelector((state) => state.user.logged);
+  const user = useSelector((state) => state.user);
+
   const [formValues, setFormValues] = useState({
-    email: '',
-    password: '',
-    firstname: '',
-    lastname: '',
-    alias: '',
+    email: user.email || '',
+    password: user.password || '',
+    firstname: user.firstname || '',
+    lastname: user.lastname || '',
+    alias: user.alias || '',
+    avatar: user.avatar || '',
   });
 
-  // Radio group
-  const [selectedValue, setSelectedValue] = React.useState('a');
-  const handleChange = (event) => {
-    setSelectedValue(event.target.value);
+  const getDataUser = () => {
+    const dispatch = useDispatch();
+    const { dataUser } = user;
+
+    console.log('GET data user >', user.firstname);
+    dispatch(getData(dataUser));
+    dispatch({ type: 'GET_PROFILE' });
   };
 
-  /* const handleChange = (e) => {
-    const { name, value } = e.target;
+  const dataUser = () => {
+    const { userData } = user;
+    console.log('Get data user', userData);
+  };
+
+  const dispatch = useDispatch();
+
+  // Radio group AVATAR
+  const [selectedValue, setSelectedValue] = React.useState('a');
+  const handleAvatarChange = (event) => {
+    event.preventDefault();
+    setSelectedValue(event.target.value);
+    console.log(event.target.value);
+
+    const { name, value } = event.target;
+    // Radio group
+
+    setSelectedValue({
+      ...selectedValue,
+      [name]: value,
+    });
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
     console.log(name);
     console.log(value);
 
@@ -45,14 +76,12 @@ export default function Profile() {
       ...formValues,
       [name]: value,
     });
-  }; 
-  */
-
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(formValues);
-    dispatch(SubmitNewUser(formValues));
-    dispatch({ type: 'SUBMIT_NEWUSER' });
+    console.log('Patch profile baby!!', formValues);
+    dispatch(PatchProfile(formValues));
+    dispatch({ type: 'PATCH_PROFILE' });
   };
 
   return (
@@ -85,9 +114,14 @@ export default function Profile() {
               alignItems: 'center',
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-              <ManageAccountsIcon />
-            </Avatar>
+            {!logged && (
+              <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                <ManageAccountsIcon />
+              </Avatar>
+            )}
+            {logged && (
+              <Avatar sx={{ m: 1 }} src="../../public/img/profile/et3.png" />
+            )}
             <Typography component="h1" variant="h5">
               Profile
             </Typography>
@@ -100,15 +134,16 @@ export default function Profile() {
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                   <TextField
-                    autoComplete="given-name"
-                    name="firstname"
                     required
                     fullWidth
                     id="firstname"
                     label="First Name"
-                    autoFocus
-                    value={formValues.firstname}
-                    onChange={handleChange}
+                    name="firstname"
+                    autoComplete={user.firstname}
+                    value={user.firstname}
+                    InputProps={{
+                      readOnly: true,
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -118,9 +153,11 @@ export default function Profile() {
                     id="lastname"
                     label="Last Name"
                     name="lastname"
-                    autoComplete="family-name"
-                    value={formValues.lastname}
-                    onChange={handleChange}
+                    autoComplete={user.lastname}
+                    value={user.lastname}
+                    InputProps={{
+                      readOnly: true,
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -131,10 +168,13 @@ export default function Profile() {
                 id="alias"
                 label="alias"
                 name="alias"
-                autoComplete="alias"
+                autoComplete={user.alias}
                 autoFocus
-                value={formValues.alias}
-                onChange={handleChange}
+                value={user.alias}
+                // onChange={handleChange}
+                InputProps={{
+                  readOnly: true,
+                }}
               />
               <FormControl>
                 <FormLabel id="demo-row-radio-buttons-group-label">
@@ -147,37 +187,37 @@ export default function Profile() {
                 alignItems="flex-start"
               >
                 <Radio
-                  checked={selectedValue === 'a'}
-                  onChange={handleChange}
-                  value="a"
+                  checked={selectedValue === 'et1'}
+                  onChange={handleAvatarChange}
+                  value="et1"
                   name="radio-buttons"
                   inputProps={{ 'aria-label': 'A' }}
                 />
                 <Radio
-                  checked={selectedValue === 'b'}
-                  onChange={handleChange}
-                  value="b"
+                  checked={selectedValue === 'et2'}
+                  onChange={handleAvatarChange}
+                  value="et2"
                   name="radio-buttons"
                   inputProps={{ 'aria-label': 'B' }}
                 />
                 <Radio
-                  checked={selectedValue === 'c'}
-                  onChange={handleChange}
-                  value="c"
+                  checked={selectedValue === 'et3'}
+                  onChange={handleAvatarChange}
+                  value="et3"
                   name="radio-buttons"
                   inputProps={{ 'aria-label': 'C' }}
                 />
                 <Radio
-                  checked={selectedValue === 'd'}
-                  onChange={handleChange}
-                  value="d"
+                  checked={selectedValue === 'et4'}
+                  onChange={handleAvatarChange}
+                  value="et4"
                   name="radio-buttons"
                   inputProps={{ 'aria-label': 'D' }}
                 />
                 <Radio
-                  checked={selectedValue === 'e'}
-                  onChange={handleChange}
-                  value="e"
+                  checked={selectedValue === 'et5'}
+                  onChange={handleAvatarChange}
+                  value="et5"
                   name="radio-buttons"
                   inputProps={{ 'aria-label': 'E' }}
                 />
@@ -218,14 +258,22 @@ export default function Profile() {
                 value={formValues.password}
                 onChange={handleChange}
               />
-
+              <Button
+                type="submit"
+                color="primary"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 1 }}
+              >
+                Modifier
+              </Button>
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{ mt: 0.5, mb: 2 }}
               >
-                Register
+                Enregistrer
               </Button>
             </Box>
           </Box>

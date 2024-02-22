@@ -26,35 +26,38 @@ function Game2() {
     compartmentData.action1_consequence !== '' ||
     compartmentData.action2_consequence !== '';
 
-  // État du dialogue (ouvert ou fermé)
+  // État de la modale de dialogue
   const [open, setOpen] = React.useState(false);
 
-  // Ouvrir le dialogue
+  // Ouvrir la modale
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  // Fermer le dialogue
+  // Fermer la modale
   const handleClose = () => {
     setOpen(false);
   };
 
   // Gérer le clic sur le premier bouton d'action
   const handleClickButton1 = () => {
-    dispatch(getCompartment(compartmentData.action1_child));
+    // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données
+    dispatch(getCompartment(compartmentData.action1_child)); // Appel de l'action.type qui va déclencher le switch du middleware Story
     dispatch({ type: 'FETCH_COMPARTMENT' });
   };
 
   // Gérer le clic sur le deuxième bouton d'action
   const handleClickButton2 = () => {
-    dispatch(getCompartment(compartmentData.action2_child));
+    // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données
+    dispatch(getCompartment(compartmentData.action2_child)); // Appel de l'action.type qui va déclencher le switch du middleware Story
     dispatch({ type: 'FETCH_COMPARTMENT' });
     handleClose();
   };
 
   // Gérer le clic sur le bouton de recommencer
   const handleClickButtonCompartment = () => {
-    dispatch(getCompartment(1));
+    // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données
+    dispatch(getCompartment(1)); // Appel de l'action.type qui va déclencher le switch du middleware Story
     dispatch({ type: 'FETCH_COMPARTMENT' });
     handleClose();
   };
