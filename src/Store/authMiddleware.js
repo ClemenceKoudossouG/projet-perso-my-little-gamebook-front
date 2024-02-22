@@ -14,8 +14,8 @@ import {
 
 const authMiddleware = (store) => (next) => (action) => {
   if (action.type === 'GET_USER') {
-    const { id } = store.getState().user;
-    fetch(`http://localhost:3000/user/${id}`, {
+    //  const { id } = store.getState().user;
+    fetch('http://localhost:3000/user', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
