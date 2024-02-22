@@ -31,8 +31,6 @@ export default function SignUpSide() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(name);
-    console.log(value);
 
     setFormValues({
       ...formValues,
@@ -42,7 +40,6 @@ export default function SignUpSide() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(formValues);
     dispatch(SubmitNewUser(formValues));
     dispatch({ type: 'SUBMIT_NEWUSER' });
     navigate('/');

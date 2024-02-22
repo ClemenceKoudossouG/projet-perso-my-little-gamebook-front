@@ -11,3 +11,14 @@
   flex-wrap: wrap;
   gap: 20px;
 }
+
+.MuiGrid-item {
+  display: flex;
+  justify-content: center;
+}
+
+.MuiCard-root {
+  width: 100%;
+  max-width: 345px;
+  margin-bottom: 20px;
+}

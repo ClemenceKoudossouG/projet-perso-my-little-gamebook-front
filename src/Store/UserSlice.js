@@ -38,10 +38,12 @@ const userSlice = createSlice({
       };
     }, */
     handleSuccessfulLogin: (state, action) => {
+      localStorage.setItem('token', action.payload.verify_user.token);
       return {
         ...state,
         ...action.payload.token,
         logged: true,
+        token: action.payload.token,
         password: '',
       };
     },
@@ -89,10 +91,11 @@ const userSlice = createSlice({
       };
     },
     handleLogOut: () => {
-      console.log('here');
+      localStorage.removeItem('token');
       return {
         ...initialState,
         logged: false,
+        token: '',
       };
     },
     handleLoginError: (state, action) => {
