@@ -8,7 +8,7 @@ const storyMiddleware = (store) => (next) => (action) => {
       // On récupére l'id chargé dans le state dans le composant reviewStory.jsx (getCompartment)
       const { id } = store.getState().compartment;
       // Récupérer le jeton depuis le state Redux
-      const { token } = store.getState().user;
+      const token = localStorage.getItem('token');
       console.log(store.getState().user);
       // On appel la route la route avec l'id provenant du state
       fetch(`http://localhost:3000/compartments/${id}`, {
@@ -29,8 +29,7 @@ const storyMiddleware = (store) => (next) => (action) => {
     case 'FETCH_STORIES': {
       console.log("Déclencher l'appel API pour récupérer des histoires");
       // Récupérer le jeton depuis le state Redux
-      const { token } = store.getState().user;
-
+      const token = localStorage.getItem('token');
       // Utilisation du type d'action correct pour récupérer des histoires
       fetch('http://localhost:3000/stories', {
         // Ajouter l'en-tête d'autorisation
