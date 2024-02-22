@@ -11,7 +11,6 @@ import {
   handleLoginError,
   handleProfileEditionError,
 } from './UserSlice';
-
 const authMiddleware = (store) => (next) => (action) => {
   if (action.type === 'GET_USER') {
     //  const { id } = store.getState().user;
@@ -84,11 +83,12 @@ const authMiddleware = (store) => (next) => (action) => {
         store.dispatch(errorAction);
       });
   } else if (action.type === 'PATCH_PROFILE') {
-    const { id } = store.getState().compartment;
+    const id = store.getState().user.id;
     fetch(`http://localhost:3000/user/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `${store.getState().user.token}`
       },
       body: JSON.stringify({
         email: store.getState().user.email,
@@ -114,8 +114,6 @@ const authMiddleware = (store) => (next) => (action) => {
         store.dispatch(errorAction);
       });
   }
-
   return next(action);
 };
-
 export default authMiddleware;
