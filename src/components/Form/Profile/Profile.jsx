@@ -23,15 +23,33 @@ import Stack from '@mui/material/Stack';
 const defaultTheme = createTheme();
 
 export default function Profile() {
-  const dispatch = useDispatch();
+  const logged = useSelector((state) => state.user.logged);
+  const user = useSelector((state) => state.user);
+
   const [formValues, setFormValues] = useState({
-    email: 'lala@gmail.com',
-    password: 'Lalala21!',
-    firstname: 'ebe',
-    lastname: 'ebe',
-    alias: 'eb',
-    avatar: '',
+    email: user.email || '',
+    password: user.password || '',
+    firstname: user.firstname || '',
+    lastname: user.lastname || '',
+    alias: user.alias || '',
+    avatar: user.avatar || '',
   });
+
+  const getDataUser = () => {
+    const dispatch = useDispatch();
+    const { dataUser } = user;
+
+    console.log('GET data user >', user.firstname);
+    dispatch(getData(dataUser));
+    dispatch({ type: 'GET_PROFILE' });
+  };
+
+  const dataUser = () => {
+    const { userData } = user;
+    console.log('Get data user', userData);
+  };
+
+  const dispatch = useDispatch();
 
   // Radio group AVATAR
   const [selectedValue, setSelectedValue] = React.useState('a');
@@ -39,6 +57,8 @@ export default function Profile() {
     event.preventDefault();
     setSelectedValue(event.target.value);
     console.log(event.target.value);
+
+    const { name, value } = event.target;
     // Radio group
 
     setSelectedValue({
@@ -62,14 +82,6 @@ export default function Profile() {
     console.log('Patch profile baby!!', formValues);
     dispatch(PatchProfile(formValues));
     dispatch({ type: 'PATCH_PROFILE' });
-  };
-  const logged = useSelector((state) => state.user.logged);
-
-  const dataUser = () => {
-    const user = useSelector((state) => state.user);
-    const { userData } = user;
-
-    console.log('Get data user');
   };
 
   return (
@@ -127,9 +139,11 @@ export default function Profile() {
                     id="firstname"
                     label="First Name"
                     name="firstname"
-                    autoComplete="first-name"
-                    value={formValues.firstname}
-                    onChange={handleChange}
+                    autoComplete={user.firstname}
+                    value={user.firstname}
+                    InputProps={{
+                      readOnly: true,
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -139,9 +153,11 @@ export default function Profile() {
                     id="lastname"
                     label="Last Name"
                     name="lastname"
-                    autoComplete="family-name"
-                    value={formValues.lastname}
-                    onChange={handleChange}
+                    autoComplete={user.lastname}
+                    value={user.lastname}
+                    InputProps={{
+                      readOnly: true,
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -152,10 +168,13 @@ export default function Profile() {
                 id="alias"
                 label="alias"
                 name="alias"
-                autoComplete="alias"
+                autoComplete={user.alias}
                 autoFocus
-                value={formValues.alias}
-                onChange={handleChange}
+                value={user.alias}
+                // onChange={handleChange}
+                InputProps={{
+                  readOnly: true,
+                }}
               />
               <FormControl>
                 <FormLabel id="demo-row-radio-buttons-group-label">
@@ -241,9 +260,18 @@ export default function Profile() {
               />
               <Button
                 type="submit"
+                color="primary"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{ mt: 3, mb: 1 }}
+              >
+                Modifier
+              </Button>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 0.5, mb: 2 }}
               >
                 Enregistrer
               </Button>

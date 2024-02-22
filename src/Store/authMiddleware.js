@@ -14,7 +14,7 @@ import {
 
 const authMiddleware = (store) => (next) => (action) => {
   if (action.type === 'GET_USER') {
-    const { id } = store.getState().compartment;
+    const { id } = store.getState().user;
     fetch(`http://localhost:3000/user/${id}`, {
       method: 'GET',
       headers: {
@@ -33,8 +33,8 @@ const authMiddleware = (store) => (next) => (action) => {
         return res.json();
       })
       .then((data) => {
-        const signUpAction = getUser(data);
-        store.dispatch(signUpAction);
+        console.log(data);
+        store.dispatch(getUser);
       });
   } else if (action.type === 'SUBMIT_LOGIN') {
     fetch('http://localhost:3000/user/signin', {

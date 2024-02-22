@@ -40,7 +40,7 @@ const userSlice = createSlice({
     handleSuccessfulLogin: (state, action) => {
       return {
         ...state,
-        ...action.payload,
+        ...action.payload.token,
         logged: true,
         password: '',
       };
