@@ -6,7 +6,11 @@ import { Link } from 'react-router-dom';
 import './VisitorHomePage.scss';
 import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
 import IconButton from '@mui/material/IconButton';
-import { getCompartment, loadCompartment } from '@/Store/compartmentSlice';
+import {
+  getCompartment,
+  loadCompartment,
+  getCompartmentBeginning,
+} from '@/Store/compartmentSlice';
 import { getAllStories } from '@/Store/StoriesSlice.js';
 
 const useStyles = makeStyles((theme) => ({
@@ -44,9 +48,9 @@ function LandingPage() {
 
   const handleClickButtonCompartment = () => {
     // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données
-    dispatch(getCompartment(1));
+    dispatch(getCompartmentBeginning(3));
     // Appel de l'action.type qui va déclencher le switch du middleware Story
-    dispatch({ type: 'FETCH_COMPARTMENT' });
+    dispatch({ type: 'FETCH_COMPARTMENT_BEGINNING' });
   };
   const handleClickButtonStories = () => {
     // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données

@@ -40,7 +40,7 @@ export default function ActionAreaCard() {
                 <CardMedia
                   component="img"
                   height="140"
-                  image="/pirate_bateau_voile.jpg"
+                  image={`img/bg/${story.img}.jpg`}
                   alt={story.name}
                 />
                 <CardContent>
@@ -48,10 +48,7 @@ export default function ActionAreaCard() {
                     {story.name}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Dans "L'histoire des 4 créateurs", explorez des îles, des
-                    bateaux, des villages et des forêts. Rencontrez des pirates,
-                    des poulpes, des sirènes et des robots. Dévoilez les
-                    mystères de l'espace et des planètes rouge et bleues.
+                    {story.description}
                   </Typography>
                 </CardContent>
                 <CardActions>

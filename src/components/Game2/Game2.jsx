@@ -1,6 +1,10 @@
 import './Game2.scss';
 import { useSelector, useDispatch } from 'react-redux';
-import { getCompartment, loadCompartment } from '@/Store/compartmentSlice';
+import {
+  getCompartment,
+  loadCompartment,
+  getCompartmentBeginning,
+} from '@/Store/compartmentSlice';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
@@ -57,8 +61,8 @@ function Game2() {
   // Gérer le clic sur le bouton de recommencer
   const handleClickButtonCompartment = () => {
     // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données
-    dispatch(getCompartment(1)); // Appel de l'action.type qui va déclencher le switch du middleware Story
-    dispatch({ type: 'FETCH_COMPARTMENT' });
+    dispatch(getCompartmentBeginning(3)); // Appel de l'action.type qui va déclencher le switch du middleware Story
+    dispatch({ type: 'FETCH_COMPARTMENT_BEGINNING' });
     handleClose();
   };
 
@@ -79,9 +83,9 @@ function Game2() {
         <div className="content-container">
           <div className="textbox">
             <Typography variant="h4" gutterBottom sx={{ color: 'white' }}>
-              Tu es sur {compartmentData.place_label}{' '}
-              {compartmentData.npc_label && `avec ${compartmentData.npc_label}`}{' '}
-              que fais-tu ?
+              Tu es {compartmentData.place_label}{' '}
+              {compartmentData.npc_label && `avec ${compartmentData.npc_label}`}
+              , que fais-tu ?
             </Typography>
           </div>
 
