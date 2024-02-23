@@ -181,7 +181,7 @@ function Game2() {
               >
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                    Le {compartmentData.npc_label} te dit :{' '}
+                    {compartmentData.npc_label} te dit :{' '}
                     {compartmentData.action2_consequence}
                   </DialogContentText>
                 </DialogContent>
