@@ -66,12 +66,12 @@ function Game2() {
     <div
       className="image-container"
       style={{
-        backgroundImage: `url(public/img/bg/${compartmentData.place_img}.jpg)`,
+        backgroundImage: `url(/img/bg/${compartmentData.place_img}.jpg)`,
       }}
     >
       <div className="image-container">
         <img
-          src={`public/img/pnj/${compartmentData.npc_img}.png`}
+          src={`/img/pnj/${compartmentData.npc_img}.png`}
           alt={compartmentData.npc_img}
           style={{ maxWidth: '100%', height: 'auto' }}
         />

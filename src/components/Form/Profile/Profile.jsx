@@ -17,15 +17,12 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { PatchProfile, getUser } from '@/Store/UserSlice';
 // import { useHistory } from 'react-router-dom';
-
 import Stack from '@mui/material/Stack';
-
 const defaultTheme = createTheme();
-
 export default function Profile() {
   const logged = useSelector((state) => state.user.logged);
   const user = useSelector((state) => state.user);
-
+  console.log(user);
   const [formValues, setFormValues] = useState({
     email: user.email || '',
     password: user.password || '',
@@ -34,44 +31,35 @@ export default function Profile() {
     alias: user.alias || '',
     avatar: user.avatar || '',
   });
-
   const getDataUser = () => {
     const dispatch = useDispatch();
     const { dataUser } = user;
-
     console.log('GET data user >', user.firstname);
     dispatch(getData(dataUser));
-    dispatch({ type: 'GET_PROFILE' });
+    dispatch({ type: 'GET_USER' });
   };
-
   const dataUser = () => {
     const { userData } = user;
     console.log('Get data user', userData);
   };
-
   const dispatch = useDispatch();
-
   // Radio group AVATAR
   const [selectedValue, setSelectedValue] = React.useState('a');
   const handleAvatarChange = (event) => {
     event.preventDefault();
     setSelectedValue(event.target.value);
     console.log(event.target.value);
-
     const { name, value } = event.target;
     // Radio group
-
     setSelectedValue({
       ...selectedValue,
       [name]: value,
     });
   };
-
   const handleChange = (event) => {
     const { name, value } = event.target;
     console.log(name);
     console.log(value);
-
     setFormValues({
       ...formValues,
       [name]: value,
@@ -83,7 +71,6 @@ export default function Profile() {
     dispatch(PatchProfile(formValues));
     dispatch({ type: 'PATCH_PROFILE' });
   };
-
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
@@ -139,11 +126,10 @@ export default function Profile() {
                     id="firstname"
                     label="First Name"
                     name="firstname"
-                    autoComplete={user.firstname}
-                    value={user.firstname}
-                    InputProps={{
-                      readOnly: true,
-                    }}
+                    autoComplete="firstname"
+                    autoFocus
+                    value={formValues.firstname}
+                    onChange={handleChange}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -153,11 +139,10 @@ export default function Profile() {
                     id="lastname"
                     label="Last Name"
                     name="lastname"
-                    autoComplete={user.lastname}
-                    value={user.lastname}
-                    InputProps={{
-                      readOnly: true,
-                    }}
+                    autoComplete="lastname"
+                    autoFocus
+                    value={formValues.lastname}
+                    onChange={handleChange}
                   />
                 </Grid>
               </Grid>
@@ -168,13 +153,10 @@ export default function Profile() {
                 id="alias"
                 label="alias"
                 name="alias"
-                autoComplete={user.alias}
+                autoComplete="alias"
                 autoFocus
-                value={user.alias}
-                // onChange={handleChange}
-                InputProps={{
-                  readOnly: true,
-                }}
+                value={formValues.alias}
+                onChange={handleChange}
               />
               <FormControl>
                 <FormLabel id="demo-row-radio-buttons-group-label">
@@ -233,7 +215,6 @@ export default function Profile() {
                 <Avatar alt="Cindy Baker" src="public/img/profile/et4.png" />
                 <Avatar alt="Cindy Baker" src="public/img/profile/et5.png" />
               </Stack>
-
               <TextField
                 margin="normal"
                 required
@@ -244,7 +225,6 @@ export default function Profile() {
                 autoComplete="email"
                 autoFocus
                 value={formValues.email}
-                onChange={handleChange}
               />
               <TextField
                 margin="normal"
@@ -255,7 +235,6 @@ export default function Profile() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                value={formValues.password}
                 onChange={handleChange}
               />
               <Button

@@ -9,7 +9,6 @@ const storyMiddleware = (store) => (next) => (action) => {
       const { id } = store.getState().compartment;
       // Récupérer le jeton depuis le state Redux
       const token = localStorage.getItem('token');
-      console.log(store.getState().user);
       // On appel la route la route avec l'id provenant du state
       fetch(`http://localhost:3000/compartments/${id}`, {
         // Ajouter l'en-tête d'autorisation

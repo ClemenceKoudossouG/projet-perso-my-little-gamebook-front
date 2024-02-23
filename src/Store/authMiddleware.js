@@ -11,7 +11,6 @@ import {
   handleLoginError,
   handleProfileEditionError,
 } from './UserSlice';
-
 const authMiddleware = (store) => (next) => (action) => {
   if (action.type === 'GET_USER') {
     //  const { id } = store.getState().user;
@@ -19,15 +18,9 @@ const authMiddleware = (store) => (next) => (action) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${store.getState().auth.token}`, // Ajout du token dans le headers mais pas de diff avec ou sans.
       },
-      body: JSON.stringify({
-        email: store.getState().user.email,
-        password: store.getState().user.password,
-        firstname: store.getState().user.firstname,
-        lastname: store.getState().user.lastname,
-        alias: store.getState().user.alias,
-        avatar: store.getState().user.alias,
-      }),
+      // Retrait des infos user car pas nécessaires ici, le token est suffisant. Plus safe en se contentant de l'envoi du token.
     })
       .then((res) => {
         return res.json();
@@ -90,11 +83,12 @@ const authMiddleware = (store) => (next) => (action) => {
         store.dispatch(errorAction);
       });
   } else if (action.type === 'PATCH_PROFILE') {
-    const { id } = store.getState().compartment;
+    const id = store.getState().user.id;
     fetch(`http://localhost:3000/user/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `${store.getState().user.token}`
       },
       body: JSON.stringify({
         email: store.getState().user.email,
@@ -120,8 +114,6 @@ const authMiddleware = (store) => (next) => (action) => {
         store.dispatch(errorAction);
       });
   }
-
   return next(action);
 };
-
 export default authMiddleware;
