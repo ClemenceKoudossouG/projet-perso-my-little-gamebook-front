@@ -41,7 +41,7 @@ export default function ActionAreaCard() {
                   component="img"
                   height="140"
                   image="/pirate_bateau_voile.jpg"
-                  alt={story.title}
+                  alt={story.name}
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
