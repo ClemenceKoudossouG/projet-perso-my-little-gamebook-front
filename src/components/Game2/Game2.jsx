@@ -26,9 +26,8 @@ function Game2() {
     compartmentData.class === 'bonus_ending';
 
   // Vérifier si le compartiment a une conséquence pour les actions
-  const consequence =
-    compartmentData.action1_consequence !== '' ||
-    compartmentData.action2_consequence !== '';
+  const consequence1 = compartmentData.action1_consequence !== null;
+  const consequence2 = compartmentData.action2_consequence !== null;
 
   // État de la modale de dialogue
   const [open, setOpen] = React.useState(false);
@@ -90,7 +89,7 @@ function Game2() {
           </div>
 
           {/* Afficher les boutons d'action si ce n'est pas une fin ou une conséquence */}
-          {!ending && !consequence && (
+          {!ending && !consequence1 && !consequence2 && (
             <div>
               <Button
                 variant="contained"
@@ -120,13 +119,6 @@ function Game2() {
                 >
                   {compartmentData.action1_label}
                 </Button>
-                <Button
-                  variant="contained"
-                  size="large"
-                  onClick={handleClickOpen}
-                >
-                  {compartmentData.action2_label}
-                </Button>
               </div>
 
               <Dialog
@@ -154,13 +146,13 @@ function Game2() {
           )}
 
           {/* Afficher le dialogue de conséquence s'il y a une conséquence */}
-          {consequence && !ending && (
+          {consequence1 && !ending && (
             <div>
               <div>
                 <Button
                   variant="contained"
                   size="large"
-                  onClick={handleClickButton1}
+                  onClick={handleClickOpen}
                 >
                   {compartmentData.action1_label}
                 </Button>
