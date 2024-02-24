@@ -47,6 +47,7 @@ function Game2() {
     // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données
     dispatch(getCompartment(compartmentData.action1_child)); // Appel de l'action.type qui va déclencher le switch du middleware Story
     dispatch({ type: 'FETCH_COMPARTMENT' });
+    handleClose();
   };
 
   // Gérer le clic sur le deuxième bouton d'action
@@ -145,8 +146,48 @@ function Game2() {
             </div>
           )}
 
-          {/* Afficher le dialogue de conséquence s'il y a une conséquence */}
+          {/* Afficher le dialogue de conséquence s'il y a une conséquence1 */}
           {consequence1 && !ending && (
+            <div>
+              <div>
+                <Button
+                  variant="contained"
+                  size="large"
+                  onClick={handleClickOpen}
+                >
+                  {compartmentData.action1_label}
+                </Button>
+                <Button
+                  variant="contained"
+                  size="large"
+                  onClick={handleClickOpen}
+                >
+                  {compartmentData.action2_label}
+                </Button>
+              </div>
+
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    {compartmentData.npc_label} te dit :{' '}
+                    {compartmentData.action_consequence}
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClickButton1} autoFocus>
+                    Continuer
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </div>
+          )}
+          {/* Afficher le dialogue de conséquence s'il y a une conséquence2 */}
+          {consequence2 && !ending && (
             <div>
               <div>
                 <Button
