@@ -21,10 +21,10 @@ import Stack from '@mui/material/Stack';
 
 const defaultTheme = createTheme();
 export default function Profile() {
-  // Condition - fiche éditable si on est loggé
+  // Condition - formulaire éditable si on est loggé
   const logged = useSelector((state) => state.user.logged);
 
-  // récupération du state
+  // récupération & modifications du state
   const user = useSelector((state) => state.user);
   console.log(user);
   const [formValues, setFormValues] = useState({
@@ -36,19 +36,20 @@ export default function Profile() {
     avatar: user.avatar || '',
   });
 
-  // Radio group AVATAR
   const dispatch = useDispatch();
+  // Radio group AVATAR
   const [selectedValue, setSelectedValue] = React.useState('a');
   const handleAvatarChange = (event) => {
     event.preventDefault();
     setSelectedValue(event.target.value);
-    console.log(event.target.value);
-    const { name, value } = event.target;
+    console.log('avatar >', event.target.value);
+    const selectedAvatarValue = event.target.value;
+    //const { name, value } = event.target;
     // Radio group
-    setSelectedValue({
-      ...selectedValue,
-      [name]: value,
-    });
+    // setSelectedValue({
+    //   ...selectedAvatarValue,
+    //   [name]: value,
+    // });
   };
   // Modifications des inputs + spread operator
   const handleChange = (event) => {
@@ -63,8 +64,12 @@ export default function Profile() {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('Patch profile baby!!', formValues, selectedValue);
-    dispatch(PatchProfile(formValues, selectedValue));
+    console.log('Patch profile baby!!', {
+      ...formValues,
+      avatar: selectedValue,
+    });
+    const updatedProfile = { ...formValues, avatar: selectedValue };
+    dispatch(PatchProfile(updatedProfile));
     dispatch({ type: 'PATCH_PROFILE' });
   };
   return (

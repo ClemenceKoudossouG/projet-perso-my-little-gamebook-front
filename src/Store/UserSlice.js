@@ -21,17 +21,6 @@ const userSlice = createSlice({
         ...action.payload, // update de user avec les données reçues. Retrait lignes token supplémentaires.
       };
     },
-    /* loadUser: (state, action) => {
-      return {
-        ...state,
-        email: action.payload.email,
-        password: action.payload.password,
-        firstname: action.payload.firstname,
-        lastname: action.payload.lastname,
-        alias: action.payload.alias,
-        avatar: action.payload.avatar,
-      };
-    }, */
     handleSuccessfulLogin: (state, action) => {
       localStorage.setItem('token', action.payload.token);
       return {
