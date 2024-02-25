@@ -15,12 +15,16 @@ import FormLabel from '@mui/material/FormLabel';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { PatchProfile, getUser } from '@/Store/UserSlice';
+import { PatchProfile } from '@/Store/UserSlice';
 // import { useHistory } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
+
 const defaultTheme = createTheme();
 export default function Profile() {
+  // Condition - fiche éditable si on est loggé
   const logged = useSelector((state) => state.user.logged);
+
+  // récupération du state
   const user = useSelector((state) => state.user);
   console.log(user);
   const [formValues, setFormValues] = useState({
@@ -31,19 +35,9 @@ export default function Profile() {
     alias: user.alias || '',
     avatar: user.avatar || '',
   });
-  const getDataUser = () => {
-    const dispatch = useDispatch();
-    const { dataUser } = user;
-    console.log('GET data user >', user.firstname);
-    dispatch(getData(dataUser));
-    dispatch({ type: 'GET_USER' });
-  };
-  const dataUser = () => {
-    const { userData } = user;
-    console.log('Get data user', userData);
-  };
-  const dispatch = useDispatch();
+
   // Radio group AVATAR
+  const dispatch = useDispatch();
   const [selectedValue, setSelectedValue] = React.useState('a');
   const handleAvatarChange = (event) => {
     event.preventDefault();
@@ -56,10 +50,12 @@ export default function Profile() {
       [name]: value,
     });
   };
+  // Modifications des inputs + spread operator
   const handleChange = (event) => {
+    event.preventDefault();
     const { name, value } = event.target;
-    console.log(name);
-    console.log(value);
+    console.log('Form element > ', name);
+    console.log('Valeur >', value);
     setFormValues({
       ...formValues,
       [name]: value,
@@ -67,8 +63,8 @@ export default function Profile() {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('Patch profile baby!!', formValues);
-    dispatch(PatchProfile(formValues));
+    console.log('Patch profile baby!!', formValues, selectedValue);
+    dispatch(PatchProfile(formValues, selectedValue));
     dispatch({ type: 'PATCH_PROFILE' });
   };
   return (
@@ -107,7 +103,10 @@ export default function Profile() {
               </Avatar>
             )}
             {logged && (
-              <Avatar sx={{ m: 1 }} src="../../public/img/profile/et3.png" />
+              <Avatar
+                sx={{ m: 1 }}
+                src={`../../public/img/profile/${user.avatar}.png`}
+              />
             )}
             <Typography component="h1" variant="h5">
               Profile
@@ -172,35 +171,35 @@ export default function Profile() {
                   checked={selectedValue === 'et1'}
                   onChange={handleAvatarChange}
                   value="et1"
-                  name="radio-buttons"
+                  name="avatar"
                   inputProps={{ 'aria-label': 'A' }}
                 />
                 <Radio
                   checked={selectedValue === 'et2'}
                   onChange={handleAvatarChange}
                   value="et2"
-                  name="radio-buttons"
+                  name="avatar"
                   inputProps={{ 'aria-label': 'B' }}
                 />
                 <Radio
                   checked={selectedValue === 'et3'}
                   onChange={handleAvatarChange}
                   value="et3"
-                  name="radio-buttons"
+                  name="avatar"
                   inputProps={{ 'aria-label': 'C' }}
                 />
                 <Radio
                   checked={selectedValue === 'et4'}
                   onChange={handleAvatarChange}
                   value="et4"
-                  name="radio-buttons"
+                  name="avatar"
                   inputProps={{ 'aria-label': 'D' }}
                 />
                 <Radio
                   checked={selectedValue === 'et5'}
                   onChange={handleAvatarChange}
                   value="et5"
-                  name="radio-buttons"
+                  name="avatar"
                   inputProps={{ 'aria-label': 'E' }}
                 />
               </Stack>

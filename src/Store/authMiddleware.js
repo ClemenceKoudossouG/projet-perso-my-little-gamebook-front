@@ -11,6 +11,7 @@ import {
   handleLoginError,
   handleProfileEditionError,
 } from './UserSlice';
+
 const authMiddleware = (store) => (next) => (action) => {
   if (action.type === 'GET_USER') {
     //  const { id } = store.getState().user;
@@ -18,7 +19,7 @@ const authMiddleware = (store) => (next) => (action) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${store.getState().auth.token}`, // Ajout du token dans le headers mais pas de diff avec ou sans.
+        Authorization: `Bearer ${store.getState().auth.token}`, // Ajout du token dans le headers mais pas de diff avec ou sans.
       },
       // Retrait des infos user car pas nécessaires ici, le token est suffisant. Plus safe en se contentant de l'envoi du token.
     })
@@ -83,12 +84,12 @@ const authMiddleware = (store) => (next) => (action) => {
         store.dispatch(errorAction);
       });
   } else if (action.type === 'PATCH_PROFILE') {
-    const id = store.getState().user.id;
+    const { id } = store.getState().user;
     fetch(`http://localhost:3000/user/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `${store.getState().user.token}`
+        Authorization: `${store.getState().user.token}`,
       },
       body: JSON.stringify({
         email: store.getState().user.email,
