@@ -77,7 +77,7 @@ export default function Profile() {
 
   const dispatch = useDispatch();
   // Radio group AVATAR
-  const [selectedValue, setSelectedValue] = React.useState('a');
+  const [selectedValue, setSelectedValue] = React.useState(user.avatar);
   const handleAvatarChange = (event) => {
     event.preventDefault();
     setSelectedValue(event.target.value);
@@ -104,6 +104,15 @@ export default function Profile() {
     dispatch(PatchProfile(updatedProfile));
     dispatch({ type: 'PATCH_PROFILE' });
   };
+
+  // Bouton MODIFIER
+  const [isReadOnly, setIsReadOnly] = useState(true);
+  const handleModifyClick = () => {
+    // const currentAvatar = user.avatar;
+    // setFormValues({ ...formValues, avatar: currentAvatar });
+    setIsReadOnly(false);
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
@@ -139,12 +148,11 @@ export default function Profile() {
                 <ManageAccountsIcon />
               </Avatar>
             )}
-            {logged && (
-              <Avatar
-                sx={{ m: 1 }}
-                src={`../../public/img/profile/${user.avatar}.png`}
-              />
-            )}
+            <Avatar
+              sx={{ m: 1 }}
+              src={`../../public/img/profile/${user.avatar}.png`}
+            />
+
             <Typography component="h1" variant="h5">
               Profile
             </Typography>
@@ -166,6 +174,7 @@ export default function Profile() {
                     autoFocus
                     value={formValues.firstname}
                     onChange={handleChange}
+                    InputProps={{ readOnly: isReadOnly }}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -179,6 +188,7 @@ export default function Profile() {
                     autoFocus
                     value={formValues.lastname}
                     onChange={handleChange}
+                    InputProps={{ readOnly: isReadOnly }}
                   />
                 </Grid>
               </Grid>
@@ -193,6 +203,7 @@ export default function Profile() {
                 autoFocus
                 value={formValues.alias}
                 onChange={handleChange}
+                InputProps={{ readOnly: isReadOnly }}
               />
               <FormControl>
                 <FormLabel id="demo-row-radio-buttons-group-label">
@@ -234,6 +245,8 @@ export default function Profile() {
                 autoComplete="email"
                 autoFocus
                 value={formValues.email}
+                onChange={handleChange}
+                InputProps={{ readOnly: isReadOnly }}
               />
               <TextField
                 margin="normal"
@@ -246,15 +259,18 @@ export default function Profile() {
                 autoComplete="current-password"
                 onChange={handleChange}
               />
+
               <Button
                 type="submit"
                 color="primary"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 1 }}
+                onClick={handleModifyClick}
               >
                 Modifier
               </Button>
+
               <Button
                 type="submit"
                 fullWidth
