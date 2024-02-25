@@ -3,7 +3,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
+// import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -20,6 +20,45 @@ import { PatchProfile } from '@/Store/UserSlice';
 import Stack from '@mui/material/Stack';
 
 const defaultTheme = createTheme();
+
+const avatars = [
+  {
+    id: 1,
+    value: 'et1',
+    label: 'A',
+    src: 'public/img/profile/et1.png',
+    alt: 'Avatar 1',
+  },
+  {
+    id: 2,
+    value: 'et2',
+    label: 'B',
+    src: 'public/img/profile/et2.png',
+    alt: 'Avatar 2',
+  },
+  {
+    id: 3,
+    value: 'et3',
+    label: 'C',
+    src: 'public/img/profile/et3.png',
+    alt: 'Avatar 3',
+  },
+  {
+    id: 4,
+    value: 'et4',
+    label: 'D',
+    src: 'public/img/profile/et4.png',
+    alt: 'Avatar 4',
+  },
+  {
+    id: 5,
+    value: 'et5',
+    label: 'E',
+    src: 'public/img/profile/et5.png',
+    alt: 'Avatar 5',
+  },
+];
+
 export default function Profile() {
   // Condition - formulaire éditable si on est loggé
   const logged = useSelector((state) => state.user.logged);
@@ -43,13 +82,6 @@ export default function Profile() {
     event.preventDefault();
     setSelectedValue(event.target.value);
     console.log('avatar >', event.target.value);
-    const selectedAvatarValue = event.target.value;
-    //const { name, value } = event.target;
-    // Radio group
-    // setSelectedValue({
-    //   ...selectedAvatarValue,
-    //   [name]: value,
-    // });
   };
   // Modifications des inputs + spread operator
   const handleChange = (event) => {
@@ -172,52 +204,25 @@ export default function Profile() {
                 justifyContent="space-between"
                 alignItems="flex-start"
               >
-                <Radio
-                  checked={selectedValue === 'et1'}
-                  onChange={handleAvatarChange}
-                  value="et1"
-                  name="avatar"
-                  inputProps={{ 'aria-label': 'A' }}
-                />
-                <Radio
-                  checked={selectedValue === 'et2'}
-                  onChange={handleAvatarChange}
-                  value="et2"
-                  name="avatar"
-                  inputProps={{ 'aria-label': 'B' }}
-                />
-                <Radio
-                  checked={selectedValue === 'et3'}
-                  onChange={handleAvatarChange}
-                  value="et3"
-                  name="avatar"
-                  inputProps={{ 'aria-label': 'C' }}
-                />
-                <Radio
-                  checked={selectedValue === 'et4'}
-                  onChange={handleAvatarChange}
-                  value="et4"
-                  name="avatar"
-                  inputProps={{ 'aria-label': 'D' }}
-                />
-                <Radio
-                  checked={selectedValue === 'et5'}
-                  onChange={handleAvatarChange}
-                  value="et5"
-                  name="avatar"
-                  inputProps={{ 'aria-label': 'E' }}
-                />
+                {avatars.map((avatar) => (
+                  <Radio
+                    key={avatar.id} // Unique key for each radio button
+                    checked={selectedValue === avatar.value}
+                    onChange={handleAvatarChange}
+                    value={avatar.value}
+                    name="avatar"
+                    inputProps={{ 'aria-label': avatar.label }}
+                  />
+                ))}
               </Stack>
               <Stack
                 direction="row"
                 justifyContent="space-between"
                 alignItems="flex-start"
               >
-                <Avatar alt="Remy Sharp" src="public/img/profile/et1.png" />
-                <Avatar alt="Travis Howard" src="public/img/profile/et2.png" />
-                <Avatar alt="Cindy Baker" src="public/img/profile/et3.png" />
-                <Avatar alt="Cindy Baker" src="public/img/profile/et4.png" />
-                <Avatar alt="Cindy Baker" src="public/img/profile/et5.png" />
+                {avatars.map((avatar) => (
+                  <Avatar key={avatar.id} alt={avatar.alt} src={avatar.src} />
+                ))}
               </Stack>
               <TextField
                 margin="normal"

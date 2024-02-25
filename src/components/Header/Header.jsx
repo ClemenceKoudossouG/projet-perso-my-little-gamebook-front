@@ -1,6 +1,8 @@
 import './Header.scss';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
+import Avatar from '@mui/material/Avatar';
+
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -21,6 +23,7 @@ export default function ButtonAppBar() {
   const navigate = useNavigate();
 
   const logged = useSelector((state) => state.user.logged);
+  const user = useSelector((state) => state.user);
 
   const handleClickLogOut = () => {
     dispatch(handleLogOut());
@@ -56,16 +59,12 @@ export default function ButtonAppBar() {
           )}
           {logged && (
             <>
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                sx={{ mr: 2 }}
-              >
-                <Link to="/profile">
-                  <AccountCircleIcon color="cyan" />
-                </Link>
-              </IconButton>
+              <Link to="/profile">
+                <Avatar
+                  sx={{ m: 1 }}
+                  src={`../../public/img/profile/${user.avatar}.png`}
+                />
+              </Link>
               <Button onClick={handleClickLogOut} color="inherit">
                 Log Out
               </Button>
