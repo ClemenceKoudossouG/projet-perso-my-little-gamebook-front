@@ -14,11 +14,14 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { useState } from 'react';
 
 function Game2() {
   const dispatch = useDispatch();
   const compartment = useSelector((state) => state.compartment);
   const { compartmentData } = compartment;
+
+  const [selectedAction, setSelectedAction] = useState(null);
 
   // Vérifier si la classe du compartiment est une fin ou un bonus de fin
   const ending =
@@ -26,20 +29,35 @@ function Game2() {
     compartmentData.class === 'bonus_ending';
 
   // Vérifier si le compartiment a une conséquence pour les actions
-  const consequence1 = compartmentData.action1_consequence !== null;
-  const consequence2 = compartmentData.action2_consequence !== null;
+  const consequence =
+    compartmentData.action1_consequence !== null ||
+    compartmentData.action2_consequence !== null;
 
   // État de la modale de dialogue
   const [open, setOpen] = React.useState(false);
 
   // Ouvrir la modale
-  const handleClickOpen = () => {
+  const handleClickOpen = (actionNumber) => {
+    setSelectedAction(actionNumber);
     setOpen(true);
   };
 
   // Fermer la modale
   const handleClose = () => {
     setOpen(false);
+  };
+  const handleClickContinue1 = () => {
+    // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données
+    dispatch(getCompartment(compartmentData.action1_child)); // Appel de l'action.type qui va déclencher le switch du middleware Story
+    dispatch({ type: 'FETCH_COMPARTMENT' });
+    handleClose();
+  };
+
+  const handleClickContinue2 = () => {
+    // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données
+    dispatch(getCompartment(compartmentData.action1_child)); // Appel de l'action.type qui va déclencher le switch du middleware Story
+    dispatch({ type: 'FETCH_COMPARTMENT' });
+    handleClose();
   };
 
   // Gérer le clic sur le premier bouton d'action
@@ -90,7 +108,7 @@ function Game2() {
           </div>
 
           {/* Afficher les boutons d'action si ce n'est pas une fin ou une conséquence */}
-          {!ending && !consequence1 && !consequence2 && (
+          {!ending && !consequence && (
             <div>
               <Button
                 variant="contained"
@@ -146,21 +164,21 @@ function Game2() {
             </div>
           )}
 
-          {/* Afficher le dialogue de conséquence s'il y a une conséquence1 */}
-          {consequence1 && !ending && (
+          {/* Afficher le dialogue de conséquence s'il y a une conséquence */}
+          {consequence && !ending && (
             <div>
               <div>
                 <Button
                   variant="contained"
                   size="large"
-                  onClick={handleClickOpen}
+                  onClick={() => handleClickOpen(1)}
                 >
                   {compartmentData.action1_label}
                 </Button>
                 <Button
                   variant="contained"
                   size="large"
-                  onClick={handleClickOpen}
+                  onClick={() => handleClickOpen(2)}
                 >
                   {compartmentData.action2_label}
                 </Button>
@@ -175,51 +193,20 @@ function Game2() {
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
                     {compartmentData.npc_label} te dit :{' '}
-                    {compartmentData.action_consequence}
+                    {selectedAction === 1
+                      ? compartmentData.action1_consequence
+                      : compartmentData.action2_consequence}
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                  <Button onClick={handleClickButton1} autoFocus>
-                    Continuer
-                  </Button>
-                </DialogActions>
-              </Dialog>
-            </div>
-          )}
-          {/* Afficher le dialogue de conséquence s'il y a une conséquence2 */}
-          {consequence2 && !ending && (
-            <div>
-              <div>
-                <Button
-                  variant="contained"
-                  size="large"
-                  onClick={handleClickOpen}
-                >
-                  {compartmentData.action1_label}
-                </Button>
-                <Button
-                  variant="contained"
-                  size="large"
-                  onClick={handleClickOpen}
-                >
-                  {compartmentData.action2_label}
-                </Button>
-              </div>
-
-              <Dialog
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-              >
-                <DialogContent>
-                  <DialogContentText id="alert-dialog-description">
-                    {compartmentData.npc_label} te dit :{' '}
-                    {compartmentData.action2_consequence}
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleClickButton2} autoFocus>
+                  <Button
+                    onClick={
+                      selectedAction === 1
+                        ? handleClickContinue1
+                        : handleClickContinue2
+                    }
+                    autoFocus
+                  >
                     Continuer
                   </Button>
                 </DialogActions>
