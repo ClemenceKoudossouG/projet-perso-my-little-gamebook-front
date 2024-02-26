@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function LandingPage() {
+function VisitorHomePage() {
   const theme = useTheme();
   const classes = useStyles();
   const logged = useSelector((state) => state.user.logged);
@@ -63,7 +63,7 @@ function LandingPage() {
         </Typography>
         {!logged ? (
           <div>
-            <Link to="/SignInSide" >
+            <Link to="/SignInSide">
               <Button
                 variant="contained"
                 color="primary"
@@ -144,4 +144,4 @@ function LandingPage() {
   );
 }
 
-export default LandingPage;
+export default VisitorHomePage;

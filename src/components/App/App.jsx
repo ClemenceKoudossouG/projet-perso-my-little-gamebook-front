@@ -7,7 +7,6 @@ import Profile from '../Form/Profile/Profile';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import theme from '../../styles/theme';
-import HomePage from '../HomePage/HomePage';
 import Game1 from '../Game1/Game1';
 import Game2 from '../Game2/Game2';
 import Stories from '../Stories/Stories';
