@@ -40,6 +40,14 @@ export default function SignUpSide() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    // Vérification si passwordConfirmation matche bien avec password
+    if (formValues.password !== formValues.passwordConfirmation) {
+      // Si ça ne matche pas, mesage d'erreur
+      alert('Veuillez confirmer de nouveau le mot de passe.');
+      return;
+    }
+    
     dispatch(SubmitNewUser(formValues));
     dispatch({ type: 'SUBMIT_NEWUSER' });
     navigate('/');
@@ -148,6 +156,18 @@ export default function SignUpSide() {
                 id="password"
                 autoComplete="current-password"
                 value={formValues.password}
+                onChange={handleChange}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="passwordConfirmation"
+                label="Password confirmation"
+                type="password"
+                id="passwordConfirmation"
+                autoComplete="current-password"
+                value={formValues.passwordConfirmation}
                 onChange={handleChange}
               />
               <Button
