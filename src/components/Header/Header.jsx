@@ -16,11 +16,16 @@ import store from '@/Store/index';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { checkLoggedIn } from '@/Store/UserSlice';
 
 export default function ButtonAppBar() {
   const theme = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(checkLoggedIn());
+  }, [dispatch]);
 
   const logged = useSelector((state) => state.user.logged);
   const user = useSelector((state) => state.user);

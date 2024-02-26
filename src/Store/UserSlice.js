@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 export const initialState = {
-  logged: false,
+  logged: !!localStorage.getItem('token'),
   email: '',
   password: '',
-  token: '',
+  token: localStorage.getItem('token'),
   firstname: '',
   lastname: '',
   alias: '',
@@ -18,7 +18,7 @@ const userSlice = createSlice({
     getUser: (state, action) => {
       return {
         ...state,
-        ...action.payload, // update de user avec les données reçues. Retrait lignes token supplémentaires.
+        ...action.payload,
       };
     },
     handleSuccessfulLogin: (state, action) => {
@@ -28,6 +28,7 @@ const userSlice = createSlice({
         ...action.payload,
         logged: true,
         password: '',
+        token: action.payload,
       };
     },
     handleSuccessfulUserCreation: (state, action) => {
@@ -35,7 +36,7 @@ const userSlice = createSlice({
       return {
         ...state,
         ...action.payload,
-        logged: false,
+        logged: true,
       };
     },
     handleSuccessfulProfileEdition: (state, action) => {
@@ -108,6 +109,21 @@ const userSlice = createSlice({
         // logged: false,
       };
     },
+    checkLoggedIn: (state) => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        return {
+          ...state,
+          logged: true,
+          token,
+        };
+      }
+      return {
+        ...state,
+        logged: false,
+        token: null,
+      };
+    },
   },
 });
 
@@ -125,6 +141,7 @@ export const {
   handleLoginError,
   handleUserCreationError,
   handleProfileEditionError,
+  checkLoggedIn,
 } = userSlice.actions;
 
 // Définition des types pour chaque action

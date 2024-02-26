@@ -39,10 +39,8 @@ export default function SignInSide() {
     event.preventDefault();
     dispatch(SubmitLogin(formValues));
     dispatch({ type: 'SUBMIT_LOGIN' });
-    if (handleSuccessfulLogin) {
-      navigate('/');
-    } else {
-    }
+
+    navigate('/');
   };
 
   return (
@@ -55,7 +53,7 @@ export default function SignInSide() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(./../../img/bg/espace_exterieur_planete.jpg)',
+            backgroundImage: 'url(/img/bg/fonds_marins.jpg)',
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light'

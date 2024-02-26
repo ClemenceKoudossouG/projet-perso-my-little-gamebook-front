@@ -1,5 +1,5 @@
 import './VisitorHomePage.scss';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, Container, Typography } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
@@ -38,9 +38,19 @@ const useStyles = makeStyles((theme) => ({
 function VisitorHomePage() {
   const theme = useTheme();
   const classes = useStyles();
+
   const logged = useSelector((state) => state.user.logged);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    // Vérifier si un token est stocké dans le localStorage lors du chargement de l'application
+    const token = localStorage.getItem('token');
+    if (token) {
+      // Si un token est présent, mettre à jour le state de l'application
+      dispatch({ type: 'LOGIN_SUCCESS', payload: token });
+    }
+  }, [dispatch]);
 
   const handleClickButtonCompartment = () => {
     // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données randomisé entre 1 et 3

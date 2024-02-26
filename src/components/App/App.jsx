@@ -1,6 +1,9 @@
 import './App.scss';
 import { ThemeProvider } from '@mui/material/styles';
 import { Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { checkLoggedIn } from '@/Store/UserSlice.js';
 import SignUpSide from '@/components/Form/SignUp/SignUp';
 import SignInSide from '@/components/Form/SignIn/SignIn';
 import Profile from '../Form/Profile/Profile';
@@ -16,6 +19,11 @@ import VisitorHomePage from '../VisitorHomePage/VisitorHomePage';
 import NotFoundPage from '../NotFoundPage/NotFoundPage';
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(checkLoggedIn());
+  }, [dispatch]);
   return (
     <ThemeProvider theme={theme}>
       <div className="container">
