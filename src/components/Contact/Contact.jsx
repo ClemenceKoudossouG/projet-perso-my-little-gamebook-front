@@ -1,5 +1,3 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -8,7 +6,6 @@ import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -28,66 +25,76 @@ export default function Contact() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="m">
-        <CssBaseline />
-        <Box
+      <div className="background">
+        <Container
+          component="main"
+          maxWidth="m"
           sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
           }}
         >
-          <Typography component="h1" variant="h5">
-            Vous souhaitez nous contacter ?{' '}
-          </Typography>
+          <CssBaseline />
           <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
+            sx={{
+              marginTop: 8,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
           >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="name"
-              label="name"
-              type="name"
-              id="name"
-              autoComplete="name"
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              fullWidth
-              required
-              name="email"
-              id="outlined-textarea"
-              label="message"
-              placeholder="message"
-              multiline
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+            <Typography component="h1" variant="h5">
+              Vous souhaitez nous contacter ?{' '}
+            </Typography>
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              noValidate
+              sx={{ mt: 1 }}
             >
-              Envoyer un message
-            </Button>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="name"
+                label="name"
+                type="name"
+                id="name"
+                autoComplete="name"
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                fullWidth
+                required
+                name="email"
+                id="outlined-textarea"
+                label="message"
+                placeholder="message"
+                multiline
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Envoyer un message
+              </Button>
+            </Box>
           </Box>
-        </Box>
-      </Container>
+        </Container>
+      </div>
     </ThemeProvider>
   );
 }
