@@ -1,6 +1,10 @@
 import './Game2.scss';
 import { useSelector, useDispatch } from 'react-redux';
-import { getCompartment, loadCompartment } from '@/Store/compartmentSlice';
+import {
+  getCompartment,
+  loadCompartment,
+  getCompartmentBeginning,
+} from '@/Store/compartmentSlice';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
@@ -10,11 +14,15 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { useState } from 'react';
 
 function Game2() {
   const dispatch = useDispatch();
   const compartment = useSelector((state) => state.compartment);
   const { compartmentData } = compartment;
+
+  const [selectedAction, setSelectedAction] = useState(null);
+  const [firstCompartmentId, setFirstCompartmentId] = useState(null);
 
   // Vérifier si la classe du compartiment est une fin ou un bonus de fin
   const ending =
@@ -23,14 +31,15 @@ function Game2() {
 
   // Vérifier si le compartiment a une conséquence pour les actions
   const consequence =
-    compartmentData.action1_consequence !== '' ||
-    compartmentData.action2_consequence !== '';
+    compartmentData.action1_consequence !== null ||
+    compartmentData.action2_consequence !== null;
 
   // État de la modale de dialogue
   const [open, setOpen] = React.useState(false);
 
   // Ouvrir la modale
-  const handleClickOpen = () => {
+  const handleClickOpen = (actionNumber) => {
+    setSelectedAction(actionNumber);
     setOpen(true);
   };
 
@@ -38,18 +47,32 @@ function Game2() {
   const handleClose = () => {
     setOpen(false);
   };
+  const handleClickContinue1 = () => {
+    // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données
+    dispatch(getCompartment(compartmentData.action1_child));
+    dispatch({ type: 'FETCH_COMPARTMENT' });
+    handleClose();
+  };
+
+  const handleClickContinue2 = () => {
+    // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données
+    dispatch(getCompartment(compartmentData.action2_child));
+    dispatch({ type: 'FETCH_COMPARTMENT' });
+    handleClose();
+  };
 
   // Gérer le clic sur le premier bouton d'action
   const handleClickButton1 = () => {
     // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données
-    dispatch(getCompartment(compartmentData.action1_child)); // Appel de l'action.type qui va déclencher le switch du middleware Story
+    dispatch(getCompartment(compartmentData.action1_child));
     dispatch({ type: 'FETCH_COMPARTMENT' });
+    handleClose();
   };
 
   // Gérer le clic sur le deuxième bouton d'action
   const handleClickButton2 = () => {
     // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données
-    dispatch(getCompartment(compartmentData.action2_child)); // Appel de l'action.type qui va déclencher le switch du middleware Story
+    dispatch(getCompartment(compartmentData.action2_child));
     dispatch({ type: 'FETCH_COMPARTMENT' });
     handleClose();
   };
@@ -57,8 +80,8 @@ function Game2() {
   // Gérer le clic sur le bouton de recommencer
   const handleClickButtonCompartment = () => {
     // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données
-    dispatch(getCompartment(1)); // Appel de l'action.type qui va déclencher le switch du middleware Story
-    dispatch({ type: 'FETCH_COMPARTMENT' });
+    dispatch(getCompartmentBeginning(compartmentData.story_id)); // Appel de l'action.type qui va déclencher le switch du middleware Story
+    dispatch({ type: 'FETCH_COMPARTMENT_BEGINNING' });
     handleClose();
   };
 
@@ -79,9 +102,9 @@ function Game2() {
         <div className="content-container">
           <div className="textbox">
             <Typography variant="h4" gutterBottom sx={{ color: 'white' }}>
-              Tu es sur {compartmentData.place_label}{' '}
-              {compartmentData.npc_label && `avec ${compartmentData.npc_label}`}{' '}
-              que fais-tu ?
+              Tu es {compartmentData.place_label}{' '}
+              {compartmentData.npc_label && `avec ${compartmentData.npc_label}`}
+              , que fais-tu ?
             </Typography>
           </div>
 
@@ -116,13 +139,6 @@ function Game2() {
                 >
                   {compartmentData.action1_label}
                 </Button>
-                <Button
-                  variant="contained"
-                  size="large"
-                  onClick={handleClickOpen}
-                >
-                  {compartmentData.action2_label}
-                </Button>
               </div>
 
               <Dialog
@@ -156,14 +172,14 @@ function Game2() {
                 <Button
                   variant="contained"
                   size="large"
-                  onClick={handleClickButton1}
+                  onClick={() => handleClickOpen(1)}
                 >
                   {compartmentData.action1_label}
                 </Button>
                 <Button
                   variant="contained"
                   size="large"
-                  onClick={handleClickOpen}
+                  onClick={() => handleClickOpen(2)}
                 >
                   {compartmentData.action2_label}
                 </Button>
@@ -177,12 +193,21 @@ function Game2() {
               >
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                    Le {compartmentData.npc_label} te dit :{' '}
-                    {compartmentData.action2_consequence}
+                    {compartmentData.npc_label} te dit :{' '}
+                    {selectedAction === 1
+                      ? compartmentData.action1_consequence
+                      : compartmentData.action2_consequence}
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                  <Button onClick={handleClickButton2} autoFocus>
+                  <Button
+                    onClick={
+                      selectedAction === 1
+                        ? handleClickContinue1
+                        : handleClickContinue2
+                    }
+                    autoFocus
+                  >
                     Continuer
                   </Button>
                 </DialogActions>

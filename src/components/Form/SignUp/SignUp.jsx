@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SubmitNewUser } from '@/Store/UserSlice';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
@@ -21,6 +21,7 @@ const defaultTheme = createTheme();
 export default function SignUpSide() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const loginError = useSelector((state) => state.user.error);
   const [formValues, setFormValues] = useState({
     email: '',
     password: '',
@@ -81,6 +82,11 @@ export default function SignUpSide() {
             <Typography component="h1" variant="h5">
               Sign Up
             </Typography>
+            {loginError && (
+              <Typography color="error" variant="body2">
+                {loginError}
+              </Typography>
+            )}
             <Box
               component="form"
               noValidate

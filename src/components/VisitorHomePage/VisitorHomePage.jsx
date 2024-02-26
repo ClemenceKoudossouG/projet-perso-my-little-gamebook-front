@@ -1,13 +1,14 @@
+import './VisitorHomePage.scss';
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, Container, Typography } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import './VisitorHomePage.scss';
 import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
 import IconButton from '@mui/material/IconButton';
-import { getCompartment, loadCompartment } from '@/Store/compartmentSlice';
+import { getCompartmentBeginning } from '@/Store/compartmentSlice';
 import { getAllStories } from '@/Store/StoriesSlice.js';
+import { useTheme } from '@mui/material/styles';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,26 +28,24 @@ const useStyles = makeStyles((theme) => ({
     textShadow: '7px 7px 8px rgba(80, 10, 20, 0.4)',
   },
   button: {
+    backgroundColor: theme.palette.primary.main,
     margin: theme.spacing(1),
     minWidth: '200px',
   },
 }));
 
 function LandingPage() {
+  const theme = useTheme();
   const classes = useStyles();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const logged = useSelector((state) => state.user.logged);
 
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-  };
   const dispatch = useDispatch();
 
   const handleClickButtonCompartment = () => {
-    // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données
-    dispatch(getCompartment(1));
-    // Appel de l'action.type qui va déclencher le switch du middleware Story
-    dispatch({ type: 'FETCH_COMPARTMENT' });
+    // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données randomisé entre 1 et 3
+    const randomId = Math.floor(Math.random() * 3) + 1;
+    dispatch(getCompartmentBeginning(randomId)); // Appel de l'action.type qui va déclencher le switch du middleware Story
+    dispatch({ type: 'FETCH_COMPARTMENT_BEGINNING' });
   };
   const handleClickButtonStories = () => {
     // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données
@@ -64,7 +63,7 @@ function LandingPage() {
         </Typography>
         {!logged ? (
           <div>
-            <Link to="/SignInSide">
+            <Link to="/SignInSide" >
               <Button
                 variant="contained"
                 color="primary"
@@ -102,7 +101,7 @@ function LandingPage() {
                 sx={{ mr: 2 }}
                 onClick={handleClickButtonStories}
               >
-                <Link to="/stories">
+                <Link to="/stories" style={{ color: '#009688' }}>
                   <PlayCircleFilledWhiteIcon
                     className="icon"
                     sx={{ fontSize: 100 }}
@@ -127,7 +126,7 @@ function LandingPage() {
                 sx={{ mr: 2 }}
                 onClick={handleClickButtonCompartment}
               >
-                <Link to="/gameDynamic">
+                <Link to="/gameDynamic" style={{ color: '#009688' }}>
                   <PlayCircleFilledWhiteIcon
                     className="icon"
                     sx={{ fontSize: 100 }}

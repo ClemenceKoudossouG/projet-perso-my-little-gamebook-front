@@ -42,6 +42,7 @@ const userSlice = createSlice({
       };
     },
     handleSuccessufUserCreation: (state, action) => {
+      localStorage.setItem('token', action.payload.token);
       return {
         ...state,
         ...action.payload,
