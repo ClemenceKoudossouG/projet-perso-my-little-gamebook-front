@@ -39,7 +39,16 @@ function Game2() {
   // Ouvrir la modale
   const handleClickOpen = (actionNumber) => {
     setSelectedAction(actionNumber);
-    setOpen(true);
+    if (
+      (actionNumber === 1 && compartmentData.action1_consequence !== null) ||
+      (actionNumber === 2 && compartmentData.action2_consequence !== null) ||
+      ending
+    ) {
+      setOpen(true);
+    } else {
+      // Si aucune conséquence et ce n'est pas une fin, exécute directement l'action
+      actionNumber === 1 ? handleClickButton1() : handleClickButton2();
+    }
   };
 
   // Fermer la modale
@@ -110,20 +119,33 @@ function Game2() {
           {/* Afficher les boutons d'action si ce n'est pas une fin ou une conséquence */}
           {!ending && !consequence && (
             <div>
-              <Button
-                variant="contained"
-                size="large"
-                onClick={handleClickButton1}
-              >
-                {compartmentData.action1_label}
-              </Button>
-              <Button
-                variant="contained"
-                size="large"
-                onClick={handleClickButton2}
-              >
-                {compartmentData.action2_label}
-              </Button>
+              {compartmentData.action1_label !==
+              compartmentData.action2_label ? (
+                <>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={handleClickButton1}
+                  >
+                    {compartmentData.action1_label}
+                  </Button>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={handleClickButton2}
+                  >
+                    {compartmentData.action2_label}
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  variant="contained"
+                  size="large"
+                  onClick={handleClickButton1}
+                >
+                  {compartmentData.action1_label}
+                </Button>
+              )}
             </div>
           )}
 

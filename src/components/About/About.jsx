@@ -37,14 +37,7 @@ export default function About() {
               concevoir un site web à la fois sympa et fonctionnel. Avec notre
               dévouement, notre créativité et notre désir d'apprendre, nous nous
               engageons à créer une expérience en ligne immersive et intuitive
-              pour nos utilisateurs. Chaque ligne de code que nous écrivons est
-              une opportunité d'apprentissage, et chaque défi rencontré est une
-              chance de grandir. Nous croyons fermement que le succès naît de la
-              collaboration et de la persévérance, et c'est avec cet esprit que
-              nous abordons ce projet. Nous sommes impatients de partager notre
-              passion et notre travail avec le monde, en créant un site web qui
-              marquera les esprits et apportera une réelle valeur à ses
-              visiteurs.
+              pour nos utilisateurs.
             </Typography>
           </Box>
         </Container>
