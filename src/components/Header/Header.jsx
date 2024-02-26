@@ -50,10 +50,10 @@ export default function ButtonAppBar() {
           {!logged && (
             <>
               <Button color="inherit">
-                <Link to="SignInSide">Sign In</Link>
+                <Link to="SignInSide" style={{ color: 'white' }}>Sign In</Link>
               </Button>
               <Button color="inherit">
-                <Link to="SignUpSide">Sign Up</Link>
+                <Link to="SignUpSide"style={{ color: 'white' }}>Sign Up</Link>
               </Button>
             </>
           )}

@@ -91,7 +91,7 @@ const userSlice = createSlice({
       return {
         ...state,
         error: action.payload,
-        logged: false,
+        // logged: false,
       };
     },
     handleUserCreationError: (state, action) => {

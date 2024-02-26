@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom';
 const defaultTheme = createTheme();
 
 export default function SignInSide() {
+  const logged = useSelector((state) => state.user.logged);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const loginError = useSelector((state) => state.user.error);
@@ -34,10 +35,14 @@ export default function SignInSide() {
   };
 
   const handleSubmit = (event) => {
+    // console.log();
     event.preventDefault();
     dispatch(SubmitLogin(formValues));
     dispatch({ type: 'SUBMIT_LOGIN' });
-    navigate('/');
+    if (handleSuccessfulLogin) {
+      navigate('/');
+    } else {
+    }
   };
 
   return (

@@ -21,9 +21,15 @@ const compartmentSlice = createSlice({
         compartmentData: action.payload,
       };
     },
+    getCompartmentBeginning: (state, action) => {
+      return {
+        ...state,
+        id: action.payload,
+      };
+    },
   },
 });
 
-export const { getCompartment, loadCompartment } = compartmentSlice.actions;
+export const { getCompartment, loadCompartment, getCompartmentBeginning } = compartmentSlice.actions;
 
 export default compartmentSlice.reducer;
