@@ -39,9 +39,15 @@ export default function ButtonAppBar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="fixed" sx={{ bgcolor: theme.palette.primary.main }}>
         <Toolbar>
-          <IconButton size="large" edge="start" color="inherit" sx={{ mr: 2 }}>
-            <Link to="/">
-              <MenuBookRoundedIcon />
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            sx={{ mr: 2 }}
+            className="white-icon"
+          >
+            <Link to="/" style={{ color: 'white' }}>
+              <MenuBookRoundedIcon style={{ color: 'white' }} />
             </Link>
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
