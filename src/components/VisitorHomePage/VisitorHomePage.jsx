@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
     color: '#fff',
     margin: theme.spacing(4, 0),
     textShadow: '7px 7px 8px rgba(80, 10, 20, 0.4)',
+    fontSize: 'calc(8vw + 20px)',
   },
   button: {
     backgroundColor: theme.palette.primary.main,

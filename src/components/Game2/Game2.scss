@@ -43,3 +43,11 @@
     }
   }
 }
+
+@media (max-width: 768px) {
+  .image-container {
+    .content-container {
+      top: 70%;
+    }
+  }
+}

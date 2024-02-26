@@ -93,6 +93,16 @@ function Game2() {
     handleClose();
   };
 
+  const styles = {
+    image: {
+      maxWidth: '100%',
+      height: 'auto',
+      '@media (max-width: 768px)': {
+        maxWidth: '50%',
+        height: 'auto',
+      },
+    },
+  };
   return (
     <div
       className="image-container"
@@ -104,7 +114,7 @@ function Game2() {
         <img
           src={`/img/pnj/${compartmentData.npc_img}.png`}
           alt={compartmentData.npc_img}
-          style={{ maxWidth: '100%', height: 'auto' }}
+          style={styles.image}
         />
 
         <div className="content-container">
