@@ -30,14 +30,15 @@ const userSlice = createSlice({
         password: '',
       };
     },
-    handleSuccessufUserCreation: (state, action) => {
+    handleSuccessfulUserCreation: (state, action) => {
+      localStorage.setItem('token', action.payload.token);
       return {
         ...state,
         ...action.payload,
-        logged: true,
+        logged: false,
       };
     },
-    handleSuccessufProfileEdition: (state, action) => {
+    handleSuccessfulProfileEdition: (state, action) => {
       return {
         ...state,
         ...action.payload,
@@ -73,6 +74,11 @@ const userSlice = createSlice({
         avatar: action.payload.avatar,
       };
     },
+    DeleteProfile: () => {
+      return {
+        logged: false,
+      };
+    },
     handleLogOut: () => {
       localStorage.removeItem('token');
       return {
@@ -99,7 +105,7 @@ const userSlice = createSlice({
       return {
         ...state,
         error: action.payload,
-        logged: false,
+        // logged: false,
       };
     },
   },
@@ -109,11 +115,12 @@ export const {
   getUser,
   loadUser,
   handleSuccessfulLogin,
-  handleSuccessufUserCreation,
-  handleSuccessufProfileEdition,
+  handleSuccessfulUserCreation,
+  handleSuccessfulProfileEdition,
   SubmitLogin,
   SubmitNewUser,
   PatchProfile,
+  DeleteProfile,
   handleLogOut,
   handleLoginError,
   handleUserCreationError,

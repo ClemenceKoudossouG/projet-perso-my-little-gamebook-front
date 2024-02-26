@@ -2,24 +2,26 @@ import {
   getUser,
   // loadUser,
   handleSuccessfulLogin,
-  handleSuccessufUserCreation,
-  handleSuccessufProfileEdition,
+  handleSuccessfulUserCreation,
+  handleSuccessfulProfileEdition,
   // SubmitLogin,
   // SubmitNewUser,
   // SubmitProfile,
   handleUserCreationError,
   handleLoginError,
   handleProfileEditionError,
+  DeleteProfile,
 } from './UserSlice';
 
 const authMiddleware = (store) => (next) => (action) => {
   if (action.type === 'GET_USER') {
+    const token = localStorage.getItem('token');
     //  const { id } = store.getState().user;
     fetch('http://localhost:3000/user', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${store.getState().auth.token}`, // Ajout du token dans le headers mais pas de diff avec ou sans.
+        Authorization: token, // Ajout du token dans le headers mais pas de diff avec ou sans.
       },
       // Retrait des infos user car pas nécessaires ici, le token est suffisant. Plus safe en se contentant de l'envoi du token.
     })
@@ -76,7 +78,7 @@ const authMiddleware = (store) => (next) => (action) => {
         return res.json();
       })
       .then((data) => {
-        const signUpAction = handleSuccessufUserCreation(data);
+        const signUpAction = handleSuccessfulUserCreation(data);
         store.dispatch(signUpAction);
       })
       .catch((error) => {
@@ -97,7 +99,7 @@ const authMiddleware = (store) => (next) => (action) => {
         firstname: store.getState().user.firstname,
         lastname: store.getState().user.lastname,
         alias: store.getState().user.alias,
-        avatar: store.getState().user.avatar,
+        avatar: store.getState().user.avatar || '',
       }),
     })
       .then((res) => {
@@ -107,8 +109,29 @@ const authMiddleware = (store) => (next) => (action) => {
         return res.json();
       })
       .then((data) => {
-        const editProfile = handleSuccessufProfileEdition(data);
+        const editProfile = handleSuccessfulProfileEdition(data);
         store.dispatch(editProfile);
+      })
+      .catch((error) => {
+        const errorAction = handleProfileEditionError(error.message);
+        store.dispatch(errorAction);
+      });
+  } else if (action.type === 'DELETE_PROFILE') {
+    const token = localStorage.getItem('token');
+    const { id } = store.getState().user;
+    fetch(`http://localhost:3000/user/${id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: token,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Erreur lors de la suppression du profil');
+        }
+        const deleteAction = DeleteProfile();
+        store.dispatch(deleteAction);
+        return res.json();
       })
       .catch((error) => {
         const errorAction = handleProfileEditionError(error.message);

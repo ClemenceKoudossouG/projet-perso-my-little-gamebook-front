@@ -15,9 +15,11 @@ import FormLabel from '@mui/material/FormLabel';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { PatchProfile } from '@/Store/UserSlice';
+import { PatchProfile, getUser } from '@/Store/UserSlice';
 // import { useHistory } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import Link from '@mui/material/Link';
 
 const defaultTheme = createTheme();
 
@@ -62,6 +64,7 @@ const avatars = [
 export default function Profile() {
   // Condition - formulaire éditable si on est loggé
   const logged = useSelector((state) => state.user.logged);
+  const navigate = useNavigate();
 
   // récupération & modifications du state
   const user = useSelector((state) => state.user);
@@ -103,6 +106,7 @@ export default function Profile() {
     const updatedProfile = { ...formValues, avatar: selectedValue };
     dispatch(PatchProfile(updatedProfile));
     dispatch({ type: 'PATCH_PROFILE' });
+    // navigate('/');
   };
 
   // Bouton MODIFIER
@@ -111,6 +115,16 @@ export default function Profile() {
     // const currentAvatar = user.avatar;
     // setFormValues({ ...formValues, avatar: currentAvatar });
     setIsReadOnly(false);
+  };
+  const [errorMessage, setErrorMessage] = useState(
+    '* Veuillez remplir tous les champs correctement'
+  );
+  // Supprimer le compte
+  const deleteButton = (event) => {
+    event.preventDefault();
+    dispatch(getUser());
+    dispatch({ type: 'DELETE_PROFILE' });
+    navigate('/SignInSide');
   };
 
   return (
@@ -143,11 +157,6 @@ export default function Profile() {
               alignItems: 'center',
             }}
           >
-            {!logged && (
-              <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                <ManageAccountsIcon />
-              </Avatar>
-            )}
             <Avatar
               sx={{ m: 1 }}
               src={`../../public/img/profile/${user.avatar}.png`}
@@ -257,11 +266,16 @@ export default function Profile() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={formValues.password}
                 onChange={handleChange}
               />
-
+              {errorMessage && (
+                <Typography variant="body2" color="error">
+                  {errorMessage}
+                </Typography>
+              )}
               <Button
-                type="submit"
+                type="modify"
                 color="primary"
                 fullWidth
                 variant="contained"
@@ -270,14 +284,16 @@ export default function Profile() {
               >
                 Modifier
               </Button>
-
               <Button
-                type="submit"
+                type="save"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 0.5, mb: 2 }}
               >
                 Enregistrer
+              </Button>
+              <Button variant="contained" fullWidth onClick={deleteButton}>
+                Supprimer
               </Button>
             </Box>
           </Box>
