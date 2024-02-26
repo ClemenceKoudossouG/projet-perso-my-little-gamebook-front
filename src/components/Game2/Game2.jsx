@@ -22,6 +22,7 @@ function Game2() {
   const { compartmentData } = compartment;
 
   const [selectedAction, setSelectedAction] = useState(null);
+  const [firstCompartmentId, setFirstCompartmentId] = useState(null);
 
   // Vérifier si la classe du compartiment est une fin ou un bonus de fin
   const ending =
@@ -79,7 +80,7 @@ function Game2() {
   // Gérer le clic sur le bouton de recommencer
   const handleClickButtonCompartment = () => {
     // Reducer qui charge le state avec l'id dont on a besoin pour charger nos données
-    dispatch(getCompartmentBeginning(3)); // Appel de l'action.type qui va déclencher le switch du middleware Story
+    dispatch(getCompartmentBeginning(compartmentData.story_id)); // Appel de l'action.type qui va déclencher le switch du middleware Story
     dispatch({ type: 'FETCH_COMPARTMENT_BEGINNING' });
     handleClose();
   };
