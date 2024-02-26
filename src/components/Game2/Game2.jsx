@@ -22,7 +22,6 @@ function Game2() {
   const { compartmentData } = compartment;
 
   const [selectedAction, setSelectedAction] = useState(null);
-  const [firstCompartmentId, setFirstCompartmentId] = useState(null);
 
   // Vérifier si la classe du compartiment est une fin ou un bonus de fin
   const ending =
@@ -193,7 +192,6 @@ function Game2() {
               >
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                    {compartmentData.npc_label} te dit :{' '}
                     {selectedAction === 1
                       ? compartmentData.action1_consequence
                       : compartmentData.action2_consequence}
