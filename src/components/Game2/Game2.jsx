@@ -103,7 +103,7 @@ function Game2() {
   if (compartmentData.action1_id === compartmentData.action2_id) {
     return (
       <div
-        className="image-container"
+        className="image-container-background"
         style={{
           backgroundImage: `url(/img/bg/${compartmentData.place_img}.jpg)`,
         }}

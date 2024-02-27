@@ -31,12 +31,14 @@ export default function Footer() {
           to="/About"
           sx={{ color: 'white' }}
         />
-        <BottomNavigationAction
+
+        {/*       <BottomNavigationAction
           label="Contact"
           component={Link}
           to="/Contact"
           sx={{ color: 'white' }}
         />
+           */}
       </BottomNavigation>
     </Box>
   );
