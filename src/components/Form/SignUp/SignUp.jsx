@@ -12,7 +12,7 @@ import { useTheme } from '@mui/material/styles';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { SubmitNewUser } from '@/Store/UserSlice';
+import { SubmitNewUser, handleSuccessfulUserCreation } from '@/Store/UserSlice';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 const defaultTheme = createTheme();
@@ -31,24 +31,51 @@ export default function SignUpSide() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setFormValues({
       ...formValues,
       [name]: value,
     });
   };
-
+  const [errors, setErrors] = useState({});
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    const inputErrors = {};
     // Vérification si passwordConfirmation matche bien avec password
     if (formValues.password !== formValues.passwordConfirmation) {
       // Si ça ne matche pas, mesage d'erreur
       alert('Veuillez confirmer de nouveau le mot de passe.');
     }
+    if (!formValues.firstname.trim()) {
+      inputErrors.firstname = 'Veuillez indiquer votre prénom';
+    }
+    if (!formValues.lastname.trim()) {
+      inputErrors.lastname = 'Veuillez indiquer votre nom de famille';
+    }
+    if (!formValues.alias.trim()) {
+      inputErrors.alias = 'Veuillez indiquer votre alias';
+    }
+    if (!formValues.email.trim()) {
+      inputErrors.email = 'Veuillez indiquer votre adresse email';
+    }
+    if (!formValues.password.trim()) {
+      inputErrors.password = 'Veuillez indiquer votre mot de passe';
+    }
+    if (!formValues.passwordConfirmation.trim()) {
+      inputErrors.passwordConfirmation =
+        'Veuillez confirmer votre mot de passe';
+    }
+    setErrors(errors);
+    if (Object.keys(errors).length > 0) {
+      console.error('Erreurs de validation: ', errors);
+      return;
+    }
+    console.log('SignUp profile > ', {
+      ...formValues,
+    });
 
     dispatch(SubmitNewUser(formValues));
     dispatch({ type: 'SUBMIT_NEWUSER' });
+    // navigate('/');
     navigate('/SignInSide');
   };
 
@@ -112,6 +139,11 @@ export default function SignUpSide() {
                     value={formValues.firstname}
                     onChange={handleChange}
                   />
+                  {errors.firstname && (
+                    <p style={{ color: 'red', fontSize: 'small' }}>
+                      {errors.firstname}
+                    </p>
+                  )}
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <TextField
@@ -124,6 +156,11 @@ export default function SignUpSide() {
                     value={formValues.lastname}
                     onChange={handleChange}
                   />
+                  {errors.lastname && (
+                    <p style={{ color: 'red', fontSize: 'small' }}>
+                      {errors.lastname}
+                    </p>
+                  )}
                 </Grid>
               </Grid>
               <TextField
@@ -138,6 +175,11 @@ export default function SignUpSide() {
                 value={formValues.alias}
                 onChange={handleChange}
               />
+              {errors.alias && (
+                <p style={{ color: 'red', fontSize: 'small' }}>
+                  {errors.alias}
+                </p>
+              )}
               <TextField
                 margin="normal"
                 required
@@ -150,6 +192,11 @@ export default function SignUpSide() {
                 value={formValues.email}
                 onChange={handleChange}
               />
+              {errors.email && (
+                <p style={{ color: 'red', fontSize: 'small' }}>
+                  {errors.email}
+                </p>
+              )}
               <TextField
                 margin="normal"
                 required
@@ -162,6 +209,11 @@ export default function SignUpSide() {
                 value={formValues.password}
                 onChange={handleChange}
               />
+              {errors.password && (
+                <p style={{ color: 'red', fontSize: 'small' }}>
+                  {errors.password}
+                </p>
+              )}
               <TextField
                 margin="normal"
                 required
@@ -174,6 +226,11 @@ export default function SignUpSide() {
                 value={formValues.passwordConfirmation}
                 onChange={handleChange}
               />
+              {errors.passwordConfirmation && (
+                <p style={{ color: 'red', fontSize: 'small' }}>
+                  {errors.passwordConfirmation}
+                </p>
+              )}
               <Button
                 type="submit"
                 fullWidth

@@ -74,8 +74,9 @@ const authMiddleware = (store) => (next) => (action) => {
       .then((res) => {
         if (!res.ok) {
           throw new Error("Erreur lors de la création de l'utilisateur");
+        } else {
+          return res.json();
         }
-        return res.json();
       })
       .then((data) => {
         const signUpAction = handleSuccessfulUserCreation(data);
@@ -95,8 +96,6 @@ const authMiddleware = (store) => (next) => (action) => {
         Authorization: `${store.getState().user.token}`,
       },
       body: JSON.stringify({
-        email: store.getState().user.email,
-        password: store.getState().user.password,
         firstname: store.getState().user.firstname,
         lastname: store.getState().user.lastname,
         alias: store.getState().user.alias,

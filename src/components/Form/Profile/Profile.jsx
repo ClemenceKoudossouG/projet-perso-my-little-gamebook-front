@@ -76,8 +76,6 @@ export default function Profile() {
   const user = useSelector((state) => state.user);
   console.log(user);
   const [formValues, setFormValues] = useState({
-    email: user.email || '',
-    password: user.password || '',
     firstname: user.firstname || '',
     lastname: user.lastname || '',
     alias: user.alias || '',
@@ -105,25 +103,20 @@ export default function Profile() {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    const errors = {};
-    if (!formValues.firstname.trim()) {
-      errors.firstname = 'Veuillez indiquer votre prénom';
+    const inputErrors = {};
+    if (formValues.firstname === '') {
+      inputErrors.firstname = 'Veuillez indiquer votre prénom';
     }
-    if (!formValues.lastname.trim()) {
-      errors.lastname = 'Veuillez indiquer votre nom de famille';
+    if (formValues.lastname === null) {
+      inputErrors.lastname = 'Veuillez indiquer votre nom de famille';
     }
-    if (!formValues.alias.trim()) {
-      errors.alias = 'Veuillez indiquer votre alias';
+    if (formValues.alias === null) {
+      inputErrors.alias = 'Veuillez indiquer votre alias';
     }
-    if (!formValues.email.trim()) {
-      errors.email = 'Veuillez indiquer votre adresse email';
-    }
-    if (!formValues.password.trim()) {
-      errors.password = 'Veuillez indiquer votre mot de passe';
-    }
+
     setErrors(errors);
     if (Object.keys(errors).length > 0) {
-      console.error('Erreurs de validation: ', errors);
+      console.error('Erreurs de modification: ', errors);
       return;
     }
     console.log('Patch profile > ', {
@@ -157,14 +150,7 @@ export default function Profile() {
     dispatch({ type: 'DELETE_PROFILE' });
     navigate('/SignInSide');
   };
-  // const useStyles = makeStyles((theme) => ({
-  //   root: {
-  //     '& .MuiTextField-root': {
-  //       margin: theme.spacing(1),
-  //       width: 200,
-  //     },
-  //   },
-  // }));
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
@@ -303,41 +289,7 @@ export default function Profile() {
                   <Avatar key={avatar.id} alt={avatar.alt} src={avatar.src} />
                 ))}
               </Stack>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                value={formValues.email}
-                onChange={handleChange}
-                InputProps={{ readOnly: isReadOnly }}
-              />
-              {errors.email && (
-                <p style={{ color: 'red', fontSize: 'small' }}>
-                  {errors.email}
-                </p>
-              )}
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                value={formValues.password}
-                onChange={handleChange}
-              />
-              {errors.password && (
-                <p style={{ color: 'red', fontSize: 'small' }}>
-                  {errors.password}
-                </p>
-              )}
+
               {loginError && (
                 <Typography variant="body2" color="error">
                   {loginError}
@@ -358,6 +310,7 @@ export default function Profile() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 0.5, mb: 2 }}
+                onClick={handleSubmit}
               >
                 Enregistrer
               </Button>
