@@ -45,7 +45,6 @@ export default function SignUpSide() {
     if (formValues.password !== formValues.passwordConfirmation) {
       // Si ça ne matche pas, mesage d'erreur
       alert('Veuillez confirmer de nouveau le mot de passe.');
-      return;
     }
 
     dispatch(SubmitNewUser(formValues));
