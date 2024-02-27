@@ -67,8 +67,6 @@ const userSlice = createSlice({
     PatchProfile: (state, action) => {
       return {
         ...state,
-        email: action.payload.email,
-        password: action.payload.password,
         firstname: action.payload.firstname,
         lastname: action.payload.lastname,
         alias: action.payload.alias,
@@ -92,7 +90,7 @@ const userSlice = createSlice({
       return {
         ...state,
         error: action.payload,
-        // logged: false,
+        logged: false,
       };
     },
     handleUserCreationError: (state, action) => {
