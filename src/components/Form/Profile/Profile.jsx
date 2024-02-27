@@ -15,12 +15,17 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { PatchProfile, getUser } from '@/Store/UserSlice';
+import {
+  PatchProfile,
+  getUser,
+  handleProfileEditionError,
+} from '@/Store/UserSlice';
 // import { useHistory } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import Link from '@mui/material/Link';
 import { checkLoggedIn } from '@/Store/UserSlice';
+import { makeStyles } from '@material-ui/core/styles';
 
 const defaultTheme = createTheme();
 
@@ -70,9 +75,10 @@ export default function Profile() {
   }, [dispatch]);
 
   // Condition - formulaire éditable si on est loggé
-  const logged = useSelector((state) => state.user.logged);
+  //const logged = useSelector((state) => state.user.logged);
   const navigate = useNavigate();
-
+  const loginError = useSelector((state) => state.user.error);
+  const [errors, setErrors] = useState({});
   // récupération & modifications du state
   const user = useSelector((state) => state.user);
   console.log(user);
@@ -112,11 +118,38 @@ export default function Profile() {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('Patch profile baby!!', {
+    const errors = {};
+    if (!formValues.firstname.trim()) {
+      errors.firstname = 'Veuillez indiquer votre prénom';
+    }
+    if (!formValues.lastname.trim()) {
+      errors.lastname = 'Veuillez indiquer votre nom de famille';
+    }
+    if (!formValues.alias.trim()) {
+      errors.alias = 'Veuillez indiquer votre alias';
+    }
+    if (!formValues.email.trim()) {
+      errors.email = 'Veuillez indiquer votre adresse email';
+    }
+    if (!formValues.password.trim()) {
+      errors.password = 'Veuillez indiquer votre mot de passe';
+    }
+    setErrors(errors);
+    if (Object.keys(errors).length > 0) {
+      console.error('Erreurs de validation: ', errors);
+      return;
+    }
+    console.log('Patch profile > ', {
       ...formValues,
       avatar: selectedValue,
     });
-    const updatedProfile = { ...formValues, avatar: selectedValue };
+    const updatedProfile = {
+      ...formValues,
+      avatar: selectedValue,
+      firstname: formValues.firstname.trim(),
+      lastname: formValues.lastname.trim(),
+      alias: formValues.alias.trim(),
+    };
     dispatch(PatchProfile(updatedProfile));
     dispatch({ type: 'PATCH_PROFILE' });
     localStorage.setItem('user', JSON.stringify(formValues));
@@ -130,9 +163,7 @@ export default function Profile() {
     // setFormValues({ ...formValues, avatar: currentAvatar });
     setIsReadOnly(false);
   };
-  const [errorMessage, setErrorMessage] = useState(
-    '* Veuillez remplir tous les champs correctement'
-  );
+
   // Supprimer le compte
   const deleteButton = (event) => {
     event.preventDefault();
@@ -140,7 +171,14 @@ export default function Profile() {
     dispatch({ type: 'DELETE_PROFILE' });
     navigate('/SignInSide');
   };
-
+  // const useStyles = makeStyles((theme) => ({
+  //   root: {
+  //     '& .MuiTextField-root': {
+  //       margin: theme.spacing(1),
+  //       width: 200,
+  //     },
+  //   },
+  // }));
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
@@ -196,10 +234,21 @@ export default function Profile() {
                     autoComplete="firstname"
                     autoFocus
                     value={formValues.firstname}
-                    onChange={handleChange}
+                    onChange={(e) =>
+                      setFormValues({
+                        ...formValues,
+                        firstname: e.target.value,
+                      })
+                    }
                     InputProps={{ readOnly: isReadOnly }}
                   />
+                  {errors.firstname && (
+                    <p style={{ color: 'red', fontSize: 'small' }}>
+                      {errors.firstname}
+                    </p>
+                  )}
                 </Grid>
+
                 <Grid item xs={12} sm={6}>
                   <TextField
                     required
@@ -213,6 +262,11 @@ export default function Profile() {
                     onChange={handleChange}
                     InputProps={{ readOnly: isReadOnly }}
                   />
+                  {errors.lastname && (
+                    <p style={{ color: 'red', fontSize: 'small' }}>
+                      {errors.lastname}
+                    </p>
+                  )}
                 </Grid>
               </Grid>
               <TextField
@@ -228,6 +282,11 @@ export default function Profile() {
                 onChange={handleChange}
                 InputProps={{ readOnly: isReadOnly }}
               />
+              {errors.alias && (
+                <p style={{ color: 'red', fontSize: 'small' }}>
+                  {errors.alias}
+                </p>
+              )}
               <FormControl>
                 <FormLabel id="demo-row-radio-buttons-group-label">
                   Avatar
@@ -271,6 +330,11 @@ export default function Profile() {
                 onChange={handleChange}
                 InputProps={{ readOnly: isReadOnly }}
               />
+              {errors.email && (
+                <p style={{ color: 'red', fontSize: 'small' }}>
+                  {errors.email}
+                </p>
+              )}
               <TextField
                 margin="normal"
                 required
@@ -283,9 +347,14 @@ export default function Profile() {
                 value={formValues.password}
                 onChange={handleChange}
               />
-              {errorMessage && (
+              {errors.password && (
+                <p style={{ color: 'red', fontSize: 'small' }}>
+                  {errors.password}
+                </p>
+              )}
+              {loginError && (
                 <Typography variant="body2" color="error">
-                  {errorMessage}
+                  {loginError}
                 </Typography>
               )}
               <Button

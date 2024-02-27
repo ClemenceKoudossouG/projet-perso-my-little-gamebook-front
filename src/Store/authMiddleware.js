@@ -87,6 +87,7 @@ const authMiddleware = (store) => (next) => (action) => {
       });
   } else if (action.type === 'PATCH_PROFILE') {
     const { id } = store.getState().user;
+
     fetch(`http://localhost:3000/user/${id}`, {
       method: 'PATCH',
       headers: {

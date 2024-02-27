@@ -28,8 +28,8 @@ function ReviewStory() {
           <PlayCircleFilledWhiteIcon className="icon" sx={{ fontSize: 100 }} />
         </Link>
       </IconButton>
-      <p>Lire</p>
-      <p>une histoire</p>
+      <p>Voir</p>
+      <p>les histoires</p>
     </div>
   );
 }
