@@ -5,6 +5,8 @@ import { Button, Container, Typography } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
+import ReviewStory from '../ReviewStory/ReviewStory';
+
 import IconButton from '@mui/material/IconButton';
 import { getCompartmentBeginning } from '@/Store/compartmentSlice';
 import { getAllStories } from '@/Store/StoriesSlice.js';
@@ -29,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     backgroundColor: theme.palette.primary.main,
-    margin: theme.spacing(1),
+    margin: theme.spacing(2),
     minWidth: '200px',
   },
 }));
@@ -107,6 +109,7 @@ function LandingPage() {
                     sx={{ fontSize: 100 }}
                   />
                 </Link>
+                
               </IconButton>
               <Typography variant="body1" style={{ fontWeight: 'bold' }}>
                 Voir les histoires

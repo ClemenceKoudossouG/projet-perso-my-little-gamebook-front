@@ -17,7 +17,7 @@ import { useNavigate } from 'react-router-dom';
 const defaultTheme = createTheme();
 
 export default function SignInSide() {
-  const logged = useSelector((state) => state.user.logged);
+  // const logged = useSelector((state) => state.user.logged);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const loginError = useSelector((state) => state.user.error);
@@ -41,10 +41,8 @@ export default function SignInSide() {
     dispatch({ type: 'SUBMIT_LOGIN' });
     if (handleSuccessfulLogin) {
       navigate('/');
-    } else {
     }
   };
-
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
