@@ -44,7 +44,7 @@ const authMiddleware = (store) => (next) => (action) => {
       }),
     })
       .then((res) => {
-        if (!res.ok) {
+        if (!res.status === 200) {
           throw new Error('Erreur lors de la connexion');
         }
         return res.json();

@@ -75,10 +75,9 @@ export default function Profile() {
   }, [dispatch]);
 
   // Condition - formulaire éditable si on est loggé
-  //const logged = useSelector((state) => state.user.logged);
+  // const logged = useSelector((state) => state.user.logged);
   const navigate = useNavigate();
   const loginError = useSelector((state) => state.user.error);
-  const [errors, setErrors] = useState({});
   // récupération & modifications du state
   const user = useSelector((state) => state.user);
   console.log(user);
@@ -114,22 +113,24 @@ export default function Profile() {
       [name]: value,
     });
   };
+
+  const [errors, setErrors] = useState({});
   const handleSubmit = (event) => {
     event.preventDefault();
     const inputErrors = {};
-    if (formValues.firstname === '') {
+    if (!formValues.firstname.trim()) {
       inputErrors.firstname = 'Veuillez indiquer votre prénom';
+      handleProfileEditionError();
     }
-    if (formValues.lastname === null) {
+    if (!formValues.lastname.trim()) {
       inputErrors.lastname = 'Veuillez indiquer votre nom de famille';
     }
-    if (formValues.alias === null) {
+    if (!formValues.alias.trim()) {
       inputErrors.alias = 'Veuillez indiquer votre alias';
     }
-
-    setErrors(errors);
+    setErrors(inputErrors);
     if (Object.keys(errors).length > 0) {
-      console.error('Erreurs de modification: ', errors);
+      console.error('Erreurs de modification: ', inputErrors);
       return;
     }
     console.log('Patch profile > ', {
@@ -165,6 +166,7 @@ export default function Profile() {
     navigate('/SignInSide');
   };
 
+  console.log('ERROR PATATE', errors);
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
