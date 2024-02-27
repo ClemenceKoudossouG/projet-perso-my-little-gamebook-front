@@ -20,12 +20,14 @@ import {
   getUser,
   handleProfileEditionError,
 } from '@/Store/UserSlice';
-// import { useHistory } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+<<<<<<< HEAD
 import Link from '@mui/material/Link';
 import { checkLoggedIn } from '@/Store/UserSlice';
 import { makeStyles } from '@material-ui/core/styles';
+=======
+>>>>>>> profile-error
 
 const defaultTheme = createTheme();
 
@@ -80,7 +82,6 @@ export default function Profile() {
   const loginError = useSelector((state) => state.user.error);
   // récupération & modifications du state
   const user = useSelector((state) => state.user);
-  console.log(user);
   const [formValues, setFormValues] = useState({
     firstname: user.firstname || '',
     lastname: user.lastname || '',
@@ -88,6 +89,7 @@ export default function Profile() {
     avatar: user.avatar || '',
   });
 
+<<<<<<< HEAD
   useEffect(() => {
     const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
     if (userFromLocalStorage) {
@@ -96,24 +98,25 @@ export default function Profile() {
   }, []);
 
   // Radio group AVATAR
+=======
+  const dispatch = useDispatch();
+  // Choix de l'avatar avec radio buttons
+>>>>>>> profile-error
   const [selectedValue, setSelectedValue] = React.useState(user.avatar);
   const handleAvatarChange = (event) => {
     event.preventDefault();
     setSelectedValue(event.target.value);
-    console.log('avatar >', event.target.value);
   };
   // Modifications des inputs + spread operator
   const handleChange = (event) => {
     event.preventDefault();
     const { name, value } = event.target;
-    console.log('Form element > ', name);
-    console.log('Valeur >', value);
     setFormValues({
       ...formValues,
       [name]: value,
     });
   };
-
+  // Si les champs des inputs sont vides, message d'erreur
   const [errors, setErrors] = useState({});
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -133,10 +136,6 @@ export default function Profile() {
       console.error('Erreurs de modification: ', inputErrors);
       return;
     }
-    console.log('Patch profile > ', {
-      ...formValues,
-      avatar: selectedValue,
-    });
     const updatedProfile = {
       ...formValues,
       avatar: selectedValue,
@@ -153,8 +152,6 @@ export default function Profile() {
   // Bouton MODIFIER
   const [isReadOnly, setIsReadOnly] = useState(true);
   const handleModifyClick = () => {
-    // const currentAvatar = user.avatar;
-    // setFormValues({ ...formValues, avatar: currentAvatar });
     setIsReadOnly(false);
   };
 

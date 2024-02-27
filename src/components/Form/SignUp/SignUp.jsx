@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { SubmitNewUser, handleSuccessfulUserCreation } from '@/Store/UserSlice';
+import { SubmitNewUser } from '@/Store/UserSlice';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 const defaultTheme = createTheme();
@@ -44,7 +44,7 @@ export default function SignUpSide() {
       // Si ça ne matche pas, mesage d'erreur
       alert('Veuillez confirmer de nouveau le mot de passe.');
     }
-    // Si les champs de l'input sont vides, message d'erreur
+    // Si les champs des inputs sont vides, message d'erreur
     if (!formValues.firstname.trim()) {
       inputErrors.firstname = 'Veuillez indiquer votre prénom';
     }
@@ -69,10 +69,7 @@ export default function SignUpSide() {
       setErrors(inputErrors);
       return;
     }
-    console.log('SignUp profile > ', {
-      ...formValues,
-    });
-
+    // Si c'est rempli correctement, on envoit au back les données et on "navigate"
     dispatch(SubmitNewUser(formValues));
     dispatch({ type: 'SUBMIT_NEWUSER' });
     navigate('/SignInSide');
