@@ -21,7 +21,7 @@ import { useNavigate } from 'react-router-dom';
 const defaultTheme = createTheme();
 
 export default function SignInSide() {
-  // const logged = useSelector((state) => state.user.logged);
+  const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const loginError = useSelector((state) => state.user.error);
@@ -39,9 +39,7 @@ export default function SignInSide() {
   };
 
   const handleSubmit = async (event) => {
-    // console.log();
     event.preventDefault();
-    // lanceD'unemaniereoud'uneautre LE check pour verifier que tout est bon
 
     const inputErrors = {};
     if (!formValues.password.trim()) {
@@ -115,9 +113,9 @@ export default function SignInSide() {
                 value={formValues.email}
                 onChange={handleChange}
               />
-              {loginError.email && (
+              {errors.email && (
                 <p style={{ color: 'red', fontSize: 'small' }}>
-                  {loginError.email}
+                  {errors.email}
                 </p>
               )}
               <TextField
@@ -132,9 +130,9 @@ export default function SignInSide() {
                 value={formValues.password}
                 onChange={handleChange}
               />
-              {loginError.password && (
+              {errors.password && (
                 <p style={{ color: 'red', fontSize: 'small' }}>
-                  {loginError.password}
+                  {errors.password}
                 </p>
               )}
               <Button

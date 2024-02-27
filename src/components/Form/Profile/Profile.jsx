@@ -166,7 +166,6 @@ export default function Profile() {
     navigate('/SignInSide');
   };
 
-  console.log('ERROR PATATE', errors);
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
@@ -306,11 +305,6 @@ export default function Profile() {
                 ))}
               </Stack>
 
-              {loginError && (
-                <Typography variant="body2" color="error">
-                  {loginError}
-                </Typography>
-              )}
               <Button
                 type="modify"
                 color="primary"
