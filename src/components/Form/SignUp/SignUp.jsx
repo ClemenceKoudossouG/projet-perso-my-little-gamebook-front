@@ -45,6 +45,7 @@ export default function SignUpSide() {
       // Si ça ne matche pas, mesage d'erreur
       alert('Veuillez confirmer de nouveau le mot de passe.');
     }
+    // Si les champs de l'input sont vides, message d'erreur
     if (!formValues.firstname.trim()) {
       inputErrors.firstname = 'Veuillez indiquer votre prénom';
     }
@@ -64,9 +65,9 @@ export default function SignUpSide() {
       inputErrors.passwordConfirmation =
         'Veuillez confirmer votre mot de passe';
     }
-    setErrors(errors);
-    if (Object.keys(errors).length > 0) {
-      console.error('Erreurs de validation: ', errors);
+    if (Object.keys(inputErrors).length > 0) {
+      console.error('Erreurs de validation: ', inputErrors);
+      setErrors(inputErrors);
       return;
     }
     console.log('SignUp profile > ', {
@@ -75,7 +76,6 @@ export default function SignUpSide() {
 
     dispatch(SubmitNewUser(formValues));
     dispatch({ type: 'SUBMIT_NEWUSER' });
-    // navigate('/');
     navigate('/SignInSide');
   };
 

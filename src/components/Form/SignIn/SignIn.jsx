@@ -11,7 +11,11 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { SubmitLogin, handleSuccessfulLogin } from '@/Store/UserSlice';
+import {
+  SubmitLogin,
+  handleSuccessfulLogin,
+  handleLoginError,
+} from '@/Store/UserSlice';
 import { useNavigate } from 'react-router-dom';
 
 const defaultTheme = createTheme();
@@ -34,9 +38,24 @@ export default function SignInSide() {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     // console.log();
     event.preventDefault();
+    // lanceD'unemaniereoud'uneautre LE check pour verifier que tout est bon
+
+    const inputErrors = {};
+    if (!formValues.password.trim()) {
+      inputErrors.password = 'Veuillez indiquer votre mot de passe';
+    }
+    if (!formValues.email.trim()) {
+      inputErrors.email = 'Veuillez indiquer votre adresse mail';
+    }
+    if (Object.keys(inputErrors).length > 0) {
+      console.error('Erreurs de modification: ', inputErrors);
+      dispatch(handleLoginError(inputErrors));
+      return;
+    }
+
     dispatch(SubmitLogin(formValues));
     dispatch({ type: 'SUBMIT_LOGIN' });
     if (handleSuccessfulLogin) {
@@ -79,11 +98,6 @@ export default function SignInSide() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            {loginError && (
-              <Typography color="error" variant="body2">
-                {loginError}
-              </Typography>
-            )}
             <Box
               component="form"
               noValidate
@@ -102,6 +116,11 @@ export default function SignInSide() {
                 value={formValues.email}
                 onChange={handleChange}
               />
+              {loginError.email && (
+                <p style={{ color: 'red', fontSize: 'small' }}>
+                  {loginError.email}
+                </p>
+              )}
               <TextField
                 margin="normal"
                 required
@@ -114,6 +133,11 @@ export default function SignInSide() {
                 value={formValues.password}
                 onChange={handleChange}
               />
+              {loginError.password && (
+                <p style={{ color: 'red', fontSize: 'small' }}>
+                  {loginError.password}
+                </p>
+              )}
               <Button
                 type="submit"
                 fullWidth
