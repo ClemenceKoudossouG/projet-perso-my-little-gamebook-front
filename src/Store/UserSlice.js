@@ -23,6 +23,7 @@ const userSlice = createSlice({
     },
     handleSuccessfulLogin: (state, action) => {
       localStorage.setItem('token', action.payload.token);
+      localStorage.setItem('user', JSON.stringify(action.payload));
       return {
         ...state,
         ...action.payload,
@@ -33,6 +34,7 @@ const userSlice = createSlice({
     },
     handleSuccessfulUserCreation: (state, action) => {
       localStorage.setItem('token', action.payload.token);
+      localStorage.setItem('user', JSON.stringify(action.payload));
       return {
         ...state,
         ...action.payload,
@@ -82,6 +84,7 @@ const userSlice = createSlice({
     },
     handleLogOut: () => {
       localStorage.removeItem('token');
+      localStorage.removeItem('user');
       return {
         ...initialState,
         logged: false,
@@ -112,8 +115,10 @@ const userSlice = createSlice({
     checkLoggedIn: (state) => {
       const token = localStorage.getItem('token');
       if (token) {
+        const userData = JSON.parse(localStorage.getItem('user'));
         return {
           ...state,
+          ...userData,
           logged: true,
           token,
         };

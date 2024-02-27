@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,6 +12,7 @@ import Radio from '@mui/material/Radio';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { PatchProfile, getUser } from '@/Store/UserSlice';
@@ -20,6 +20,7 @@ import { PatchProfile, getUser } from '@/Store/UserSlice';
 import Stack from '@mui/material/Stack';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import Link from '@mui/material/Link';
+import { checkLoggedIn } from '@/Store/UserSlice';
 
 const defaultTheme = createTheme();
 
@@ -62,6 +63,12 @@ const avatars = [
 ];
 
 export default function Profile() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(checkLoggedIn());
+  }, [dispatch]);
+
   // Condition - formulaire éditable si on est loggé
   const logged = useSelector((state) => state.user.logged);
   const navigate = useNavigate();
@@ -78,7 +85,13 @@ export default function Profile() {
     avatar: user.avatar || '',
   });
 
-  const dispatch = useDispatch();
+  useEffect(() => {
+    const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
+    if (userFromLocalStorage) {
+      setFormValues(userFromLocalStorage);
+    }
+  }, []);
+
   // Radio group AVATAR
   const [selectedValue, setSelectedValue] = React.useState(user.avatar);
   const handleAvatarChange = (event) => {
@@ -106,6 +119,7 @@ export default function Profile() {
     const updatedProfile = { ...formValues, avatar: selectedValue };
     dispatch(PatchProfile(updatedProfile));
     dispatch({ type: 'PATCH_PROFILE' });
+    localStorage.setItem('user', JSON.stringify(formValues));
     // navigate('/');
   };
 
