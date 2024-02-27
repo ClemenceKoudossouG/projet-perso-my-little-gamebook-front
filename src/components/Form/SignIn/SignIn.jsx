@@ -39,9 +39,9 @@ export default function SignInSide() {
     event.preventDefault();
     dispatch(SubmitLogin(formValues));
     dispatch({ type: 'SUBMIT_LOGIN' });
-
     navigate('/');
   };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
