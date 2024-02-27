@@ -13,7 +13,7 @@ const storyMiddleware = (store) => (next) => (action) => {
       fetch(`http://localhost:3000/compartments/${id}`, {
         // Ajouter l'en-tête d'autorisation
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: token,
         },
       })
         .then((res) => res.json())
@@ -36,7 +36,7 @@ const storyMiddleware = (store) => (next) => (action) => {
       fetch(`http://localhost:3000/compartments/story/${id}/beginning`, {
         // Ajouter l'en-tête d'autorisation
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: token,
         },
       })
         .then((res) => res.json())
@@ -56,7 +56,7 @@ const storyMiddleware = (store) => (next) => (action) => {
       fetch('http://localhost:3000/stories', {
         // Ajouter l'en-tête d'autorisation
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: token,
         },
       })
         .then((res) => res.json())

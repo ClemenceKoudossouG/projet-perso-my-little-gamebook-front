@@ -33,6 +33,8 @@ function Game2() {
     compartmentData.action1_consequence !== null ||
     compartmentData.action2_consequence !== null;
 
+  const beginning = compartmentData.class === 'beginning';
+
   // État de la modale de dialogue
   const [open, setOpen] = React.useState(false);
 
@@ -93,45 +95,47 @@ function Game2() {
     handleClose();
   };
 
-  const styles = {
-    image: {
-      maxWidth: '100%',
-      height: 'auto',
-      '@media (max-width: 768px)': {
-        maxWidth: '50%',
-        height: 'auto',
-      },
-    },
-  };
-  return (
-    <div
-      className="image-container"
-      style={{
-        backgroundImage: `url(/img/bg/${compartmentData.place_img}.jpg)`,
-      }}
-    >
-      <div className="image-container">
-        <img
-          src={`/img/pnj/${compartmentData.npc_img}.png`}
-          alt={compartmentData.npc_img}
-          style={styles.image}
-        />
+  if (compartmentData.action1_id === compartmentData.action2_id) {
+    if (compartmentData.npc_id !== null) {
+      return (
+        <div
+          className="image-container"
+          style={{
+            backgroundImage: `url(/img/bg/${compartmentData.place_img}.jpg)`,
+          }}
+        >
+          <div className="image-container">
+            <img
+              src={`/img/pnj/${compartmentData.npc_img}.png`}
+              alt={compartmentData.npc_img}
+              style={{ maxWidth: '100%', height: 'auto' }}
+            />
+            <div className="content-container">
+              {!beginning && (
+                <div className="textbox">
+                  <Typography variant="h4" gutterBottom sx={{ color: 'white' }}>
+                    Tu es {compartmentData.place_label}
+                    {compartmentData.npc_label &&
+                      ` avec ${compartmentData.npc_label}`}
+                    , que fais-tu ?
+                  </Typography>
+                </div>
+              )}
 
-        <div className="content-container">
-          <div className="textbox">
-            <Typography variant="h4" gutterBottom sx={{ color: 'white' }}>
-              Tu es {compartmentData.place_label}{' '}
-              {compartmentData.npc_label && `avec ${compartmentData.npc_label}`}
-              , que fais-tu ?
-            </Typography>
-          </div>
-
-          {/* Afficher les boutons d'action si ce n'est pas une fin ou une conséquence */}
-          {!ending && !consequence && (
-            <div>
-              {compartmentData.action1_label !==
-              compartmentData.action2_label ? (
-                <>
+              {beginning && (
+                <div className="textbox">
+                  <Typography variant="h4" gutterBottom sx={{ color: 'white' }}>
+                    C'est le début de ton aventure... Tu es{' '}
+                    {compartmentData.place_label}
+                    {compartmentData.npc_label &&
+                      ` avec ${compartmentData.npc_label}`}
+                    , que fais-tu ?
+                  </Typography>
+                </div>
+              )}
+              {/* Afficher les boutons d'action si ce n'est pas une fin ou une conséquence */}
+              {!ending && !consequence && (
+                <div>
                   <Button
                     variant="contained"
                     size="large"
@@ -139,115 +143,538 @@ function Game2() {
                   >
                     {compartmentData.action1_label}
                   </Button>
+                </div>
+              )}
+              {/* Afficher le dialogue de fin s'il s'agit d'une fin */}
+              {ending && (
+                <div>
+                  <div>
+                    <Button
+                      variant="contained"
+                      size="large"
+                      onClick={handleClickOpen}
+                    >
+                      {compartmentData.action1_label}
+                    </Button>
+                  </div>
+                  <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                    <DialogTitle id="alert-dialog-title">
+                      C'est fini !
+                    </DialogTitle>
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                        {compartmentData.action1_consequence}
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Link to="/">
+                        <Button onClick={handleClose}>Quitter</Button>
+                      </Link>
+                      <Button onClick={handleClickButtonCompartment} autoFocus>
+                        Recommencer
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                </div>
+              )}
+              {/* Afficher le dialogue de conséquence s'il y a une conséquence */}
+              {consequence && !ending && (
+                <div>
+                  <div>
+                    <Button
+                      variant="contained"
+                      size="large"
+                      onClick={() => handleClickOpen(1)}
+                    >
+                      {compartmentData.action1_label}
+                    </Button>
+                  </div>
+                  <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                        {compartmentData.action1_consequence}
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handleClickContinue1} autoFocus>
+                        Continuer
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div
+          className="image-container"
+          style={{
+            backgroundImage: `url(/img/bg/${compartmentData.place_img}.jpg)`,
+          }}
+        >
+          <div className="image-container">
+            <div className="content-container">
+              {!beginning && (
+                <div className="textbox">
+                  <Typography variant="h4" gutterBottom sx={{ color: 'white' }}>
+                    Tu es {compartmentData.place_label}
+                    {compartmentData.npc_label &&
+                      ` avec ${compartmentData.npc_label}`}
+                    , que fais-tu ?
+                  </Typography>
+                </div>
+              )}
+
+              {beginning && (
+                <div className="textbox">
+                  <Typography variant="h4" gutterBottom sx={{ color: 'white' }}>
+                    C'est le début de ton aventure... Tu es{' '}
+                    {compartmentData.place_label}
+                    {compartmentData.npc_label &&
+                      ` avec ${compartmentData.npc_label}`}
+                    , que fais-tu ?
+                  </Typography>
+                </div>
+              )}
+              {/* Afficher les boutons d'action si ce n'est pas une fin ou une conséquence */}
+              {!ending && !consequence && (
+                <div>
                   <Button
                     variant="contained"
                     size="large"
-                    onClick={handleClickButton2}
+                    onClick={handleClickButton1}
                   >
-                    {compartmentData.action2_label}
+                    {compartmentData.action1_label}
                   </Button>
-                </>
-              ) : (
-                <Button
-                  variant="contained"
-                  size="large"
-                  onClick={handleClickButton1}
-                >
-                  {compartmentData.action1_label}
-                </Button>
+                </div>
+              )}
+              {/* Afficher le dialogue de fin s'il s'agit d'une fin */}
+              {ending && (
+                <div>
+                  <div>
+                    <Button
+                      variant="contained"
+                      size="large"
+                      onClick={handleClickOpen}
+                    >
+                      {compartmentData.action1_label}
+                    </Button>
+                  </div>
+                  <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                    <DialogTitle id="alert-dialog-title">
+                      C'est fini !
+                    </DialogTitle>
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                        {compartmentData.action1_consequence}
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Link to="/">
+                        <Button onClick={handleClose}>Quitter</Button>
+                      </Link>
+                      <Button onClick={handleClickButtonCompartment} autoFocus>
+                        Recommencer
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                </div>
+              )}
+              {/* Afficher le dialogue de conséquence s'il y a une conséquence */}
+              {consequence && !ending && (
+                <div>
+                  <div>
+                    <Button
+                      variant="contained"
+                      size="large"
+                      onClick={() => handleClickOpen(1)}
+                    >
+                      {compartmentData.action1_label}
+                    </Button>
+                  </div>
+                  <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                        {compartmentData.action1_consequence}
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handleClickContinue1} autoFocus>
+                        Continuer
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                </div>
               )}
             </div>
-          )}
-
-          {/* Afficher le dialogue de fin s'il s'agit d'une fin */}
-          {ending && (
-            <div>
-              <div>
-                <Button
-                  variant="contained"
-                  size="large"
-                  onClick={handleClickOpen}
-                >
-                  {compartmentData.action1_label}
-                </Button>
-              </div>
-
-              <Dialog
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-              >
-                <DialogTitle id="alert-dialog-title">C'est fini !</DialogTitle>
-                <DialogContent>
-                  <DialogContentText id="alert-dialog-description">
-                    {compartmentData.action1_consequence}
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                  <Link to="/">
-                    <Button onClick={handleClose}>Quitter</Button>
-                  </Link>
-                  <Button onClick={handleClickButtonCompartment} autoFocus>
-                    Recommencer
-                  </Button>
-                </DialogActions>
-              </Dialog>
-            </div>
-          )}
-
-          {/* Afficher le dialogue de conséquence s'il y a une conséquence */}
-          {consequence && !ending && (
-            <div>
-              <div>
-                <Button
-                  variant="contained"
-                  size="large"
-                  onClick={() => handleClickOpen(1)}
-                >
-                  {compartmentData.action1_label}
-                </Button>
-                <Button
-                  variant="contained"
-                  size="large"
-                  onClick={() => handleClickOpen(2)}
-                >
-                  {compartmentData.action2_label}
-                </Button>
-              </div>
-
-              <Dialog
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-              >
-                <DialogContent>
-                  <DialogContentText id="alert-dialog-description">
-                    {selectedAction === 1
-                      ? compartmentData.action1_consequence
-                      : compartmentData.action2_consequence}
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                  <Button
-                    onClick={
-                      selectedAction === 1
-                        ? handleClickContinue1
-                        : handleClickContinue2
-                    }
-                    autoFocus
-                  >
-                    Continuer
-                  </Button>
-                </DialogActions>
-              </Dialog>
-            </div>
-          )}
+          </div>
         </div>
-      </div>
-    </div>
-  );
+      );
+    }
+  } else {
+    if (compartmentData.npc_id !== null) {
+      return (
+        <div
+          className="image-container"
+          style={{
+            backgroundImage: `url(/img/bg/${compartmentData.place_img}.jpg)`,
+          }}
+        >
+          <div className="image-container">
+            <img
+              src={`/img/pnj/${compartmentData.npc_img}.png`}
+              alt={compartmentData.npc_img}
+              style={{ maxWidth: '100%', height: 'auto' }}
+            />
+
+            <div className="content-container">
+              {!beginning && (
+                <div className="textbox">
+                  <Typography variant="h4" gutterBottom sx={{ color: 'white' }}>
+                    Tu es {compartmentData.place_label}
+                    {compartmentData.npc_label &&
+                      ` avec ${compartmentData.npc_label}`}
+                    , que fais-tu ?
+                  </Typography>
+                </div>
+              )}
+
+              {beginning && (
+                <div className="textbox">
+                  <Typography variant="h4" gutterBottom sx={{ color: 'white' }}>
+                    C'est le début de ton aventure... Tu es{' '}
+                    {compartmentData.place_label}
+                    {compartmentData.npc_label &&
+                      ` avec ${compartmentData.npc_label}`}
+                    , que fais-tu ?
+                  </Typography>
+                </div>
+              )}
+
+              {/* Afficher les boutons d'action si ce n'est pas une fin ou une conséquence */}
+              {!ending && !consequence && (
+                <div>
+                  {compartmentData.action1_label !==
+                  compartmentData.action2_label ? (
+                    <>
+                      <Button
+                        variant="contained"
+                        size="large"
+                        onClick={handleClickButton1}
+                      >
+                        {compartmentData.action1_label}
+                      </Button>
+                      <Button
+                        variant="contained"
+                        size="large"
+                        onClick={handleClickButton2}
+                      >
+                        {compartmentData.action2_label}
+                      </Button>
+                    </>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      size="large"
+                      onClick={handleClickButton1}
+                    >
+                      {compartmentData.action1_label}
+                    </Button>
+                  )}
+                </div>
+              )}
+
+              {/* Afficher le dialogue de fin s'il s'agit d'une fin */}
+              {ending && (
+                <div>
+                  <div>
+                    <Button
+                      variant="contained"
+                      size="large"
+                      onClick={handleClickOpen}
+                    >
+                      {compartmentData.action1_label}
+                    </Button>
+                    <Button
+                      variant="contained"
+                      size="large"
+                      onClick={handleClickOpen}
+                    >
+                      {compartmentData.action2_label}
+                    </Button>
+                  </div>
+
+                  <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                    <DialogTitle id="alert-dialog-title">
+                      C'est fini !
+                    </DialogTitle>
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                        {selectedAction === 1
+                          ? compartmentData.action1_consequence
+                          : compartmentData.action2_consequence}
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Link to="/">
+                        <Button onClick={handleClose}>Quitter</Button>
+                      </Link>
+                      <Button onClick={handleClickButtonCompartment} autoFocus>
+                        Recommencer
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                </div>
+              )}
+
+              {/* Afficher le dialogue de conséquence s'il y a une conséquence */}
+              {consequence && !ending && (
+                <div>
+                  <div>
+                    <Button
+                      variant="contained"
+                      size="large"
+                      onClick={() => handleClickOpen(1)}
+                    >
+                      {compartmentData.action1_label}
+                    </Button>
+                    <Button
+                      variant="contained"
+                      size="large"
+                      onClick={() => handleClickOpen(2)}
+                    >
+                      {compartmentData.action2_label}
+                    </Button>
+                  </div>
+
+                  <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                        {selectedAction === 1
+                          ? compartmentData.action1_consequence
+                          : compartmentData.action2_consequence}
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button
+                        onClick={
+                          selectedAction === 1
+                            ? handleClickContinue1
+                            : handleClickContinue2
+                        }
+                        autoFocus
+                      >
+                        Continuer
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div
+          className="image-container"
+          style={{
+            backgroundImage: `url(/img/bg/${compartmentData.place_img}.jpg)`,
+          }}
+        >
+          <div className="image-container">
+            <div className="content-container">
+              {!beginning && (
+                <div className="textbox">
+                  <Typography variant="h4" gutterBottom sx={{ color: 'white' }}>
+                    Tu es {compartmentData.place_label}
+                    {compartmentData.npc_label &&
+                      ` avec ${compartmentData.npc_label}`}
+                    , que fais-tu ?
+                  </Typography>
+                </div>
+              )}
+
+              {beginning && (
+                <div className="textbox">
+                  <Typography variant="h4" gutterBottom sx={{ color: 'white' }}>
+                    C'est le début de ton aventure... Tu es{' '}
+                    {compartmentData.place_label}
+                    {compartmentData.npc_label &&
+                      ` avec ${compartmentData.npc_label}`}
+                    , que fais-tu ?
+                  </Typography>
+                </div>
+              )}
+
+              {/* Afficher les boutons d'action si ce n'est pas une fin ou une conséquence */}
+              {!ending && !consequence && (
+                <div>
+                  {compartmentData.action1_label !==
+                  compartmentData.action2_label ? (
+                    <>
+                      <Button
+                        variant="contained"
+                        size="large"
+                        onClick={handleClickButton1}
+                      >
+                        {compartmentData.action1_label}
+                      </Button>
+                      <Button
+                        variant="contained"
+                        size="large"
+                        onClick={handleClickButton2}
+                      >
+                        {compartmentData.action2_label}
+                      </Button>
+                    </>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      size="large"
+                      onClick={handleClickButton1}
+                    >
+                      {compartmentData.action1_label}
+                    </Button>
+                  )}
+                </div>
+              )}
+
+              {/* Afficher le dialogue de fin s'il s'agit d'une fin */}
+              {ending && (
+                <div>
+                  <div>
+                    <Button
+                      variant="contained"
+                      size="large"
+                      onClick={handleClickOpen}
+                    >
+                      {compartmentData.action1_label}
+                    </Button>
+                    <Button
+                      variant="contained"
+                      size="large"
+                      onClick={handleClickOpen}
+                    >
+                      {compartmentData.action2_label}
+                    </Button>
+                  </div>
+
+                  <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                    <DialogTitle id="alert-dialog-title">
+                      C'est fini !
+                    </DialogTitle>
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                        {selectedAction === 1
+                          ? compartmentData.action1_consequence
+                          : compartmentData.action2_consequence}
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Link to="/">
+                        <Button onClick={handleClose}>Quitter</Button>
+                      </Link>
+                      <Button onClick={handleClickButtonCompartment} autoFocus>
+                        Recommencer
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                </div>
+              )}
+
+              {/* Afficher le dialogue de conséquence s'il y a une conséquence */}
+              {consequence && !ending && (
+                <div>
+                  <div>
+                    <Button
+                      variant="contained"
+                      size="large"
+                      onClick={() => handleClickOpen(1)}
+                    >
+                      {compartmentData.action1_label}
+                    </Button>
+                    <Button
+                      variant="contained"
+                      size="large"
+                      onClick={() => handleClickOpen(2)}
+                    >
+                      {compartmentData.action2_label}
+                    </Button>
+                  </div>
+
+                  <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                        {selectedAction === 1
+                          ? compartmentData.action1_consequence
+                          : compartmentData.action2_consequence}
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button
+                        onClick={
+                          selectedAction === 1
+                            ? handleClickContinue1
+                            : handleClickContinue2
+                        }
+                        autoFocus
+                      >
+                        Continuer
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    }
+  }
 }
 
 export default Game2;
