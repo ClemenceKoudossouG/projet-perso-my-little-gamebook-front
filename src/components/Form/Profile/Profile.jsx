@@ -2,32 +2,24 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-// import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import Typography from '@mui/material/Typography';
 import Radio from '@mui/material/Radio';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import React, { useEffect } from 'react';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import {
   PatchProfile,
   getUser,
   handleProfileEditionError,
+  checkLoggedIn,
 } from '@/Store/UserSlice';
 import Stack from '@mui/material/Stack';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
-<<<<<<< HEAD
-import Link from '@mui/material/Link';
-import { checkLoggedIn } from '@/Store/UserSlice';
-import { makeStyles } from '@material-ui/core/styles';
-=======
->>>>>>> profile-error
 
 const defaultTheme = createTheme();
 
@@ -79,7 +71,6 @@ export default function Profile() {
   // Condition - formulaire éditable si on est loggé
   // const logged = useSelector((state) => state.user.logged);
   const navigate = useNavigate();
-  const loginError = useSelector((state) => state.user.error);
   // récupération & modifications du state
   const user = useSelector((state) => state.user);
   const [formValues, setFormValues] = useState({
@@ -89,19 +80,7 @@ export default function Profile() {
     avatar: user.avatar || '',
   });
 
-<<<<<<< HEAD
-  useEffect(() => {
-    const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
-    if (userFromLocalStorage) {
-      setFormValues(userFromLocalStorage);
-    }
-  }, []);
-
-  // Radio group AVATAR
-=======
-  const dispatch = useDispatch();
   // Choix de l'avatar avec radio buttons
->>>>>>> profile-error
   const [selectedValue, setSelectedValue] = React.useState(user.avatar);
   const handleAvatarChange = (event) => {
     event.preventDefault();
@@ -149,7 +128,7 @@ export default function Profile() {
     // navigate('/');
   };
 
-  // Bouton MODIFIER
+  // Bouton "modifier""
   const [isReadOnly, setIsReadOnly] = useState(true);
   const handleModifyClick = () => {
     setIsReadOnly(false);
