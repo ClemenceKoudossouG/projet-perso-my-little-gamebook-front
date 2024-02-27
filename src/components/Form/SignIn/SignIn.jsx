@@ -10,7 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
   SubmitLogin,
   handleSuccessfulLogin,
@@ -24,7 +24,6 @@ export default function SignInSide() {
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const loginError = useSelector((state) => state.user.error);
   const [formValues, setFormValues] = useState({
     email: '',
     password: '',
@@ -40,7 +39,7 @@ export default function SignInSide() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    // Si les champs de l'input sont vides, message d'erreur
     const inputErrors = {};
     if (!formValues.password.trim()) {
       inputErrors.password = 'Veuillez indiquer votre mot de passe';
@@ -49,11 +48,11 @@ export default function SignInSide() {
       inputErrors.email = 'Veuillez indiquer votre adresse mail';
     }
     if (Object.keys(inputErrors).length > 0) {
-      console.error('Erreurs de modification: ', inputErrors);
-      dispatch(handleLoginError(inputErrors));
+      console.error('Erreurs de connexion: ', inputErrors);
+      setErrors(inputErrors);
       return;
     }
-
+    // Si c'est rempli correctement, on envoit au back les données et on "navigate"
     dispatch(SubmitLogin(formValues));
     dispatch({ type: 'SUBMIT_LOGIN' });
     if (handleSuccessfulLogin) {
