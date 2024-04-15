@@ -22,10 +22,7 @@ export default function SignUpSide() {
   const navigate = useNavigate();
   const loginError = useSelector((state) => state.user.error);
   const [formValues, setFormValues] = useState({
-    email: '',
     password: '',
-    firstname: '',
-    lastname: '',
     alias: '',
   });
 
@@ -43,26 +40,17 @@ export default function SignUpSide() {
     // Vérification si passwordConfirmation matche bien avec password
     if (formValues.password !== formValues.passwordConfirmation) {
       // Si ça ne matche pas, mesage d'erreur
-      alert('Veuillez confirmer de nouveau le mot de passe.');
-    }
-    if (!formValues.firstname.trim()) {
-      inputErrors.firstname = 'Veuillez indiquer votre prénom';
-    }
-    if (!formValues.lastname.trim()) {
-      inputErrors.lastname = 'Veuillez indiquer votre nom de famille';
+      alert("N'oublie pas de confirmer ton mot de passe !");
     }
     if (!formValues.alias.trim()) {
-      inputErrors.alias = 'Veuillez indiquer votre alias';
-    }
-    if (!formValues.email.trim()) {
-      inputErrors.email = 'Veuillez indiquer votre adresse email';
+      inputErrors.alias = "N'oublie pas ton pseudo !";
     }
     if (!formValues.password.trim()) {
-      inputErrors.password = 'Veuillez indiquer votre mot de passe';
+      inputErrors.password = 'Oups, tu as oublié ton mot de passe !';
     }
     if (!formValues.passwordConfirmation.trim()) {
       inputErrors.passwordConfirmation =
-        'Veuillez confirmer votre mot de passe';
+        "N'oublie pas de confirmer ton mot de passe !";
     }
     setErrors(errors);
     if (Object.keys(errors).length > 0) {
@@ -113,7 +101,7 @@ export default function SignUpSide() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign Up
+              Nouvel aventurier ? Crée ton compte ici !
             </Typography>
             {loginError && (
               <Typography color="error" variant="body2">
@@ -126,49 +114,12 @@ export default function SignUpSide() {
               onSubmit={handleSubmit}
               sx={{ mt: 1 }}
             >
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    autoComplete="given-name"
-                    name="firstname"
-                    required
-                    fullWidth
-                    id="firstname"
-                    label="First Name"
-                    autoFocus
-                    value={formValues.firstname}
-                    onChange={handleChange}
-                  />
-                  {errors.firstname && (
-                    <p style={{ color: 'red', fontSize: 'small' }}>
-                      {errors.firstname}
-                    </p>
-                  )}
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="lastname"
-                    label="Last Name"
-                    name="lastname"
-                    autoComplete="family-name"
-                    value={formValues.lastname}
-                    onChange={handleChange}
-                  />
-                  {errors.lastname && (
-                    <p style={{ color: 'red', fontSize: 'small' }}>
-                      {errors.lastname}
-                    </p>
-                  )}
-                </Grid>
-              </Grid>
               <TextField
                 margin="normal"
                 required
                 fullWidth
                 id="alias"
-                label="alias"
+                label="pseudo"
                 name="alias"
                 autoComplete="alias"
                 autoFocus
@@ -184,25 +135,8 @@ export default function SignUpSide() {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                value={formValues.email}
-                onChange={handleChange}
-              />
-              {errors.email && (
-                <p style={{ color: 'red', fontSize: 'small' }}>
-                  {errors.email}
-                </p>
-              )}
-              <TextField
-                margin="normal"
-                required
-                fullWidth
                 name="password"
-                label="Password"
+                label="Mot de passe"
                 type="password"
                 id="password"
                 autoComplete="current-password"
@@ -219,7 +153,7 @@ export default function SignUpSide() {
                 required
                 fullWidth
                 name="passwordConfirmation"
-                label="Password confirmation"
+                label="Je confirme mon mot de passe"
                 type="password"
                 id="passwordConfirmation"
                 autoComplete="current-password"
@@ -237,12 +171,12 @@ export default function SignUpSide() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign Up
+                Je crée mon compte
               </Button>
               <Grid container>
                 <Grid item>
                   <Link href="/SignInSide" variant="body2">
-                    Already have an account? Sign in
+                    J'ai déjà un compte. Je me connecte !
                   </Link>
                 </Grid>
               </Grid>

@@ -22,7 +22,7 @@ export default function SignInSide() {
   const navigate = useNavigate();
   const loginError = useSelector((state) => state.user.error);
   const [formValues, setFormValues] = useState({
-    email: '',
+    alias: '',
     password: '',
   });
 
@@ -76,7 +76,7 @@ export default function SignInSide() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
+              Connexion
             </Typography>
             {loginError && (
               <Typography color="error" variant="body2">
@@ -93,10 +93,10 @@ export default function SignInSide() {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                id="alias"
+                label="Pseudo"
+                name="alias"
+                autoComplete="alias"
                 autoFocus
                 value={formValues.email}
                 onChange={handleChange}
@@ -106,7 +106,7 @@ export default function SignInSide() {
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                label="Halte-là, ton mot de passe ?"
                 type="password"
                 id="password"
                 autoComplete="current-password"
@@ -119,12 +119,12 @@ export default function SignInSide() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign In
+                Je me connecte !
               </Button>
               <Grid container>
                 <Grid item>
                   <Link href="/SignUpSide" variant="body2">
-                    "Don't have an account? Sign Up"
+                    "Pas encore de compte ? Crée-toi un compte ici !"
                   </Link>
                 </Grid>
               </Grid>

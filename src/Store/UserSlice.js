@@ -2,11 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 export const initialState = {
   logged: !!localStorage.getItem('token'),
-  email: '',
   password: '',
   token: localStorage.getItem('token'),
-  firstname: '',
-  lastname: '',
   alias: '',
   avatar: '',
 };
@@ -52,25 +49,20 @@ const userSlice = createSlice({
     SubmitLogin: (state, action) => {
       return {
         ...state,
-        email: action.payload.email,
+        alias: action.payload.alias,
         password: action.payload.password,
       };
     },
     SubmitNewUser: (state, action) => {
       return {
         ...state,
-        email: action.payload.email,
         password: action.payload.password,
-        firstname: action.payload.firstname,
-        lastname: action.payload.lastname,
         alias: action.payload.alias,
       };
     },
     PatchProfile: (state, action) => {
       return {
         ...state,
-        firstname: action.payload.firstname,
-        lastname: action.payload.lastname,
         alias: action.payload.alias,
         avatar: action.payload.avatar,
       };

@@ -83,8 +83,6 @@ export default function Profile() {
   const user = useSelector((state) => state.user);
   console.log(user);
   const [formValues, setFormValues] = useState({
-    firstname: user.firstname || '',
-    lastname: user.lastname || '',
     alias: user.alias || '',
     avatar: user.avatar || '',
   });
@@ -117,14 +115,8 @@ export default function Profile() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const inputErrors = {};
-    if (formValues.firstname === '') {
-      inputErrors.firstname = 'Veuillez indiquer votre prénom';
-    }
-    if (formValues.lastname === null) {
-      inputErrors.lastname = 'Veuillez indiquer votre nom de famille';
-    }
     if (formValues.alias === null) {
-      inputErrors.alias = 'Veuillez indiquer votre alias';
+      inputErrors.alias = "N'oublie pas ton pseudo !";
     }
 
     setErrors(errors);
@@ -139,8 +131,6 @@ export default function Profile() {
     const updatedProfile = {
       ...formValues,
       avatar: selectedValue,
-      firstname: formValues.firstname.trim(),
-      lastname: formValues.lastname.trim(),
       alias: formValues.alias.trim(),
     };
     dispatch(PatchProfile(updatedProfile));
@@ -209,52 +199,6 @@ export default function Profile() {
               onSubmit={handleSubmit}
               sx={{ mt: 1 }}
             >
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="firstname"
-                    label="First Name"
-                    name="firstname"
-                    autoComplete="firstname"
-                    autoFocus
-                    value={formValues.firstname}
-                    onChange={(e) =>
-                      setFormValues({
-                        ...formValues,
-                        firstname: e.target.value,
-                      })
-                    }
-                    InputProps={{ readOnly: isReadOnly }}
-                  />
-                  {errors.firstname && (
-                    <p style={{ color: 'red', fontSize: 'small' }}>
-                      {errors.firstname}
-                    </p>
-                  )}
-                </Grid>
-
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="lastname"
-                    label="Last Name"
-                    name="lastname"
-                    autoComplete="lastname"
-                    autoFocus
-                    value={formValues.lastname}
-                    onChange={handleChange}
-                    InputProps={{ readOnly: isReadOnly }}
-                  />
-                  {errors.lastname && (
-                    <p style={{ color: 'red', fontSize: 'small' }}>
-                      {errors.lastname}
-                    </p>
-                  )}
-                </Grid>
-              </Grid>
               <TextField
                 margin="normal"
                 required

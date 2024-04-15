@@ -39,13 +39,13 @@ const authMiddleware = (store) => (next) => (action) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        email: store.getState().user.email,
+        alias: store.getState().user.alias,
         password: store.getState().user.password,
       }),
     })
       .then((res) => {
         if (!res.ok) {
-          throw new Error('Erreur lors de la connexion');
+          throw new Error('Oups ! La connexion a échoué.');
         }
         return res.json();
       })
@@ -64,16 +64,13 @@ const authMiddleware = (store) => (next) => (action) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        email: store.getState().user.email,
         password: store.getState().user.password,
-        firstname: store.getState().user.firstname,
-        lastname: store.getState().user.lastname,
         alias: store.getState().user.alias,
       }),
     })
       .then((res) => {
         if (!res.ok) {
-          throw new Error("Erreur lors de la création de l'utilisateur");
+          throw new Error("Oups ! L'utilisateur n'a pas pu être créé.");
         } else {
           return res.json();
         }
@@ -96,15 +93,13 @@ const authMiddleware = (store) => (next) => (action) => {
         Authorization: `${store.getState().user.token}`,
       },
       body: JSON.stringify({
-        firstname: store.getState().user.firstname,
-        lastname: store.getState().user.lastname,
         alias: store.getState().user.alias,
         avatar: store.getState().user.avatar || '',
       }),
     })
       .then((res) => {
         if (!res.ok) {
-          throw new Error("Erreur lors de l'édition du profil");
+          throw new Error("Oups ! Le profil n'a pas pu être modifié.");
         }
         return res.json();
       })
@@ -127,7 +122,7 @@ const authMiddleware = (store) => (next) => (action) => {
     })
       .then((res) => {
         if (!res.ok) {
-          throw new Error('Erreur lors de la suppression du profil');
+          throw new Error("Oups ! Le profil n'a pas pu être supprimé.");
         }
         const deleteAction = DeleteProfile();
         store.dispatch(deleteAction);
