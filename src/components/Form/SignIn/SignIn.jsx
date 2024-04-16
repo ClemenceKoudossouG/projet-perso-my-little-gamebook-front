@@ -9,18 +9,18 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { SubmitLogin, handleSuccessfulLogin } from '@/Store/UserSlice';
 import { useNavigate } from 'react-router-dom';
+import { SubmitLogin } from '../../../Store/UserSlice';
 
 const defaultTheme = createTheme();
 
 export default function SignInSide() {
-  // const logged = useSelector((state) => state.user.logged);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const loginError = useSelector((state) => state.user.error);
+  const isLogged = useSelector((state) => state.user.logged);
   const [formValues, setFormValues] = useState({
     alias: '',
     password: '',
@@ -35,12 +35,16 @@ export default function SignInSide() {
   };
 
   const handleSubmit = (event) => {
-    // console.log();
     event.preventDefault();
     dispatch(SubmitLogin(formValues));
     dispatch({ type: 'SUBMIT_LOGIN' });
-    navigate('/');
   };
+  // Conditionnelle pour rediriger l'utilisateur uniquement si connecté
+  useEffect(() => {
+    if (isLogged) {
+      navigate('/');
+    }
+  }, [isLogged, navigate]);
 
   return (
     <ThemeProvider theme={defaultTheme}>

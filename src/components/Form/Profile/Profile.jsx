@@ -24,8 +24,8 @@ import {
 import Stack from '@mui/material/Stack';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import Link from '@mui/material/Link';
-import { checkLoggedIn } from '@/Store/UserSlice';
 import { makeStyles } from '@material-ui/core/styles';
+import { checkLoggedIn } from '@/Store/UserSlice';
 
 const defaultTheme = createTheme();
 
@@ -75,9 +75,9 @@ export default function Profile() {
   }, [dispatch]);
 
   // Condition - formulaire éditable si on est loggé
-  //const logged = useSelector((state) => state.user.logged);
+  // const logged = useSelector((state) => state.user.logged);
   const navigate = useNavigate();
-  const loginError = useSelector((state) => state.user.error);
+  // const loggedInError = useSelector((state) => state.user.error);
   const [errors, setErrors] = useState({});
   // récupération & modifications du state
   const user = useSelector((state) => state.user);
@@ -247,12 +247,11 @@ export default function Profile() {
                   <Avatar key={avatar.id} alt={avatar.alt} src={avatar.src} />
                 ))}
               </Stack>
-
-              {loginError && (
+              {/* {loggedInError && (
                 <Typography variant="body2" color="error">
-                  {loginError}
+                  {loggedInError}
                 </Typography>
-              )}
+              )} */}
               <Button
                 type="modify"
                 color="primary"

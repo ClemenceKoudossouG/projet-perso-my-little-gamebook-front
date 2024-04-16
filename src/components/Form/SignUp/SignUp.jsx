@@ -10,7 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SubmitNewUser, handleSuccessfulUserCreation } from '@/Store/UserSlice';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
@@ -21,8 +21,10 @@ export default function SignUpSide() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const loginError = useSelector((state) => state.user.error);
+  const aliasError = useSelector((state) => state.user.aliasError);
   const [formValues, setFormValues] = useState({
     password: '',
+    passwordConfirmation: '',
     alias: '',
   });
 
@@ -106,6 +108,7 @@ export default function SignUpSide() {
             {loginError && (
               <Typography color="error" variant="body2">
                 {loginError}
+                {aliasError}
               </Typography>
             )}
             <Box
