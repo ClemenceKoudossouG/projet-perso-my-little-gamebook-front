@@ -6,26 +6,24 @@ import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+// import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import Typography from '@mui/material/Typography';
 import Radio from '@mui/material/Radio';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import React, { useEffect } from 'react';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+// import { useHistory } from 'react-router-dom';
+import Stack from '@mui/material/Stack';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+// import Link from '@mui/material/Link';
+// import { makeStyles } from '@material-ui/core/styles';
 import {
   PatchProfile,
   getUser,
   handleProfileEditionError,
-} from '@/Store/UserSlice';
-// import { useHistory } from 'react-router-dom';
-import Stack from '@mui/material/Stack';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import Link from '@mui/material/Link';
-import { makeStyles } from '@material-ui/core/styles';
-import { checkLoggedIn } from '@/Store/UserSlice';
+} from '../../../Store/UserSlice';
 
 const defaultTheme = createTheme();
 
@@ -71,13 +69,15 @@ export default function Profile() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(checkLoggedIn());
-  }, [dispatch]);
+    // On enlève l'éventuel message d'erreur login résiduel.
+    dispatch(handleProfileEditionError(null));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Condition - formulaire éditable si on est loggé
   // const logged = useSelector((state) => state.user.logged);
   const navigate = useNavigate();
-  // const loggedInError = useSelector((state) => state.user.error);
+  const loginError = useSelector((state) => state.user.error);
   const [errors, setErrors] = useState({});
   // récupération & modifications du state
   const user = useSelector((state) => state.user);
@@ -247,11 +247,11 @@ export default function Profile() {
                   <Avatar key={avatar.id} alt={avatar.alt} src={avatar.src} />
                 ))}
               </Stack>
-              {/* {loggedInError && (
+              {loginError && (
                 <Typography variant="body2" color="error">
-                  {loggedInError}
+                  {loginError}
                 </Typography>
-              )} */}
+              )}
               <Button
                 type="modify"
                 color="primary"

@@ -52,6 +52,8 @@ const authMiddleware = (store) => (next) => (action) => {
       .then((data) => {
         const loginAction = handleSuccessfulLogin(data);
         store.dispatch(loginAction);
+        // On enlève l'éventuel message d'erreur login résiduel (pour éviter son apparition sur le profil)
+        store.dispatch(handleProfileEditionError(null));
       })
       .catch((error) => {
         const errorAction = handleLoginError(error.message);
