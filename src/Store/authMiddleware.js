@@ -71,12 +71,15 @@ const authMiddleware = (store) => (next) => (action) => {
       }),
     })
       .then((res) => {
+        if (res.status === 409) {
+          // Erreur spécifique si le pseudo est déjà pris
+          throw new Error(
+            'Oups ! Ce pseudo est déjà pris, tu dois en choisir un autre !'
+          );
+        }
         if (!res.ok) {
           throw new Error("Oups ! L'utilisateur n'a pas pu être créé.");
         }
-        // if (res.status === 409) {
-        //   throw new Error("Oups ! Ce pseudo est déjà pris.");
-        // }
         return res.json();
       })
       .then((data) => {

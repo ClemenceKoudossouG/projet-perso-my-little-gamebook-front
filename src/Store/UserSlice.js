@@ -30,12 +30,12 @@ const userSlice = createSlice({
       };
     },
     handleSuccessfulUserCreation: (state, action) => {
-      localStorage.setItem('token', action.payload.token);
+      // localStorage.setItem('token', action.payload.token);
       localStorage.setItem('user', JSON.stringify(action.payload));
       return {
         ...state,
         ...action.payload,
-        logged: true,
+        successfulCreation: true,
       };
     },
     handleSuccessfulProfileEdition: (state, action) => {
@@ -93,7 +93,6 @@ const userSlice = createSlice({
         ...state,
         error: action.payload.error,
         aliasError: action.payload.aliasError,
-        //passwordFormatError: action.payload.passwordError,
         logged: false,
       };
     },

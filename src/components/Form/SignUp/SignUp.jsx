@@ -22,9 +22,10 @@ export default function SignUpSide() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const loginError = useSelector((state) => state.user.error);
-  // const aliasError = useSelector((state) => state.user.aliasError);
-  //const passwordFormatError = useSelector((state) => state.user.passwordError);
-  const successfulCreation = useSelector((state) => state.user.logged);
+  const aliasError = useSelector((state) => state.user.aliasError);
+  const successfulCreation = useSelector(
+    (state) => state.user.successfulCreation
+  );
   const [formValues, setFormValues] = useState({
     password: '',
     passwordConfirmation: '',
@@ -128,11 +129,11 @@ export default function SignUpSide() {
                 {loginError}
               </Typography>
             )}
-            {/* {passwordFormatError && (
+            {aliasError && (
               <Typography color="error" variant="body2">
-                {passwordFormatError}
+                {aliasError}
               </Typography>
-            )} */}
+            )}
             <Box
               component="form"
               noValidate
