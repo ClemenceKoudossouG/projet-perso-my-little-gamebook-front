@@ -18,11 +18,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import Stack from '@mui/material/Stack';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // import Link from '@mui/material/Link';
-// import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   PatchProfile,
   getUser,
   handleProfileEditionError,
+  checkLoggedIn,
 } from '../../../Store/UserSlice';
 
 const defaultTheme = createTheme();
@@ -67,6 +68,10 @@ const avatars = [
 
 export default function Profile() {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(checkLoggedIn());
+  }, [dispatch]);
 
   useEffect(() => {
     // On enlève l'éventuel message d'erreur login résiduel.

@@ -73,17 +73,17 @@ const authMiddleware = (store) => (next) => (action) => {
       .then((res) => {
         if (!res.ok) {
           throw new Error("Oups ! L'utilisateur n'a pas pu être créé.");
-        } else {
-          return res.json();
         }
+        // if (res.status === 409) {
+        //   throw new Error("Oups ! Ce pseudo est déjà pris.");
+        // }
+        return res.json();
       })
       .then((data) => {
-        const signUpAction = handleSuccessfulUserCreation(data);
-        store.dispatch(signUpAction);
+        store.dispatch(handleSuccessfulUserCreation(data));
       })
       .catch((error) => {
-        const errorAction = handleUserCreationError(error.message);
-        store.dispatch(errorAction);
+        store.dispatch(handleUserCreationError({ error: error.message }));
       });
   } else if (action.type === 'PATCH_PROFILE') {
     const { id } = store.getState().user;

@@ -12,8 +12,9 @@ import { useTheme } from '@mui/material/styles';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { SubmitNewUser, handleSuccessfulUserCreation } from '@/Store/UserSlice';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { SubmitNewUser, handleSuccessfulUserCreation } from '../../../Store/UserSlice';
+
 
 const defaultTheme = createTheme();
 
@@ -21,7 +22,9 @@ export default function SignUpSide() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const loginError = useSelector((state) => state.user.error);
-  const aliasError = useSelector((state) => state.user.aliasError);
+  // const aliasError = useSelector((state) => state.user.aliasError);
+  //const passwordFormatError = useSelector((state) => state.user.passwordError);
+  const successfulCreation = useSelector((state) => state.user.logged);
   const [formValues, setFormValues] = useState({
     password: '',
     passwordConfirmation: '',
@@ -36,12 +39,24 @@ export default function SignUpSide() {
     });
   };
   const [errors, setErrors] = useState({});
+
+  // Regex pour valider le format de mot de passe
+  const validatePasswordFormat = (password) => {
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    return passwordRegex.test(password);
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
     const inputErrors = {};
+    // Vérification du format du mot de passe
+    if (!validatePasswordFormat(formValues.password)) {
+      inputErrors.passwordFormat =
+        'Le mot de passe doit contenir au moins 8 caractères, dont une majuscule et minuscule, 1 chiffre et 1 caractère spécial.';
+    }
     // Vérification si passwordConfirmation matche bien avec password
     if (formValues.password !== formValues.passwordConfirmation) {
-      // Si ça ne matche pas, mesage d'erreur
+      // Si ça ne matche pas, message d'erreur
       alert("N'oublie pas de confirmer ton mot de passe !");
     }
     if (!formValues.alias.trim()) {
@@ -54,20 +69,23 @@ export default function SignUpSide() {
       inputErrors.passwordConfirmation =
         "N'oublie pas de confirmer ton mot de passe !";
     }
-    setErrors(errors);
-    if (Object.keys(errors).length > 0) {
-      console.error('Erreurs de validation: ', errors);
-      return;
-    }
-    console.log('SignUp profile > ', {
-      ...formValues,
-    });
+    setErrors(inputErrors);
+    if (Object.keys(inputErrors).length === 0) {
+      console.log('SignUp profile > ', {
+        ...formValues,
+      });
 
-    dispatch(SubmitNewUser(formValues));
-    dispatch({ type: 'SUBMIT_NEWUSER' });
-    // navigate('/');
-    navigate('/SignInSide');
+      dispatch(SubmitNewUser(formValues));
+      dispatch({ type: 'SUBMIT_NEWUSER' });
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+    }
   };
+
+  useEffect(() => {
+    if (successfulCreation) {
+      navigate('/SignInSide');
+    }
+  }, [successfulCreation, navigate]);
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -108,9 +126,13 @@ export default function SignUpSide() {
             {loginError && (
               <Typography color="error" variant="body2">
                 {loginError}
-                {aliasError}
               </Typography>
             )}
+            {/* {passwordFormatError && (
+              <Typography color="error" variant="body2">
+                {passwordFormatError}
+              </Typography>
+            )} */}
             <Box
               component="form"
               noValidate
@@ -149,6 +171,11 @@ export default function SignUpSide() {
               {errors.password && (
                 <p style={{ color: 'red', fontSize: 'small' }}>
                   {errors.password}
+                </p>
+              )}
+              {errors.passwordFormat && (
+                <p style={{ color: 'red', fontSize: 'small' }}>
+                  {errors.passwordFormat}
                 </p>
               )}
               <TextField

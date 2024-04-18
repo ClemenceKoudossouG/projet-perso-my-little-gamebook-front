@@ -91,7 +91,9 @@ const userSlice = createSlice({
     handleUserCreationError: (state, action) => {
       return {
         ...state,
-        error: action.payload,
+        error: action.payload.error,
+        aliasError: action.payload.aliasError,
+        //passwordFormatError: action.payload.passwordError,
         logged: false,
       };
     },
