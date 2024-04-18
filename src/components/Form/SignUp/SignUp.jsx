@@ -57,7 +57,7 @@ export default function SignUpSide() {
     // Vérification si passwordConfirmation matche bien avec password
     if (formValues.password !== formValues.passwordConfirmation) {
       // Si ça ne matche pas, message d'erreur
-      alert("N'oublie pas de confirmer ton mot de passe !");
+      inputErrors.passwordMatch = 'Les mots de passe ne correspondent pas.';
     }
     if (!formValues.alias.trim()) {
       inputErrors.alias = "N'oublie pas ton pseudo !";
@@ -193,6 +193,11 @@ export default function SignUpSide() {
               {errors.passwordConfirmation && (
                 <p style={{ color: 'red', fontSize: 'small' }}>
                   {errors.passwordConfirmation}
+                </p>
+              )}
+              {errors.passwordMatch && (
+                <p style={{ color: 'red', fontSize: 'small' }}>
+                  {errors.passwordMatch}
                 </p>
               )}
               <Button
