@@ -111,6 +111,7 @@ const authMiddleware = (store) => (next) => (action) => {
       .then((data) => {
         const editProfile = handleSuccessfulProfileEdition(data);
         store.dispatch(editProfile);
+        store.dispatch({ type: 'PROFILE_EDIT_SUCCESS' });
       })
       .catch((error) => {
         const errorAction = handleProfileEditionError(error.message);

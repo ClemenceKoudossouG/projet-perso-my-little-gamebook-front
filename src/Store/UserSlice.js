@@ -41,11 +41,11 @@ const userSlice = createSlice({
     handleSuccessfulProfileEdition: (state, action) => {
       return {
         ...state,
-        ...action.payload,
+        ...action.payload.alias,
+        ...action.payload.avatar,
         logged: true,
       };
     },
-
     SubmitLogin: (state, action) => {
       return {
         ...state,
@@ -106,13 +106,24 @@ const userSlice = createSlice({
     checkLoggedIn: (state) => {
       const token = localStorage.getItem('token');
       if (token) {
-        const userData = JSON.parse(localStorage.getItem('user'));
-        return {
-          ...state,
-          ...userData,
-          logged: true,
-          token,
-        };
+        try {
+          const userData = JSON.parse(localStorage.getItem('user'));
+          return {
+            ...state,
+            ...userData,
+            logged: true,
+            token,
+          };
+        } catch (error) {
+          // ajout de gestion d'erreur
+          console.error('Error parsing user data:', error);
+          // Retour du state initial
+          return {
+            ...state,
+            logged: false,
+            token: null,
+          };
+        }
       }
       return {
         ...state,
@@ -138,10 +149,12 @@ export const {
   handleUserCreationError,
   handleProfileEditionError,
   checkLoggedIn,
+  handleSuccessfulProfilePatch,
 } = userSlice.actions;
 
 // Définition des types pour chaque action
 export const HandleSuccessfulLoginType = 'user/handleSuccessfulLogin';
 export const SubmitLoginType = 'user/submitLogin';
 
+// Export your reducer as before
 export default userSlice.reducer;
