@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { showNotification } from '../Store/notificationSlice';
+// import { showNotification } from '../Store/notificationSlice';
 
 const NotificationContainer = styled.div`
   position: fixed;

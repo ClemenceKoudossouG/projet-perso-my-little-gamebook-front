@@ -21,7 +21,10 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // import Link from '@mui/material/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Notification from '../../Notification';
-import { showNotification, hideNotification } from '../../../Store/notificationSlice';
+import {
+  showNotification,
+  hideNotification,
+} from '../../../Store/notificationSlice';
 
 import {
   PatchProfile,
@@ -75,6 +78,7 @@ export default function Profile() {
   const [isReadOnly, setIsReadOnly] = useState(true);
   const [isModified, setIsModified] = useState(false); // On garde une trace des modifications
   const [isSaved, setIsSaved] = useState(false); // On garde une trace de l'enregistrement du profil
+  const [avatarClicked, setAvatarClicked] = useState(false); // On garde une trace du clic sur l'avatar
   const notification = useSelector((state) => state.notification);
 
   useEffect(() => {
@@ -107,11 +111,26 @@ export default function Profile() {
     }
   }, []);
 
+  useEffect(() => {
+    // Define a function to check whether the form is modified and an avatar is clicked
+    const checkFormModification = () => {
+      // Check if either form is modified, avatar is clicked, or alias is modified
+      if (isModified || avatarClicked) {
+        // If modified or avatar clicked or alias modified, show the "Enregistrer mon profil" button
+        setIsSaved(false);
+      }
+    };
+    // On appelle la fonction checkFormModification si isModified ou avatarClicked changent
+    checkFormModification();
+  }, [isModified, avatarClicked]);
+
   // Radio group AVATAR
   const [selectedValue, setSelectedValue] = React.useState(user.avatar);
   const handleAvatarChange = (event) => {
     event.preventDefault();
     setSelectedValue(event.target.value);
+    setAvatarClicked(true); // état "cliqué" de l'avatar
+    setIsModified(true); // State modifié = true
     console.log('avatar >', event.target.value);
   };
   // Modifications des inputs + spread operator
@@ -158,7 +177,7 @@ export default function Profile() {
       avatar: selectedValue,
       alias: formValues.alias.trim(),
     };
-    // Bloc try catth pour gérer les erreurs et l'affichage de la notification après enregistrement du profil.
+    // Bloc try catch pour gérer les erreurs et l'affichage de la notification après enregistrement du profil.
     try {
       await dispatch(PatchProfile(updatedProfile));
       dispatch({ type: 'PATCH_PROFILE' });
@@ -296,7 +315,7 @@ export default function Profile() {
                   <Avatar key={avatar.id} alt={avatar.alt} src={avatar.src} />
                 ))}
               </Stack>
-              {loginError && ( 
+              {loginError && (
                 <Typography variant="body2" color="error">
                   {loginError}
                 </Typography>
@@ -311,7 +330,7 @@ export default function Profile() {
               >
                 Modifier mon profil
               </Button>
-              {isModified && ( // Le bouton enregistrer ne s'affiche qu'en cas de modification
+              {isModified && ( // Le bouton enregistrer ne s'affiche qu'en cas de modification du profil
                 <Button
                   type="submit"
                   fullWidth
@@ -320,7 +339,7 @@ export default function Profile() {
                   // onClick={handleSubmit}: fonction handleSubmit appelée plus aut dans le form, onSubmit. Evite l'affichage de la notification au clic sur le bouton.
                 >
                   Enregistrer mon profil
-              </Button>
+                </Button>
               )}
               <Button variant="contained" fullWidth onClick={deleteButton}>
                 Supprimer mon profil
