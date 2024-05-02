@@ -21,6 +21,8 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // import Link from '@mui/material/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Notification from '../../Notification';
+import { Modal } from '@mui/material';
+
 import {
   showNotification,
   hideNotification,
@@ -79,6 +81,7 @@ export default function Profile() {
   const [isModified, setIsModified] = useState(false); // On garde une trace des modifications
   const [isSaved, setIsSaved] = useState(false); // On garde une trace de l'enregistrement du profil
   const [avatarClicked, setAvatarClicked] = useState(false); // On garde une trace du clic sur l'avatar
+  const [showConfirmationModal, setShowConfirmationModal ] = useState(false);
   const notification = useSelector((state) => state.notification);
 
   useEffect(() => {
@@ -206,10 +209,23 @@ export default function Profile() {
     return null;
   };
   // Supprimer le compte
-  const deleteButton = (event) => {
-    event.preventDefault();
-    dispatch(getUser());
+  // On ouvre la modale de confirmation avec le bouton supprimer mon profil
+  const handleDeleteButtonClick = () => {
+    setShowConfirmationModal(true);
+  };
+
+  // On gère la fermerture de la modale de confirmation
+  const handleCloseConfirmationModal = () => {
+    setShowConfirmationModal(false);
+  };
+
+  // On gère la suppression du profil avec la modale de confirmation
+  const handleDeleteProfile = () => {
+    // Dispatch de l'action delete
     dispatch({ type: 'DELETE_PROFILE' });
+    // Fermeture de la modale de confirmation
+    setShowConfirmationModal(false);
+    // Redirection vers la page d'accueil logged out
     navigate('/SignInSide');
   };
 
@@ -341,9 +357,44 @@ export default function Profile() {
                   Enregistrer mon profil
                 </Button>
               )}
-              <Button variant="contained" fullWidth onClick={deleteButton}>
+              <Button
+                variant="contained"
+                fullWidth
+                onClick={handleDeleteButtonClick}
+              >
                 Supprimer mon profil
               </Button>
+              {/* Modale de confirmation de suppression du profil */}
+              <Modal
+                open={showConfirmationModal}
+                onClose={handleCloseConfirmationModal}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    width: 400,
+                    bgcolor: 'background.paper',
+                    border: '2px solid #000',
+                    boxShadow: 24,
+                    p: 4,
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                  }}
+                >
+                  <Typography
+                    id="modal-modal-title"
+                    variant="h6"
+                    component="h2"
+                  >
+                    Es-tu certain(e) de vouloir supprimer ton profil ?
+                  </Typography>
+                  <Button onClick={handleDeleteProfile}>Oui !</Button>
+                  <Button onClick={handleCloseConfirmationModal}>Non !</Button>
+                </Box>
+              </Modal>
             </Box>
           </Box>
         </Grid>
