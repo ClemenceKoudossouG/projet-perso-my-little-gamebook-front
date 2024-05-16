@@ -112,6 +112,8 @@ const authMiddleware = (store) => (next) => (action) => {
         const editProfile = handleSuccessfulProfileEdition(data);
         store.dispatch(editProfile);
         store.dispatch({ type: 'PROFILE_EDIT_SUCCESS' });
+        // On s'assure que le nouvel avatar reste bien dans le local storage (évite les bugs au refresh)
+        localStorage.setItem('user', JSON.stringify(data));
       })
       .catch((error) => {
         const errorAction = handleProfileEditionError(error.message);
