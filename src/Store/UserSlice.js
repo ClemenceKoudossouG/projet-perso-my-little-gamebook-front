@@ -41,8 +41,8 @@ const userSlice = createSlice({
     handleSuccessfulProfileEdition: (state, action) => {
       return {
         ...state,
-        ...action.payload.alias,
-        ...action.payload.avatar,
+        alias: action.payload.alias,
+        avatar: action.payload.avatar,
         logged: true,
       };
     },

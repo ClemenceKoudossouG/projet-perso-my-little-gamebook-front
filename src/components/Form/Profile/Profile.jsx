@@ -81,7 +81,7 @@ export default function Profile() {
   const [isModified, setIsModified] = useState(false); // On garde une trace des modifications
   const [isSaved, setIsSaved] = useState(false); // On garde une trace de l'enregistrement du profil
   const [avatarClicked, setAvatarClicked] = useState(false); // On garde une trace du clic sur l'avatar
-  const [showConfirmationModal, setShowConfirmationModal ] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const notification = useSelector((state) => state.notification);
 
   useEffect(() => {
@@ -196,7 +196,7 @@ export default function Profile() {
       }
     } catch (error) {
       console.error('Error updating profile:', error);
-      // Handle error
+      dispatch(hideNotification());
     }
   };
 
