@@ -301,6 +301,27 @@ export default function Profile() {
                   {errors.alias}
                 </p>
               )}
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                value={formValues.email}
+                onChange={handleChange}
+                InputProps={{
+                  readOnly: isReadOnly,
+                  sx: {
+                    '& input': {
+                      cursor: isReadOnly ? 'default' : 'text',
+                      backgroundColor: isReadOnly ? 'inherit' : '#ffffcc',
+                    },
+                  },
+                }}
+              />
               <FormControl>
                 <FormLabel id="demo-row-radio-buttons-group-label">
                   Avatar

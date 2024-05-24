@@ -66,6 +66,7 @@ const authMiddleware = (store) => (next) => (action) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        email: store.getState().user.email,
         password: store.getState().user.password,
         alias: store.getState().user.alias,
       }),
@@ -98,6 +99,7 @@ const authMiddleware = (store) => (next) => (action) => {
         Authorization: `${store.getState().user.token}`,
       },
       body: JSON.stringify({
+        email: store.getState().user.email,
         alias: store.getState().user.alias,
         avatar: store.getState().user.avatar || '',
       }),

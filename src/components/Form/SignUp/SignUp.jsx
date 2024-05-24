@@ -144,6 +144,18 @@ export default function SignUpSide() {
                 margin="normal"
                 required
                 fullWidth
+                id="email"
+                label="Adresse email"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                value={formValues.email}
+                onChange={handleChange}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
                 id="alias"
                 label="pseudo"
                 name="alias"

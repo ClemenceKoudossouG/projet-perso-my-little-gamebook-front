@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 export const initialState = {
   logged: !!localStorage.getItem('token'),
+  email: '',
   password: '',
   token: localStorage.getItem('token'),
   alias: '',
@@ -42,6 +43,7 @@ const userSlice = createSlice({
       return {
         ...state,
         alias: action.payload.alias,
+        email: action.payload.email,
         avatar: action.payload.avatar,
         logged: true,
       };
@@ -56,6 +58,7 @@ const userSlice = createSlice({
     SubmitNewUser: (state, action) => {
       return {
         ...state,
+        email: action.payload.email,
         password: action.payload.password,
         alias: action.payload.alias,
       };
@@ -63,6 +66,7 @@ const userSlice = createSlice({
     PatchProfile: (state, action) => {
       return {
         ...state,
+        email: action.payload.email,
         alias: action.payload.alias,
         avatar: action.payload.avatar,
       };
