@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { checkLoggedIn } from '@/Store/UserSlice.js';
 import SignUpSide from '@/components/Form/SignUp/SignUp';
 import SignInSide from '@/components/Form/SignIn/SignIn';
+import UserEmailSide from '@/components/Form/PasswordReset/UserEmail';
 import Profile from '../Form/Profile/Profile';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
@@ -33,6 +34,7 @@ function App() {
         <Routes>
           <Route path="/SignUpSide" element={<SignUpSide />} />
           <Route path="/SignInSide" element={<SignInSide />} />
+          <Route path="/UserEmailSide" element={<UserEmailSide />} />
           <Route path="/game" element={<Game1 />} />
           <Route path="/gameDynamic" element={<Game2 />} />
           <Route path="/" element={<VisitorHomePage />} />

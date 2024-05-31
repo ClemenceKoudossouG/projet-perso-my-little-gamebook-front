@@ -11,6 +11,8 @@ import {
   handleLoginError,
   handleProfileEditionError,
   DeleteProfile,
+  SubmitEmail,
+  handleResetEmailError,
 } from './UserSlice';
 
 const authMiddleware = (store) => (next) => (action) => {
@@ -59,6 +61,28 @@ const authMiddleware = (store) => (next) => (action) => {
         const errorAction = handleLoginError(error.message);
         store.dispatch(errorAction);
       });
+  } else if (action.type === 'SUBMIT_EMAIL') {
+    fetch('http://localhost:3000/request-password-reset', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: store.getState().user.email,
+      }),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Oups ! La demande de réinitialisation a échoué.');
+        }
+        return res.json();
+      })
+      .then((data) => {
+        store.dispatch(SubmitEmail(data));
+      })
+      .catch((error) => {
+        store.dispatch(handleResetEmailError({ error: error.message }));
+      });
   } else if (action.type === 'SUBMIT_NEWUSER') {
     fetch('http://localhost:3000/user/signup', {
       method: 'POST',
@@ -73,10 +97,15 @@ const authMiddleware = (store) => (next) => (action) => {
     })
       .then((res) => {
         if (res.status === 409) {
-          // Erreur spécifique si le pseudo est déjà pris
-          throw new Error(
-            'Oups ! Ce pseudo est déjà pris, tu dois en choisir un autre !'
-          );
+          return res.json().then((data) => {
+            if (data.error.includes("pseudo")) {
+              throw new Error('Oups ! Ce pseudo est déjà pris, tu dois en choisir un autre !');
+            } else if (data.error.includes("email")) {
+              throw new Error('Cet email est déjà utilisé, veuillez en choisir un autre ou vous connecter.');
+            } else {
+              throw new Error(data.error);
+            }
+          });
         }
         if (!res.ok) {
           throw new Error("Oups ! L'utilisateur n'a pas pu être créé.");

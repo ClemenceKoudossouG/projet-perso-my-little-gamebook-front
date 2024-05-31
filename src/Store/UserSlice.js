@@ -135,6 +135,18 @@ const userSlice = createSlice({
         token: null,
       };
     },
+    SubmitEmail: (state, action) => {
+      return {
+        ...state,
+        email: action.payload.email,
+      };
+    },
+    handleResetEmailError: (state, action) => {
+      return {
+        ...state,
+        error: action.payload.error,
+      };
+    },
   },
 });
 
@@ -154,6 +166,8 @@ export const {
   handleProfileEditionError,
   checkLoggedIn,
   handleSuccessfulProfilePatch,
+  SubmitEmail,
+  handleResetEmailError,
 } = userSlice.actions;
 
 // Définition des types pour chaque action

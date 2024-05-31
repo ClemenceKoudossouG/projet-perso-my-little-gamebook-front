@@ -12,18 +12,15 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { SubmitLogin } from '../../../Store/UserSlice';
+import { SubmitEmail } from '../../../Store/UserSlice';
 
 const defaultTheme = createTheme();
 
-export default function SignInSide() {
+export default function UserEmailSide() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const loginError = useSelector((state) => state.user.error);
-  const isLogged = useSelector((state) => state.user.logged);
+  // const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
-    alias: '',
-    password: '',
+    email: '',
   });
 
   const handleChange = (e) => {
@@ -36,15 +33,9 @@ export default function SignInSide() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(SubmitLogin(formValues));
-    dispatch({ type: 'SUBMIT_LOGIN' });
+    dispatch(SubmitEmail({ email: formValues.email }));
+    dispatch({ type: 'SUBMIT_EMAIL' });
   };
-  // Conditionnelle pour rediriger l'utilisateur uniquement si connecté
-  useEffect(() => {
-    if (isLogged) {
-      navigate('/');
-    }
-  }, [isLogged, navigate]);
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -80,13 +71,13 @@ export default function SignInSide() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Connexion
+              Email utilisateur
             </Typography>
-            {loginError && (
+            {/* {loginError && (
               <Typography color="error" variant="body2">
                 {loginError}
               </Typography>
-            )}
+            )} */}
             <Box
               component="form"
               noValidate
@@ -97,24 +88,12 @@ export default function SignInSide() {
                 margin="normal"
                 required
                 fullWidth
-                id="alias"
-                label="Pseudo"
-                name="alias"
-                autoComplete="alias"
-                autoFocus
+                name="email"
+                label="Email utilisateur"
+                type="email"
+                id="email"
+                autoComplete="current-email"
                 value={formValues.email}
-                onChange={handleChange}
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Halte-là, ton mot de passe ?"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                value={formValues.password}
                 onChange={handleChange}
               />
               <Button
@@ -123,20 +102,8 @@ export default function SignInSide() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Je me connecte !
+                Recevoir un email de réinitialisation
               </Button>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <Link href="/SignUpSide" variant="body2">
-                    "Pas encore de compte ? Inscris-toi ici !"
-                  </Link>
-                </Grid>
-                <Grid item xs={12}>
-                  <Link href="/UserEmailSide" variant="body2">
-                    "Mot de passe oublié ?"
-                  </Link>
-                </Grid>
-              </Grid>
             </Box>
           </Box>
         </Grid>
