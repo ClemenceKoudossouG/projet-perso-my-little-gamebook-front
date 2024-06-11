@@ -5,6 +5,7 @@ export const initialState = {
   email: '',
   password: '',
   token: localStorage.getItem('token'),
+  resetToken: '',
   alias: '',
   avatar: '',
 };
@@ -147,6 +148,26 @@ const userSlice = createSlice({
         error: action.payload.error,
       };
     },
+    setPasswordResetToken: (state, action) => {
+      console.log('Setting token in state:', action.payload);
+      return {
+        ...state,
+        resetToken: action.payload,
+      };
+    },
+    SubmitPassword: (state, action) => {
+      return {
+        ...state,
+        password: action.payload.password,
+      };
+    },
+    handlePasswordResetError: (state, action) => {
+      return {
+        ...state,
+        tokenFromURL: action.payload.tokenFromURL,
+        token: action.payload.error,
+      };
+    },
   },
 });
 
@@ -168,6 +189,9 @@ export const {
   handleSuccessfulProfilePatch,
   SubmitEmail,
   handleResetEmailError,
+  setPasswordResetToken,
+  SubmitPassword,
+  handlePasswordResetError,
 } = userSlice.actions;
 
 // Définition des types pour chaque action

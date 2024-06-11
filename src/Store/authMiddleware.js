@@ -13,6 +13,9 @@ import {
   DeleteProfile,
   SubmitEmail,
   handleResetEmailError,
+  setPasswordResetToken,
+  SubmitPassword,
+  handlePasswordResetError,
 } from './UserSlice';
 
 const authMiddleware = (store) => (next) => (action) => {
@@ -83,6 +86,31 @@ const authMiddleware = (store) => (next) => (action) => {
       .catch((error) => {
         store.dispatch(handleResetEmailError({ error: error.message }));
       });
+  } else if (action.type === 'SUBMIT_NEW_PASSWORD') {
+    // console.log('Submitting new password with token:', resetToken);
+    // const { password, resetToken } = store.getState().user;
+    fetch('http://localhost:3000/request-password-reset/reset-password', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        password: store.getState().user.password,
+        resetToken: store.getState().user.resetToken,
+      }),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Oups ! La réinitialisation a échoué.');
+        }
+        return res.json();
+      })
+      .then((data) => {
+        store.dispatch(SubmitPassword(data));
+      })
+      .catch((error) => {
+        store.dispatch(handlePasswordResetError({ error: error.message }));
+      });
   } else if (action.type === 'SUBMIT_NEWUSER') {
     fetch('http://localhost:3000/user/signup', {
       method: 'POST',
@@ -95,17 +123,16 @@ const authMiddleware = (store) => (next) => (action) => {
         alias: store.getState().user.alias,
       }),
     })
-      .then((res) => {
+      .then(async (res) => {
         if (res.status === 409) {
-          return res.json().then((data) => {
-            if (data.error.includes("pseudo")) {
-              throw new Error('Oups ! Ce pseudo est déjà pris, tu dois en choisir un autre !');
-            } else if (data.error.includes("email")) {
-              throw new Error('Cet email est déjà utilisé, veuillez en choisir un autre ou vous connecter.');
-            } else {
-              throw new Error(data.error);
-            }
-          });
+          const data = await res.json();
+          if (data.error.includes("pseudo")) {
+            throw new Error('Oups ! Ce pseudo est déjà pris, tu dois en choisir un autre !');
+          } else if (data.error.includes("email")) {
+            throw new Error('Cet email est déjà utilisé, veuillez en choisir un autre ou vous connecter.');
+          } else {
+            throw new Error(data.error);
+          }
         }
         if (!res.ok) {
           throw new Error("Oups ! L'utilisateur n'a pas pu être créé.");
