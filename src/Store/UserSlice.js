@@ -164,6 +164,7 @@ const userSlice = createSlice({
     handlePasswordResetError: (state, action) => {
       return {
         ...state,
+        error: action.payload.resetError,
         tokenFromURL: action.payload.tokenFromURL,
         token: action.payload.error,
       };

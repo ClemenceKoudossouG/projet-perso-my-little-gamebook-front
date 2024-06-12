@@ -25,6 +25,7 @@ export default function NewPasswordSide() {
   const dispatch = useDispatch();
   const location = useLocation();
   const resetToken = useSelector((state) => state.user.resetToken);
+  const resetError = useSelector((state) => state.user.resetError);
   console.log('Token from state:', resetToken);
   // const navigate = useNavigate();
 
@@ -80,7 +81,9 @@ export default function NewPasswordSide() {
       inputErrors.confirmNewPassword =
         "N'oublie pas de confirmer ton mot de passe !";
     }
+
     setErrors(inputErrors);
+
     if (Object.keys(inputErrors).length === 0) {
       console.log('Submitting new password > ', formValues.password);
       console.log('Token before submit:', resetToken);
@@ -132,11 +135,11 @@ export default function NewPasswordSide() {
             <Typography component="h1" variant="h5">
               Nouveau mot de passe
             </Typography>
-            {/* {loginError && (
+            {resetError && (
               <Typography color="error" variant="body2">
-                {loginError}
+                {resetError}
               </Typography>
-            )} */}
+            )}
             <Box
               component="form"
               noValidate
@@ -155,6 +158,16 @@ export default function NewPasswordSide() {
                 value={formValues.password}
                 onChange={handleChange}
               />
+              {errors.passwordMatch && (
+                <Typography color="error" variant="body2">
+                  {errors.passwordMatch}
+                </Typography>
+              )}
+              {errors.password && (
+                <Typography color="error" variant="body2">
+                  {errors.password}
+                </Typography>
+              )}
               <TextField
                 margin="normal"
                 required
@@ -167,6 +180,11 @@ export default function NewPasswordSide() {
                 value={formValues.confirmNewPassword}
                 onChange={handleChange}
               />
+              {errors.confirmNewPassword && (
+                <Typography color="error" variant="body2">
+                  {errors.confirmNewPassword}
+                </Typography>
+              )}
               <input type="hidden" name="resetToken" value={resetToken} />
               <Button
                 type="submit"

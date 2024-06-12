@@ -13,7 +13,6 @@ import {
   DeleteProfile,
   SubmitEmail,
   handleResetEmailError,
-  setPasswordResetToken,
   SubmitPassword,
   handlePasswordResetError,
 } from './UserSlice';
@@ -109,7 +108,8 @@ const authMiddleware = (store) => (next) => (action) => {
         store.dispatch(SubmitPassword(data));
       })
       .catch((error) => {
-        store.dispatch(handlePasswordResetError({ error: error.message }));
+        const errorAction = handlePasswordResetError(error.message);
+        store.dispatch(errorAction);
       });
   } else if (action.type === 'SUBMIT_NEWUSER') {
     fetch('http://localhost:3000/user/signup', {
