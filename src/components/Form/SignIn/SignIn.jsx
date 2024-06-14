@@ -128,12 +128,12 @@ export default function SignInSide() {
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <Link href="/SignUpSide" variant="body2">
-                    "Pas encore de compte ? Inscris-toi ici !"
+                    Pas encore de compte ? Inscris-toi ici !
                   </Link>
                 </Grid>
                 <Grid item xs={12}>
                   <Link href="/UserEmailSide" variant="body2">
-                    "Mot de passe oublié ?"
+                    Mot de passe oublié ?
                   </Link>
                 </Grid>
               </Grid>

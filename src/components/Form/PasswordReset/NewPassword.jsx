@@ -33,7 +33,7 @@ export default function NewPasswordSide() {
   const location = useLocation();
   const resetToken = useSelector((state) => state.user.resetToken);
   const resetError = useSelector((state) => state.user.error);
-  const [passwordSaved, setPasswordSaved ] = useState(false); // Trace de la sauvegarde du mot de passe
+  const [passwordSaved, setPasswordSaved] = useState(false); // Trace de la sauvegarde du mot de passe
   const notification = useSelector((state) => state.notification);
   const navigate = useNavigate();
 

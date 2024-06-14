@@ -14,9 +14,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { SubmitEmail } from '../../../Store/UserSlice';
 
+import Notification from '../../Notification';
+
+import {
+  showNotification,
+  hideNotification,
+} from '../../../Store/notificationSlice';
+
 const defaultTheme = createTheme();
 
 export default function UserEmailSide() {
+  const [emailSent, setEmailSent] = useState(false); // Trace de l'envoi de l'email
+  const notification = useSelector((state) => state.notification);
+
   const dispatch = useDispatch();
   // const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
@@ -34,7 +44,30 @@ export default function UserEmailSide() {
   const handleSubmit = (event) => {
     event.preventDefault();
     dispatch(SubmitEmail({ email: formValues.email }));
+    setEmailSent(true);
     dispatch({ type: 'SUBMIT_EMAIL' });
+  };
+
+  // eslint-disable-next-line consistent-return
+  useEffect(() => {
+    if (emailSent) {
+      dispatch(
+        showNotification('Un email de réinitialisation vous a été envoyé.')
+      );
+      const timer = setTimeout(() => {
+        dispatch(hideNotification());
+        setEmailSent(false);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  });
+
+  const renderNotification = () => {
+    if (emailSent) {
+      // eslint-disable-next-line prettier/prettier
+      return <Notification message={notification.message} variant={notification.variant} />;
+    }
+    return null;
   };
 
   return (
@@ -73,6 +106,7 @@ export default function UserEmailSide() {
             <Typography component="h1" variant="h5">
               Email utilisateur
             </Typography>
+            {renderNotification()}
             {/* {loginError && (
               <Typography color="error" variant="body2">
                 {loginError}
