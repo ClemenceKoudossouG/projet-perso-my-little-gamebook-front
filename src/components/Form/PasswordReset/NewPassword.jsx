@@ -17,6 +17,13 @@ import {
   SubmitPassword,
 } from '../../../Store/UserSlice';
 
+import Notification from '../../Notification';
+
+import {
+  showNotification,
+  hideNotification,
+} from '../../../Store/notificationSlice';
+
 const defaultTheme = createTheme();
 
 export default function NewPasswordSide() {
@@ -26,8 +33,11 @@ export default function NewPasswordSide() {
   const location = useLocation();
   const resetToken = useSelector((state) => state.user.resetToken);
   const resetError = useSelector((state) => state.user.error);
+  const [passwordSaved, setPasswordSaved ] = useState(false); // Trace de la sauvegarde du mot de passe
+  const notification = useSelector((state) => state.notification);
+  const navigate = useNavigate();
+
   console.log('Token from state:', resetToken);
-  // const navigate = useNavigate();
 
   useEffect(() => {
     console.log('Component mounted or updated');
@@ -35,7 +45,7 @@ export default function NewPasswordSide() {
     const tokenFromURL = params.get('token');
     console.log('Extracted token from URL:', tokenFromURL);
     if (tokenFromURL) {
-      dispatch(setPasswordResetToken(tokenFromURL)); // Action to store token in state
+      dispatch(setPasswordResetToken(tokenFromURL)); // Stocke le token dans le state
     }
   }, [location, dispatch]);
 
@@ -95,8 +105,34 @@ export default function NewPasswordSide() {
       });
 
       dispatch(SubmitPassword({ password: formValues.password, resetToken }));
+      setPasswordSaved(true);
       dispatch({ type: 'SUBMIT_NEW_PASSWORD' });
     }
+  };
+
+  // eslint-disable-next-line consistent-return
+  useEffect(() => {
+    if (passwordSaved) {
+      dispatch(
+        showNotification(
+          'Mot de passe mis à jour avec succès. Tu vas être être redirigé.e vers la page de connexion.'
+        )
+      );
+      const timer = setTimeout(() => {
+        dispatch(hideNotification());
+        setPasswordSaved(false);
+        navigate('/SignInSide');
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [passwordSaved, dispatch, navigate]);
+
+  const renderNotification = () => {
+    if (passwordSaved) {
+      // eslint-disable-next-line prettier/prettier
+      return <Notification message={notification.message} variant={notification.variant} />;
+    }
+    return null;
   };
 
   return (
@@ -135,6 +171,7 @@ export default function NewPasswordSide() {
             <Typography component="h1" variant="h5">
               Nouveau mot de passe
             </Typography>
+            {renderNotification()}
             {resetError && (
               <Typography color="error" variant="body2">
                 {resetError}

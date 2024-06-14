@@ -20,8 +20,8 @@ import Stack from '@mui/material/Stack';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // import Link from '@mui/material/Link';
 import { makeStyles } from '@material-ui/core/styles';
-import Notification from '../../Notification';
 import { Modal } from '@mui/material';
+import Notification from '../../Notification';
 
 import {
   showNotification,
