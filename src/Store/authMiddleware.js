@@ -108,8 +108,7 @@ const authMiddleware = (store) => (next) => (action) => {
         store.dispatch(SubmitPassword(data));
       })
       .catch((error) => {
-        const errorAction = handlePasswordResetError(error.message);
-        store.dispatch(errorAction);
+        store.dispatch(handlePasswordResetError({ resetError: error.message }));
       });
   } else if (action.type === 'SUBMIT_NEWUSER') {
     fetch('http://localhost:3000/user/signup', {

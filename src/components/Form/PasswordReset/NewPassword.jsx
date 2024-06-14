@@ -25,7 +25,7 @@ export default function NewPasswordSide() {
   const dispatch = useDispatch();
   const location = useLocation();
   const resetToken = useSelector((state) => state.user.resetToken);
-  const resetError = useSelector((state) => state.user.resetError);
+  const resetError = useSelector((state) => state.user.error);
   console.log('Token from state:', resetToken);
   // const navigate = useNavigate();
 
