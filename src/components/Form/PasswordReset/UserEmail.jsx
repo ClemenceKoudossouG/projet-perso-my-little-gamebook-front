@@ -25,6 +25,7 @@ const defaultTheme = createTheme();
 
 export default function UserEmailSide() {
   const [emailSent, setEmailSent] = useState(false); // Trace de l'envoi de l'email
+  const resetEmailError = useSelector((state) => state.user.error);
   const notification = useSelector((state) => state.notification);
 
   const dispatch = useDispatch();
@@ -50,7 +51,7 @@ export default function UserEmailSide() {
 
   // eslint-disable-next-line consistent-return
   useEffect(() => {
-    if (emailSent) {
+    if (emailSent && !resetEmailError) {
       dispatch(
         showNotification('Un email de réinitialisation vous a été envoyé.')
       );
@@ -60,10 +61,10 @@ export default function UserEmailSide() {
       }, 5000);
       return () => clearTimeout(timer);
     }
-  });
+  }, [emailSent, resetEmailError, dispatch]);
 
   const renderNotification = () => {
-    if (emailSent) {
+    if (emailSent && !resetEmailError) {
       // eslint-disable-next-line prettier/prettier
       return <Notification message={notification.message} variant={notification.variant} />;
     }
@@ -107,11 +108,11 @@ export default function UserEmailSide() {
               Email utilisateur
             </Typography>
             {renderNotification()}
-            {/* {loginError && (
+            {resetEmailError && (
               <Typography color="error" variant="body2">
-                {loginError}
+                {resetEmailError}
               </Typography>
-            )} */}
+            )}
             <Box
               component="form"
               noValidate
