@@ -148,6 +148,13 @@ const userSlice = createSlice({
         error: action.payload.error,
       };
     },
+    SUBMIT_EMAIL_SUCCESS: (state, action) => {
+      return {
+        ...state,
+        emailSent: true,
+        error: null, // Clear any existing errors
+      };
+    },
     setPasswordResetToken: (state, action) => {
       console.log('Setting token in state:', action.payload);
       return {
@@ -165,6 +172,9 @@ const userSlice = createSlice({
       state.error = action.payload.resetError;
       // tokenFromURL: action.payload.tokenFromURL,
       // token: action.payload.error,
+    },
+    clearError: (state) => {
+      state.error = null;
     },
   },
 });
@@ -187,9 +197,11 @@ export const {
   handleSuccessfulProfilePatch,
   SubmitEmail,
   handleResetEmailError,
+  SUBMIT_EMAIL_SUCCESS,
   setPasswordResetToken,
   SubmitPassword,
   handlePasswordResetError,
+  clearError,
 } = userSlice.actions;
 
 // Définition des types pour chaque action

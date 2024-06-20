@@ -12,6 +12,7 @@ import {
   handleProfileEditionError,
   DeleteProfile,
   SubmitEmail,
+  SUBMIT_EMAIL_SUCCESS,
   handleResetEmailError,
   SubmitPassword,
   handlePasswordResetError,
@@ -82,7 +83,7 @@ const authMiddleware = (store) => (next) => (action) => {
         return res.json();
       })
       .then((data) => {
-        store.dispatch(SubmitEmail(data));
+        store.dispatch({ type: 'SUBMIT_EMAIL_SUCCESS', payload: data });
       })
       .catch((error) => {
         store.dispatch(handleResetEmailError({ error: error.message }));

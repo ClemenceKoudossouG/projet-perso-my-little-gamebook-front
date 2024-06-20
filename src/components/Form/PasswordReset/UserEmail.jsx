@@ -12,7 +12,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { SubmitEmail } from '../../../Store/UserSlice';
+import { SubmitEmail, clearError } from '../../../Store/UserSlice';
 
 import Notification from '../../Notification';
 
@@ -45,28 +45,41 @@ export default function UserEmailSide() {
   const handleSubmit = (event) => {
     event.preventDefault();
     dispatch(SubmitEmail({ email: formValues.email }));
-    setEmailSent(true);
     dispatch({ type: 'SUBMIT_EMAIL' });
+    if (emailSent && !resetEmailError) {
+      setEmailSent(true);
+    }
+    dispatch(
+      showNotification({
+        message: 'Un email de réinitialisation a été envoyé.',
+        type: 'success',
+      })
+    );
+    const timer = setTimeout(() => {
+      dispatch(hideNotification());
+      setEmailSent(false);
+    }, 5000);
+    return () => clearTimeout(timer);
   };
 
   // eslint-disable-next-line consistent-return
   useEffect(() => {
-    if (emailSent && !resetEmailError) {
-      dispatch(
-        showNotification('Un email de réinitialisation vous a été envoyé.')
-      );
-      const timer = setTimeout(() => {
-        dispatch(hideNotification());
-        setEmailSent(false);
-      }, 5000);
-      return () => clearTimeout(timer);
+    if (resetEmailError) {
+      dispatch(showNotification({ message: resetEmailError, type: 'error' }));
+      dispatch(clearError()); // Retirer toute trace d'erreur. 
+      setEmailSent(false);
     }
-  }, [emailSent, resetEmailError, dispatch]);
+    const timer = setTimeout(() => {
+      dispatch(hideNotification());
+      setEmailSent(false);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [resetEmailError, dispatch]);
 
   const renderNotification = () => {
-    if (emailSent && !resetEmailError) {
+    if (notification.message) {
       // eslint-disable-next-line prettier/prettier
-      return <Notification message={notification.message} variant={notification.variant} />;
+      return <Notification message={notification.message} type={notification.type} />;
     }
     return null;
   };
@@ -108,11 +121,11 @@ export default function UserEmailSide() {
               Email utilisateur
             </Typography>
             {renderNotification()}
-            {resetEmailError && (
+            {/* {resetEmailError && (
               <Typography color="error" variant="body2">
                 {resetEmailError}
               </Typography>
-            )}
+            )} */}
             <Box
               component="form"
               noValidate
