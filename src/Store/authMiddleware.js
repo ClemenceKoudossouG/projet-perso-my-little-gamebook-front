@@ -78,7 +78,7 @@ const authMiddleware = (store) => (next) => (action) => {
         if (res.status === 500) {
           throw new Error('Oups ! La demande de réinitialisation a échoué.');
         } else if (res.status === 404) {
-          throw new Error("Cet email utilisateur n'existe pas.");
+          throw new Error('Email utilisateur inconnu au bataillon !');
         }
         return res.json();
       })

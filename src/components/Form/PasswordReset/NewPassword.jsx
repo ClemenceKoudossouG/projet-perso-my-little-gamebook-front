@@ -15,6 +15,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   setPasswordResetToken,
   SubmitPassword,
+  clearError,
 } from '../../../Store/UserSlice';
 
 import Notification from '../../Notification';
@@ -71,7 +72,7 @@ export default function NewPasswordSide() {
 
   const [errors, setErrors] = useState({});
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const inputErrors = {};
 
@@ -79,9 +80,7 @@ export default function NewPasswordSide() {
       inputErrors.passwordMatch =
         'Le mot de passe doit contenir au moins 8 caractères, dont une majuscule et minuscule, 1 chiffre et 1 caractère spécial.';
     }
-    // Vérification si passwordConfirmation matche bien avec password
     if (formValues.password !== formValues.confirmNewPassword) {
-      // Si ça ne matche pas, message d'erreur
       inputErrors.passwordMatch = 'Les mots de passe ne correspondent pas.';
     }
     if (!formValues.password.trim()) {
@@ -95,42 +94,40 @@ export default function NewPasswordSide() {
     setErrors(inputErrors);
 
     if (Object.keys(inputErrors).length === 0) {
-      console.log('Submitting new password > ', formValues.password);
-      console.log('Token before submit:', resetToken);
-      // Log the URL and data before making the request
-      console.log('Request URL:', 'http://localhost:3000/request-password-reset/reset-password');
-      console.log('Request data:', {
-        password: formValues.password,
-        token: resetToken,
-      });
-
-      dispatch(SubmitPassword({ password: formValues.password, resetToken }));
-      setPasswordSaved(true);
+      await dispatch(
+        SubmitPassword({ password: formValues.password, resetToken })
+      );
       dispatch({ type: 'SUBMIT_NEW_PASSWORD' });
+      dispatch(
+        showNotification({
+          message:
+            'Mot de passe mis à jour avec succès. Tu vas être redirigé(e) vers la page de connexion.',
+          type: 'success',
+        })
+      );
+      setTimeout(() => {
+        dispatch(hideNotification());
+        navigate('/SignInSide');
+      }, 5000);
     }
   };
 
-  // eslint-disable-next-line consistent-return
   useEffect(() => {
-    if (passwordSaved) {
-      dispatch(
-        showNotification(
-          'Mot de passe mis à jour avec succès. Tu vas être être redirigé.e vers la page de connexion.'
-        )
-      );
-      const timer = setTimeout(() => {
-        dispatch(hideNotification());
-        setPasswordSaved(false);
-        navigate('/SignInSide');
-      }, 5000);
-      return () => clearTimeout(timer);
+    if (resetError) {
+      dispatch(showNotification({ message: resetError, type: 'error' }));
+      dispatch(clearError()); // Retirer toute trace d'erreur.
+      setPasswordSaved(false);
     }
-  }, [passwordSaved, dispatch, navigate]);
+    const timer = setTimeout(() => {
+      dispatch(hideNotification());
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [resetError, dispatch]);
 
   const renderNotification = () => {
-    if (passwordSaved) {
+    if (notification.message) {
       // eslint-disable-next-line prettier/prettier
-      return <Notification message={notification.message} variant={notification.variant} />;
+      return <Notification message={notification.message} type={notification.type} />;
     }
     return null;
   };
@@ -172,11 +169,11 @@ export default function NewPasswordSide() {
               Nouveau mot de passe
             </Typography>
             {renderNotification()}
-            {resetError && (
+            {/* {resetError && (
               <Typography color="error" variant="body2">
                 {resetError}
               </Typography>
-            )}
+            )} */}
             <Box
               component="form"
               noValidate

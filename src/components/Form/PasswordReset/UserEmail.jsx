@@ -66,7 +66,7 @@ export default function UserEmailSide() {
   useEffect(() => {
     if (resetEmailError) {
       dispatch(showNotification({ message: resetEmailError, type: 'error' }));
-      dispatch(clearError()); // Retirer toute trace d'erreur. 
+      dispatch(clearError()); // Retirer toute trace d'erreur.
       setEmailSent(false);
     }
     const timer = setTimeout(() => {
