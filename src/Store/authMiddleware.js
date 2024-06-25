@@ -163,7 +163,12 @@ const authMiddleware = (store) => (next) => (action) => {
       }),
     })
       .then((res) => {
-        if (!res.ok) {
+        // const data = res.json();
+        if (res.status === 409) {
+          throw new Error(
+            'Ce pseudo est déjà pris, tu dois en choisir un autre !'
+          );
+        } else if (!res.ok) {
           throw new Error("Oups ! Le profil n'a pas pu être modifié.");
         }
         return res.json();

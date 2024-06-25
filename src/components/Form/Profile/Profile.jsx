@@ -33,6 +33,7 @@ import {
   getUser,
   handleProfileEditionError,
   checkLoggedIn,
+  clearError,
 } from '../../../Store/UserSlice';
 
 const defaultTheme = createTheme();
@@ -180,31 +181,42 @@ export default function Profile() {
       avatar: selectedValue,
       alias: formValues.alias.trim(),
     };
-    // Bloc try catch pour gérer les erreurs et l'affichage de la notification après enregistrement du profil.
-    try {
-      await dispatch(PatchProfile(updatedProfile));
-      dispatch({ type: 'PATCH_PROFILE' });
-      localStorage.setItem('user', JSON.stringify(formValues));
-      if (isModified) {
-        setIsSaved(true); // Le profil est sauvegardé seulement s'il a été modifié
-        dispatch(showNotification('Profil bien enregistré !'));
-        // Masquer la notification après quelques secondes
-        setTimeout(() => {
-          dispatch(hideNotification());
-          setIsSaved(false);
-        }, 5000); //  = 5 secondes
-      }
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      dispatch(hideNotification());
+    await dispatch(PatchProfile(updatedProfile));
+    dispatch({ type: 'PATCH_PROFILE' });
+    localStorage.setItem('user', JSON.stringify(formValues));
+    if (isModified && !loginError) {
+      setIsSaved(true); // Le profil est sauvegardé seulement s'il a été modifié
+      dispatch(
+        showNotification({
+          message: 'Profil bien enregistré !',
+          type: 'success',
+        })
+      );
+      // Masquer la notification après quelques secondes
+      setTimeout(() => {
+        dispatch(hideNotification());
+        setIsSaved(false);
+      }, 5000); //  = 5 secondes
     }
   };
 
+  useEffect(() => {
+    if (loginError) {
+      dispatch(showNotification({ message: loginError, type: 'error' }));
+      dispatch(clearError()); // Retirer toute trace d'erreur.
+      setIsModified(false);
+    }
+    const timer = setTimeout(() => {
+      dispatch(hideNotification());
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [loginError, dispatch]);
+
   // Fonction d'affichage de la notification après sauvegarde du profil.
   const renderNotification = () => {
-    if (isSaved) {
+    if (notification.message) {
       // eslint-disable-next-line prettier/prettier
-      return <Notification message={notification.message} variant={notification.variant} />;
+      return <Notification message={notification.message} type={notification.type} />;
     }
     return null;
   };
@@ -267,7 +279,7 @@ export default function Profile() {
             <Typography component="h1" variant="h5">
               Mon profil
               {/* Affichage de la notification après sauvegarde du profil. */}
-              {isSaved && renderNotification()}
+              {renderNotification()}
             </Typography>
             <Box
               component="form"
@@ -352,11 +364,11 @@ export default function Profile() {
                   <Avatar key={avatar.id} alt={avatar.alt} src={avatar.src} />
                 ))}
               </Stack>
-              {loginError && (
+              {/* {loginError && (
                 <Typography variant="body2" color="error">
                   {loginError}
                 </Typography>
-              )}
+              )} */}
               <Button
                 type="modify"
                 color="primary"
