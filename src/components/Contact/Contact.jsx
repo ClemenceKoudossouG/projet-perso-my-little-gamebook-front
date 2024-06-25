@@ -44,7 +44,7 @@ export default function Contact() {
             }}
           >
             <Typography component="h1" variant="h5">
-              Vous souhaitez nous contacter ?{' '}
+              Une remarque ou une question ? Raconte-nous tout !{' '}
             </Typography>
             <Box
               component="form"
