@@ -9,10 +9,11 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { SubmitNewUser } from '@/Store/UserSlice';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { SubmitNewUser, handleSuccessfulUserCreation } from '../../../Store/UserSlice';
+
 
 const defaultTheme = createTheme();
 
@@ -20,11 +21,13 @@ export default function SignUpSide() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const loginError = useSelector((state) => state.user.error);
+  const aliasError = useSelector((state) => state.user.aliasError);
+  const successfulCreation = useSelector(
+    (state) => state.user.successfulCreation
+  );
   const [formValues, setFormValues] = useState({
-    email: '',
     password: '',
-    firstname: '',
-    lastname: '',
+    passwordConfirmation: '',
     alias: '',
   });
 
@@ -36,44 +39,53 @@ export default function SignUpSide() {
     });
   };
   const [errors, setErrors] = useState({});
+
+  // Regex pour valider le format de mot de passe
+  const validatePasswordFormat = (password) => {
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    return passwordRegex.test(password);
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
     const inputErrors = {};
+    // Vérification du format du mot de passe
+    if (!validatePasswordFormat(formValues.password)) {
+      inputErrors.passwordFormat =
+        'Le mot de passe doit contenir au moins 8 caractères, dont une majuscule et minuscule, 1 chiffre et 1 caractère spécial.';
+    }
     // Vérification si passwordConfirmation matche bien avec password
     if (formValues.password !== formValues.passwordConfirmation) {
-      // Si ça ne matche pas, mesage d'erreur
-      alert('Veuillez confirmer de nouveau le mot de passe.');
-    }
-    // Si les champs des inputs sont vides, message d'erreur
-    if (!formValues.firstname.trim()) {
-      inputErrors.firstname = 'Veuillez indiquer votre prénom';
-    }
-    if (!formValues.lastname.trim()) {
-      inputErrors.lastname = 'Veuillez indiquer votre nom de famille';
+      // Si ça ne matche pas, message d'erreur
+      inputErrors.passwordMatch = 'Les mots de passe ne correspondent pas.';
     }
     if (!formValues.alias.trim()) {
-      inputErrors.alias = 'Veuillez indiquer votre alias';
-    }
-    if (!formValues.email.trim()) {
-      inputErrors.email = 'Veuillez indiquer votre adresse email';
+      inputErrors.alias = "N'oublie pas ton pseudo !";
     }
     if (!formValues.password.trim()) {
-      inputErrors.password = 'Veuillez indiquer votre mot de passe';
+      inputErrors.password = 'Oups, tu as oublié ton mot de passe !';
     }
     if (!formValues.passwordConfirmation.trim()) {
       inputErrors.passwordConfirmation =
-        'Veuillez confirmer votre mot de passe';
+        "N'oublie pas de confirmer ton mot de passe !";
     }
-    if (Object.keys(inputErrors).length > 0) {
-      console.error('Erreurs de validation: ', inputErrors);
-      setErrors(inputErrors);
-      return;
+    setErrors(inputErrors);
+    if (Object.keys(inputErrors).length === 0) {
+      console.log('SignUp profile > ', {
+        ...formValues,
+      });
+
+      dispatch(SubmitNewUser(formValues));
+      dispatch({ type: 'SUBMIT_NEWUSER' });
+      // eslint-disable-next-line react-hooks/rules-of-hooks
     }
-    // Si c'est rempli correctement, on envoit au back les données et on "navigate"
-    dispatch(SubmitNewUser(formValues));
-    dispatch({ type: 'SUBMIT_NEWUSER' });
-    navigate('/SignInSide');
   };
+
+  useEffect(() => {
+    if (successfulCreation) {
+      navigate('/SignInSide');
+    }
+  }, [successfulCreation, navigate]);
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -109,11 +121,16 @@ export default function SignUpSide() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign Up
+              Nouvel aventurier ? Crée ton compte ici !
             </Typography>
             {loginError && (
               <Typography color="error" variant="body2">
                 {loginError}
+              </Typography>
+            )}
+            {aliasError && (
+              <Typography color="error" variant="body2">
+                {aliasError}
               </Typography>
             )}
             <Box
@@ -122,49 +139,24 @@ export default function SignUpSide() {
               onSubmit={handleSubmit}
               sx={{ mt: 1 }}
             >
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    autoComplete="given-name"
-                    name="firstname"
-                    required
-                    fullWidth
-                    id="firstname"
-                    label="First Name"
-                    autoFocus
-                    value={formValues.firstname}
-                    onChange={handleChange}
-                  />
-                  {errors.firstname && (
-                    <p style={{ color: 'red', fontSize: 'small' }}>
-                      {errors.firstname}
-                    </p>
-                  )}
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="lastname"
-                    label="Last Name"
-                    name="lastname"
-                    autoComplete="family-name"
-                    value={formValues.lastname}
-                    onChange={handleChange}
-                  />
-                  {errors.lastname && (
-                    <p style={{ color: 'red', fontSize: 'small' }}>
-                      {errors.lastname}
-                    </p>
-                  )}
-                </Grid>
-              </Grid>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Adresse email"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                value={formValues.email}
+                onChange={handleChange}
+              />
               <TextField
                 margin="normal"
                 required
                 fullWidth
                 id="alias"
-                label="alias"
+                label="pseudo"
                 name="alias"
                 autoComplete="alias"
                 autoFocus
@@ -180,25 +172,8 @@ export default function SignUpSide() {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                value={formValues.email}
-                onChange={handleChange}
-              />
-              {errors.email && (
-                <p style={{ color: 'red', fontSize: 'small' }}>
-                  {errors.email}
-                </p>
-              )}
-              <TextField
-                margin="normal"
-                required
-                fullWidth
                 name="password"
-                label="Password"
+                label="Mot de passe"
                 type="password"
                 id="password"
                 autoComplete="current-password"
@@ -210,12 +185,17 @@ export default function SignUpSide() {
                   {errors.password}
                 </p>
               )}
+              {errors.passwordFormat && (
+                <p style={{ color: 'red', fontSize: 'small' }}>
+                  {errors.passwordFormat}
+                </p>
+              )}
               <TextField
                 margin="normal"
                 required
                 fullWidth
                 name="passwordConfirmation"
-                label="Password confirmation"
+                label="Je confirme mon mot de passe"
                 type="password"
                 id="passwordConfirmation"
                 autoComplete="current-password"
@@ -227,18 +207,23 @@ export default function SignUpSide() {
                   {errors.passwordConfirmation}
                 </p>
               )}
+              {errors.passwordMatch && (
+                <p style={{ color: 'red', fontSize: 'small' }}>
+                  {errors.passwordMatch}
+                </p>
+              )}
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign Up
+                Je crée mon compte
               </Button>
               <Grid container>
                 <Grid item>
                   <Link href="/SignInSide" variant="body2">
-                    Already have an account? Sign in
+                    J'ai déjà un compte. Je me connecte !
                   </Link>
                 </Grid>
               </Grid>

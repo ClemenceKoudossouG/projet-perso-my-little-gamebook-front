@@ -12,18 +12,26 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { SubmitLogin } from '../../../Store/UserSlice';
+import { SubmitEmail, clearError } from '../../../Store/UserSlice';
+
+import Notification from '../../Notification';
+
+import {
+  showNotification,
+  hideNotification,
+} from '../../../Store/notificationSlice';
 
 const defaultTheme = createTheme();
 
-export default function SignInSide() {
+export default function UserEmailSide() {
+  const [emailSent, setEmailSent] = useState(false); // Trace de l'envoi de l'email
+  const resetEmailError = useSelector((state) => state.user.error);
+  const notification = useSelector((state) => state.notification);
+
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const loginError = useSelector((state) => state.user.error);
-  const isLogged = useSelector((state) => state.user.logged);
+  // const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
-    alias: '',
-    password: '',
+    email: '',
   });
 
   const handleChange = (e) => {
@@ -36,29 +44,45 @@ export default function SignInSide() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Si les champs de l'input sont vides, message d'erreur
-    const inputErrors = {};
-    if (!formValues.password.trim()) {
-      inputErrors.password = 'Veuillez indiquer votre mot de passe';
+    dispatch(SubmitEmail({ email: formValues.email }));
+    dispatch({ type: 'SUBMIT_EMAIL' });
+    if (emailSent && !resetEmailError) {
+      setEmailSent(true);
     }
-    if (!formValues.email.trim()) {
-      inputErrors.email = 'Veuillez indiquer votre adresse mail';
-    }
-    if (Object.keys(inputErrors).length > 0) {
-      console.error('Erreurs de connexion: ', inputErrors);
-      setErrors(inputErrors);
-      return;
-    }
-    // Si c'est rempli correctement, on envoit au back les données et on "navigate"
-    dispatch(SubmitLogin(formValues));
-    dispatch({ type: 'SUBMIT_LOGIN' });
+    dispatch(
+      showNotification({
+        message: 'Un email de réinitialisation a été envoyé.',
+        type: 'success',
+      })
+    );
+    const timer = setTimeout(() => {
+      dispatch(hideNotification());
+      setEmailSent(false);
+    }, 5000);
+    return () => clearTimeout(timer);
   };
-  // Conditionnelle pour rediriger l'utilisateur uniquement si connecté
+
+  // eslint-disable-next-line consistent-return
   useEffect(() => {
-    if (isLogged) {
-      navigate('/');
+    if (resetEmailError) {
+      dispatch(showNotification({ message: resetEmailError, type: 'error' }));
+      dispatch(clearError()); // Retirer toute trace d'erreur.
+      setEmailSent(false);
     }
-  }, [isLogged, navigate]);
+    const timer = setTimeout(() => {
+      dispatch(hideNotification());
+      setEmailSent(false);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [resetEmailError, dispatch]);
+
+  const renderNotification = () => {
+    if (notification.message) {
+      // eslint-disable-next-line prettier/prettier
+      return <Notification message={notification.message} type={notification.type} />;
+    }
+    return null;
+  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -94,8 +118,14 @@ export default function SignInSide() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Connexion
+              Email utilisateur
             </Typography>
+            {renderNotification()}
+            {/* {resetEmailError && (
+              <Typography color="error" variant="body2">
+                {resetEmailError}
+              </Typography>
+            )} */}
             <Box
               component="form"
               noValidate
@@ -106,56 +136,22 @@ export default function SignInSide() {
                 margin="normal"
                 required
                 fullWidth
-                id="alias"
-                label="Pseudo"
-                name="alias"
-                autoComplete="alias"
-                autoFocus
+                name="email"
+                label="Email utilisateur"
+                type="email"
+                id="email"
+                autoComplete="current-email"
                 value={formValues.email}
                 onChange={handleChange}
               />
-              {errors.email && (
-                <p style={{ color: 'red', fontSize: 'small' }}>
-                  {errors.email}
-                </p>
-              )}
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Halte-là, ton mot de passe ?"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                value={formValues.password}
-                onChange={handleChange}
-              />
-              {errors.password && (
-                <p style={{ color: 'red', fontSize: 'small' }}>
-                  {errors.password}
-                </p>
-              )}
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Je me connecte !
+                Recevoir un email de réinitialisation
               </Button>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <Link href="/SignUpSide" variant="body2">
-                    Pas encore de compte ? Inscris-toi ici !
-                  </Link>
-                </Grid>
-                <Grid item xs={12}>
-                  <Link href="/UserEmailSide" variant="body2">
-                    Mot de passe oublié ?
-                  </Link>
-                </Grid>
-              </Grid>
             </Box>
           </Box>
         </Grid>

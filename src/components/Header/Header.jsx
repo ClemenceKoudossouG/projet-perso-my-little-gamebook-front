@@ -58,7 +58,7 @@ export default function ButtonAppBar() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             My Little GameBook
           </Typography>
-          {!logged && (
+          {/* {!logged && (
             <>
               <Button color="inherit">
                 <Link to="SignInSide" style={{ color: 'white' }}>
@@ -71,7 +71,7 @@ export default function ButtonAppBar() {
                 </Link>
               </Button>
             </>
-          )}
+          )} */}
           {logged && (
             <>
               <Link to="/profile">

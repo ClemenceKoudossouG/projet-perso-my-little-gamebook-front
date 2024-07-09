@@ -2,24 +2,39 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
+// import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+// import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import Typography from '@mui/material/Typography';
 import Radio from '@mui/material/Radio';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import React, { useEffect, useState } from 'react';
+// import Snackbar from '@mui/material/Snackbar';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
+import Stack from '@mui/material/Stack';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+// import Link from '@mui/material/Link';
+import { makeStyles } from '@material-ui/core/styles';
+import { Modal } from '@mui/material';
+import Notification from '../../Notification';
+
+import {
+  showNotification,
+  hideNotification,
+} from '../../../Store/notificationSlice';
+
 import {
   PatchProfile,
   getUser,
   handleProfileEditionError,
   checkLoggedIn,
-} from '@/Store/UserSlice';
-import Stack from '@mui/material/Stack';
+  clearError,
+} from '../../../Store/UserSlice';
 
 const defaultTheme = createTheme();
 
@@ -63,82 +78,166 @@ const avatars = [
 
 export default function Profile() {
   const dispatch = useDispatch();
+  const [isReadOnly, setIsReadOnly] = useState(true);
+  const [isModified, setIsModified] = useState(false); // On garde une trace des modifications
+  const [isSaved, setIsSaved] = useState(false); // On garde une trace de l'enregistrement du profil
+  const [avatarClicked, setAvatarClicked] = useState(false); // On garde une trace du clic sur l'avatar
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const notification = useSelector((state) => state.notification);
 
   useEffect(() => {
     dispatch(checkLoggedIn());
   }, [dispatch]);
 
+  useEffect(() => {
+    // On enlève l'éventuel message d'erreur login résiduel.
+    dispatch(handleProfileEditionError(null));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Condition - formulaire éditable si on est loggé
   // const logged = useSelector((state) => state.user.logged);
   const navigate = useNavigate();
+  const loginError = useSelector((state) => state.user.error);
+  const [errors, setErrors] = useState({});
   // récupération & modifications du state
   const user = useSelector((state) => state.user);
+  console.log(user);
   const [formValues, setFormValues] = useState({
-    firstname: user.firstname || '',
-    lastname: user.lastname || '',
     alias: user.alias || '',
     avatar: user.avatar || '',
   });
 
-  // Choix de l'avatar avec radio buttons
+  useEffect(() => {
+    const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
+    if (userFromLocalStorage) {
+      setFormValues(userFromLocalStorage);
+    }
+  }, []);
+
+  useEffect(() => {
+    // Define a function to check whether the form is modified and an avatar is clicked
+    const checkFormModification = () => {
+      // Check if either form is modified, avatar is clicked, or alias is modified
+      if (isModified || avatarClicked) {
+        // If modified or avatar clicked or alias modified, show the "Enregistrer mon profil" button
+        setIsSaved(false);
+      }
+    };
+    // On appelle la fonction checkFormModification si isModified ou avatarClicked changent
+    checkFormModification();
+  }, [isModified, avatarClicked]);
+
+  // Radio group AVATAR
   const [selectedValue, setSelectedValue] = React.useState(user.avatar);
   const handleAvatarChange = (event) => {
     event.preventDefault();
     setSelectedValue(event.target.value);
+    setAvatarClicked(true); // état "cliqué" de l'avatar
+    setIsModified(true); // State modifié = true
+    console.log('avatar >', event.target.value);
   };
   // Modifications des inputs + spread operator
   const handleChange = (event) => {
     event.preventDefault();
     const { name, value } = event.target;
+    console.log('Form element > ', name);
+    console.log('Valeur >', value);
     setFormValues({
       ...formValues,
       [name]: value,
     });
+    setIsModified(true); // State modifié = true
   };
-  // Si les champs des inputs sont vides, message d'erreur
-  const [errors, setErrors] = useState({});
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const inputErrors = {};
-    if (!formValues.firstname.trim()) {
-      inputErrors.firstname = 'Veuillez indiquer votre prénom';
-      handleProfileEditionError();
-    }
-    if (!formValues.lastname.trim()) {
-      inputErrors.lastname = 'Veuillez indiquer votre nom de famille';
-    }
-    if (!formValues.alias.trim()) {
-      inputErrors.alias = 'Veuillez indiquer votre alias';
-    }
-    setErrors(inputErrors);
-    if (Object.keys(errors).length > 0) {
-      console.error('Erreurs de modification: ', inputErrors);
-      return;
-    }
-    const updatedProfile = {
-      ...formValues,
-      avatar: selectedValue,
-      firstname: formValues.firstname.trim(),
-      lastname: formValues.lastname.trim(),
-      alias: formValues.alias.trim(),
-    };
-    dispatch(PatchProfile(updatedProfile));
-    dispatch({ type: 'PATCH_PROFILE' });
-    localStorage.setItem('user', JSON.stringify(formValues));
-    // navigate('/');
-  };
-
-  // Bouton "modifier""
-  const [isReadOnly, setIsReadOnly] = useState(true);
+  // Bouton MODIFIER
   const handleModifyClick = () => {
     setIsReadOnly(false);
   };
+  useEffect(() => {
+    if (isModified) {
+      // On évite le déclenchement de la notification de succès au clic sur le bouton modifier
+      setIsSaved(false);
+    }
+  }, [isModified]);
 
-  // Supprimer le compte
-  const deleteButton = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    dispatch(getUser());
+    const inputErrors = {};
+    // Message d'erreur si le champ alias est vide.
+    if (!formValues.alias.trim()) {
+      inputErrors.alias = "N'oublie pas ton pseudo !";
+    }
+    setErrors(inputErrors);
+    if (Object.keys(inputErrors).length > 0) {
+      console.error('Erreurs de modification: ', errors);
+      return; // S'il y a des erreurs, on ne fait rien et on return dès maintenant pour ne pas poursuivre la soumission du formulaire.
+    }
+    console.log('Patch profile > ', {
+      ...formValues,
+      avatar: selectedValue,
+    });
+    const updatedProfile = {
+      ...formValues,
+      avatar: selectedValue,
+      alias: formValues.alias.trim(),
+    };
+    await dispatch(PatchProfile(updatedProfile));
+    dispatch({ type: 'PATCH_PROFILE' });
+    localStorage.setItem('user', JSON.stringify(formValues));
+    if (isModified && !loginError) {
+      setIsSaved(true); // Le profil est sauvegardé seulement s'il a été modifié
+      dispatch(
+        showNotification({
+          message: 'Profil bien enregistré !',
+          type: 'success',
+        })
+      );
+      // Masquer la notification après quelques secondes
+      setTimeout(() => {
+        dispatch(hideNotification());
+        setIsSaved(false);
+      }, 5000); //  = 5 secondes
+    }
+  };
+
+  useEffect(() => {
+    if (loginError) {
+      dispatch(showNotification({ message: loginError, type: 'error' }));
+      dispatch(clearError()); // Retirer toute trace d'erreur.
+      setIsModified(false);
+    }
+    const timer = setTimeout(() => {
+      dispatch(hideNotification());
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [loginError, dispatch]);
+
+  // Fonction d'affichage de la notification après sauvegarde du profil.
+  const renderNotification = () => {
+    if (notification.message) {
+      // eslint-disable-next-line prettier/prettier
+      return <Notification message={notification.message} type={notification.type} />;
+    }
+    return null;
+  };
+  // Supprimer le compte
+  // On ouvre la modale de confirmation avec le bouton supprimer mon profil
+  const handleDeleteButtonClick = () => {
+    setShowConfirmationModal(true);
+  };
+
+  // On gère la fermerture de la modale de confirmation
+  const handleCloseConfirmationModal = () => {
+    setShowConfirmationModal(false);
+  };
+
+  // On gère la suppression du profil avec la modale de confirmation
+  const handleDeleteProfile = () => {
+    // Dispatch de l'action delete
     dispatch({ type: 'DELETE_PROFILE' });
+    // Fermeture de la modale de confirmation
+    setShowConfirmationModal(false);
+    // Redirection vers la page d'accueil logged out
     navigate('/SignInSide');
   };
 
@@ -178,7 +277,9 @@ export default function Profile() {
             />
 
             <Typography component="h1" variant="h5">
-              Profile
+              Mon profil
+              {/* Affichage de la notification après sauvegarde du profil. */}
+              {renderNotification()}
             </Typography>
             <Box
               component="form"
@@ -186,52 +287,6 @@ export default function Profile() {
               onSubmit={handleSubmit}
               sx={{ mt: 1 }}
             >
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="firstname"
-                    label="First Name"
-                    name="firstname"
-                    autoComplete="firstname"
-                    autoFocus
-                    value={formValues.firstname}
-                    onChange={(e) =>
-                      setFormValues({
-                        ...formValues,
-                        firstname: e.target.value,
-                      })
-                    }
-                    InputProps={{ readOnly: isReadOnly }}
-                  />
-                  {errors.firstname && (
-                    <p style={{ color: 'red', fontSize: 'small' }}>
-                      {errors.firstname}
-                    </p>
-                  )}
-                </Grid>
-
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="lastname"
-                    label="Last Name"
-                    name="lastname"
-                    autoComplete="lastname"
-                    autoFocus
-                    value={formValues.lastname}
-                    onChange={handleChange}
-                    InputProps={{ readOnly: isReadOnly }}
-                  />
-                  {errors.lastname && (
-                    <p style={{ color: 'red', fontSize: 'small' }}>
-                      {errors.lastname}
-                    </p>
-                  )}
-                </Grid>
-              </Grid>
               <TextField
                 margin="normal"
                 required
@@ -243,13 +298,42 @@ export default function Profile() {
                 autoFocus
                 value={formValues.alias}
                 onChange={handleChange}
-                InputProps={{ readOnly: isReadOnly }}
+                InputProps={{
+                  readOnly: isReadOnly,
+                  sx: {
+                    '& input': {
+                      cursor: isReadOnly ? 'default' : 'text', // Style par défaut si non éditable
+                      backgroundColor: isReadOnly ? 'inherit' : '#ffffcc', // Couleur de fond si éditable
+                    },
+                  },
+                }}
               />
               {errors.alias && (
                 <p style={{ color: 'red', fontSize: 'small' }}>
                   {errors.alias}
                 </p>
               )}
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                value={formValues.email}
+                onChange={handleChange}
+                InputProps={{
+                  readOnly: isReadOnly,
+                  sx: {
+                    '& input': {
+                      cursor: isReadOnly ? 'default' : 'text',
+                      backgroundColor: isReadOnly ? 'inherit' : '#ffffcc',
+                    },
+                  },
+                }}
+              />
               <FormControl>
                 <FormLabel id="demo-row-radio-buttons-group-label">
                   Avatar
@@ -280,7 +364,11 @@ export default function Profile() {
                   <Avatar key={avatar.id} alt={avatar.alt} src={avatar.src} />
                 ))}
               </Stack>
-
+              {/* {loginError && (
+                <Typography variant="body2" color="error">
+                  {loginError}
+                </Typography>
+              )} */}
               <Button
                 type="modify"
                 color="primary"
@@ -289,20 +377,57 @@ export default function Profile() {
                 sx={{ mt: 3, mb: 1 }}
                 onClick={handleModifyClick}
               >
-                Modifier
+                Modifier mon profil
               </Button>
+              {isModified && ( // Le bouton enregistrer ne s'affiche qu'en cas de modification du profil
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 0.5, mb: 2 }}
+                  // onClick={handleSubmit}: fonction handleSubmit appelée plus aut dans le form, onSubmit. Evite l'affichage de la notification au clic sur le bouton.
+                >
+                  Enregistrer mon profil
+                </Button>
+              )}
               <Button
-                type="save"
-                fullWidth
                 variant="contained"
-                sx={{ mt: 0.5, mb: 2 }}
-                onClick={handleSubmit}
+                fullWidth
+                onClick={handleDeleteButtonClick}
               >
-                Enregistrer
+                Supprimer mon profil
               </Button>
-              <Button variant="contained" fullWidth onClick={deleteButton}>
-                Supprimer
-              </Button>
+              {/* Modale de confirmation de suppression du profil */}
+              <Modal
+                open={showConfirmationModal}
+                onClose={handleCloseConfirmationModal}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    width: 400,
+                    bgcolor: 'background.paper',
+                    border: '2px solid #000',
+                    boxShadow: 24,
+                    p: 4,
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                  }}
+                >
+                  <Typography
+                    id="modal-modal-title"
+                    variant="h6"
+                    component="h2"
+                  >
+                    Es-tu certain(e) de vouloir supprimer ton profil ?
+                  </Typography>
+                  <Button onClick={handleDeleteProfile}>Oui !</Button>
+                  <Button onClick={handleCloseConfirmationModal}>Non !</Button>
+                </Box>
+              </Modal>
             </Box>
           </Box>
         </Grid>

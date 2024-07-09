@@ -15,6 +15,9 @@ import { useTheme } from '@mui/material/styles';
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundImage: 'url("public/img/bg/ile.jpg")',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
     position: 'relative',
     minHeight: '100vh',
     display: 'flex',
@@ -86,7 +89,7 @@ function VisitorHomePage() {
               </Button>
             </Link>
 
-            <Link to="/SignUpSide">
+            <Link to="/SignUpSide" style={{ color: '#009688' }}>
               <Button
                 variant="contained"
                 color="primary"
@@ -120,9 +123,11 @@ function VisitorHomePage() {
                     sx={{ fontSize: 100 }}
                   />
                 </Link>
-                
               </IconButton>
-              <Typography variant="body1" style={{ fontWeight: 'bold' }}>
+              <Typography
+                variant="body1"
+                style={{ fontWeight: 'bold', color: 'white' }}
+              >
                 Voir les histoires
               </Typography>
             </div>
@@ -147,7 +152,10 @@ function VisitorHomePage() {
                   />
                 </Link>
               </IconButton>
-              <Typography variant="body1" style={{ fontWeight: 'bold' }}>
+              <Typography
+                variant="body1"
+                style={{ fontWeight: 'bold', color: 'white' }}
+              >
                 Jouer une histoire
               </Typography>
             </div>
