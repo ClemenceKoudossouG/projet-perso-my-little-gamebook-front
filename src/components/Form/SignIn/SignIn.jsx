@@ -36,20 +36,6 @@ export default function SignInSide() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Si les champs de l'input sont vides, message d'erreur
-    const inputErrors = {};
-    if (!formValues.password.trim()) {
-      inputErrors.password = 'Veuillez indiquer votre mot de passe';
-    }
-    if (!formValues.email.trim()) {
-      inputErrors.email = 'Veuillez indiquer votre adresse mail';
-    }
-    if (Object.keys(inputErrors).length > 0) {
-      console.error('Erreurs de connexion: ', inputErrors);
-      setErrors(inputErrors);
-      return;
-    }
-    // Si c'est rempli correctement, on envoit au back les données et on "navigate"
     dispatch(SubmitLogin(formValues));
     dispatch({ type: 'SUBMIT_LOGIN' });
   };
@@ -96,6 +82,11 @@ export default function SignInSide() {
             <Typography component="h1" variant="h5">
               Connexion
             </Typography>
+            {loginError && (
+              <Typography color="error" variant="body2">
+                {loginError}
+              </Typography>
+            )}
             <Box
               component="form"
               noValidate
@@ -114,11 +105,6 @@ export default function SignInSide() {
                 value={formValues.email}
                 onChange={handleChange}
               />
-              {errors.email && (
-                <p style={{ color: 'red', fontSize: 'small' }}>
-                  {errors.email}
-                </p>
-              )}
               <TextField
                 margin="normal"
                 required
@@ -131,11 +117,6 @@ export default function SignInSide() {
                 value={formValues.password}
                 onChange={handleChange}
               />
-              {errors.password && (
-                <p style={{ color: 'red', fontSize: 'small' }}>
-                  {errors.password}
-                </p>
-              )}
               <Button
                 type="submit"
                 fullWidth
