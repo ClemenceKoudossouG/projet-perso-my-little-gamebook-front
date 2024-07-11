@@ -76,19 +76,17 @@ export default function Contact() {
       if (!contactError) {
         setIsSent(true);
       }
-      if (isSent && !contactError) {
-        dispatch(
-          showNotification({
-            message: 'Message bien envoyé ! Nous vous répondrons au plus vite.',
-            type: 'success',
-          })
-        );
-        const timer = setTimeout(() => {
-          dispatch(hideNotification());
-          setIsSent(false);
-        }, 5000);
-        return () => clearTimeout(timer);
-      }
+      dispatch(
+        showNotification({
+          message: 'Message bien envoyé ! Nous vous répondrons au plus vite.',
+          type: 'success',
+        })
+      );
+      const timer = setTimeout(() => {
+        dispatch(hideNotification());
+        setIsSent(false);
+      }, 5000);
+      return () => clearTimeout(timer);
     }
   };
 
@@ -203,7 +201,7 @@ export default function Contact() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Envoyer un message
+                Envoyer
               </Button>
             </Box>
           </Box>
