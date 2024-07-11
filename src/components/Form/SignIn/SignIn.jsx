@@ -17,6 +17,7 @@ import { SubmitLogin } from '../../../Store/UserSlice';
 const defaultTheme = createTheme();
 
 export default function SignInSide() {
+  const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const loginError = useSelector((state) => state.user.error);
@@ -36,6 +37,17 @@ export default function SignInSide() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    const inputErrors = {};
+    if (!formValues.alias) {
+      inputErrors.alias = "N'oublie pas ton pseudo.";
+    }
+    if (!formValues.password) {
+      inputErrors.password = "N'oublie pas ton mot de passe";
+    }
+    if (Object.keys(inputErrors).length > 0) {
+      setErrors(inputErrors);
+      return;
+    }
     dispatch(SubmitLogin(formValues));
     dispatch({ type: 'SUBMIT_LOGIN' });
   };
@@ -102,9 +114,14 @@ export default function SignInSide() {
                 name="alias"
                 autoComplete="alias"
                 autoFocus
-                value={formValues.email}
+                value={formValues.alias}
                 onChange={handleChange}
               />
+              {errors.alias && (
+                <Typography color="error" variant="body2">
+                  {errors.alias}
+                </Typography>
+              )}
               <TextField
                 margin="normal"
                 required
@@ -117,6 +134,11 @@ export default function SignInSide() {
                 value={formValues.password}
                 onChange={handleChange}
               />
+              {errors.password && (
+                <Typography color="error" variant="body2">
+                  {errors.password}
+                </Typography>
+              )}
               <Button
                 type="submit"
                 fullWidth
