@@ -16,6 +16,7 @@ import Game1 from '../Game1/Game1';
 import Game2 from '../Game2/Game2';
 import Stories from '../Stories/Stories';
 import Contact from '../Contact/Contact';
+import DisclaimerPage from '../DisclaimerPage';
 import About from '../About/About';
 import VisitorHomePage from '../VisitorHomePage/VisitorHomePage';
 import NotFoundPage from '../NotFoundPage/NotFoundPage';
@@ -45,6 +46,7 @@ function App() {
           <Route path="/" element={<VisitorHomePage />} />
           <Route path="/stories" element={<Stories />} />
           <Route path="/Contact" element={<Contact />} />
+          <Route path="/disclaimer" element={<DisclaimerPage />} />
           <Route path="/About" element={<About />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<NotFoundPage />} />
