@@ -103,8 +103,9 @@ function DisclaimerPage() {
         <Typography variant="body1" component="p" className={classes.text}>
           <strong>5. Images tierces</strong>
           <br />
-          Notre application utilise des images gratuites provenant de Freepik
-          (https://www.freepik.com). Nous respectons leurs directives
+          Notre application utilise des images et icônes gratuites provenant de
+          Freepik et Flaticon (https://www.freepik.com,
+          https://www.flaticon.com/fr/). Nous respectons leurs directives
           d'utilisation et attribuons correctement les crédits lorsque
           nécessaire.
         </Typography>
