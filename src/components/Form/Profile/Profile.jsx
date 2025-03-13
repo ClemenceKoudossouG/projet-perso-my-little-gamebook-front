@@ -11,15 +11,13 @@ import Typography from '@mui/material/Typography';
 import Radio from '@mui/material/Radio';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 // import Snackbar from '@mui/material/Snackbar';
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // import { useHistory } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
-// import Link from '@mui/material/Link';
-import { makeStyles } from '@material-ui/core/styles';
+import { useNavigate } from 'react-router-dom';
 import { Modal } from '@mui/material';
 import Notification from '../../Notification';
 
@@ -30,49 +28,62 @@ import {
 
 import {
   PatchProfile,
-  getUser,
   handleProfileEditionError,
   checkLoggedIn,
   clearError,
 } from '../../../Store/UserSlice';
 
-const defaultTheme = createTheme();
+// Create styled components using the styled API
+const StyledContainer = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  padding: theme.spacing(2),
+}));
+
+const StyledButton = styled(Button)(({ theme }) => ({
+  marginTop: theme.spacing(2),
+}));
+
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  marginBottom: theme.spacing(2),
+}));
 
 const avatars = [
   {
     id: 1,
     value: 'et1',
-    label: 'A',
-    src: 'public/img/profile/et1.png',
+    label: 'Avatar 1',
     alt: 'Avatar 1',
+    src: '/img/profile/et1.png',
   },
   {
     id: 2,
     value: 'et2',
-    label: 'B',
-    src: 'public/img/profile/et2.png',
+    label: 'Avatar 2',
     alt: 'Avatar 2',
+    src: '/img/profile/et2.png',
   },
   {
     id: 3,
     value: 'et3',
-    label: 'C',
-    src: 'public/img/profile/et3.png',
+    label: 'Avatar 3',
     alt: 'Avatar 3',
+    src: '/img/profile/et3.png',
   },
   {
     id: 4,
     value: 'et4',
-    label: 'D',
-    src: 'public/img/profile/et4.png',
+    label: 'Avatar 4',
     alt: 'Avatar 4',
+    src: '/img/profile/et4.png',
   },
   {
     id: 5,
     value: 'et5',
-    label: 'E',
-    src: 'public/img/profile/et5.png',
+    label: 'Avatar 5',
     alt: 'Avatar 5',
+    src: '/img/profile/et5.png',
   },
 ];
 
@@ -80,7 +91,6 @@ export default function Profile() {
   const dispatch = useDispatch();
   const [isReadOnly, setIsReadOnly] = useState(true);
   const [isModified, setIsModified] = useState(false); // On garde une trace des modifications
-  const [isSaved, setIsSaved] = useState(false); // On garde une trace de l'enregistrement du profil
   const [avatarClicked, setAvatarClicked] = useState(false); // On garde une trace du clic sur l'avatar
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const notification = useSelector((state) => state.notification);
@@ -121,7 +131,7 @@ export default function Profile() {
       // Check if either form is modified, avatar is clicked, or alias is modified
       if (isModified || avatarClicked) {
         // If modified or avatar clicked or alias modified, show the "Enregistrer mon profil" button
-        setIsSaved(false);
+        setIsModified(false);
       }
     };
     // On appelle la fonction checkFormModification si isModified ou avatarClicked changent
@@ -156,7 +166,7 @@ export default function Profile() {
   useEffect(() => {
     if (isModified) {
       // On évite le déclenchement de la notification de succès au clic sur le bouton modifier
-      setIsSaved(false);
+      setIsModified(false);
     }
   }, [isModified]);
 
@@ -185,7 +195,6 @@ export default function Profile() {
     dispatch({ type: 'PATCH_PROFILE' });
     localStorage.setItem('user', JSON.stringify(formValues));
     if (isModified && !loginError) {
-      setIsSaved(true); // Le profil est sauvegardé seulement s'il a été modifié
       dispatch(
         showNotification({
           message: 'Profil bien enregistré !',
@@ -195,7 +204,6 @@ export default function Profile() {
       // Masquer la notification après quelques secondes
       setTimeout(() => {
         dispatch(hideNotification());
-        setIsSaved(false);
       }, 5000); //  = 5 secondes
     }
   };
@@ -240,9 +248,8 @@ export default function Profile() {
     // Redirection vers la page d'accueil logged out
     navigate('/SignInSide');
   };
-
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <StyledContainer>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
@@ -287,7 +294,7 @@ export default function Profile() {
               onSubmit={handleSubmit}
               sx={{ mt: 1 }}
             >
-              <TextField
+              <StyledTextField
                 margin="normal"
                 required
                 fullWidth
@@ -369,7 +376,7 @@ export default function Profile() {
                   {loginError}
                 </Typography>
               )} */}
-              <Button
+              <StyledButton
                 type="modify"
                 color="primary"
                 fullWidth
@@ -378,7 +385,7 @@ export default function Profile() {
                 onClick={handleModifyClick}
               >
                 Modifier mon profil
-              </Button>
+              </StyledButton>
               {isModified && ( // Le bouton enregistrer ne s'affiche qu'en cas de modification du profil
                 <Button
                   type="submit"
@@ -432,6 +439,6 @@ export default function Profile() {
           </Box>
         </Grid>
       </Grid>
-    </ThemeProvider>
+    </StyledContainer>
   );
 }

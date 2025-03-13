@@ -1,52 +1,51 @@
-import { Container, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Container, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100vh',
-    width: '100vw',
-    backgroundImage: `url(public/img/bg/foret_sombre.jpg)`,
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-    overflowY: 'scroll',
-    paddingTop: '100vh',
-    paddingBottom: '10vh',
-  },
-  container: {
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    borderRadius: '8px',
-    padding: '20px',
-    maxWidth: '800px',
-  },
-  text: {
-    color: '#ffffff',
-    marginBottom: '16px',
-  },
-  link: {
-    color: '#add8e6',
-    textDecoration: 'none',
-    '&:hover': {
-      textDecoration: 'underline',
-    },
+const StyledRoot = styled('div')(() => ({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: '100vh',
+  width: '100vw',
+  backgroundImage: `url(public/img/bg/foret_sombre.jpg)`,
+  backgroundRepeat: 'no-repeat',
+  backgroundSize: 'cover',
+  overflowY: 'scroll',
+  paddingTop: '60vh',
+  paddingBottom: '10vh',
+}));
+
+const StyledContainer = styled(Container)(() => ({
+  backgroundColor: 'rgba(0, 0, 0, 0.7)',
+  borderRadius: '8px',
+  padding: '20px',
+  maxWidth: '800px',
+}));
+
+const StyledTypography = styled(Typography)(() => ({
+  color: '#ffffff',
+  marginBottom: '16px',
+}));
+
+const StyledLink = styled('a')(() => ({
+  color: '#add8e6',
+  textDecoration: 'none',
+  '&:hover': {
+    textDecoration: 'underline',
   },
 }));
 
 function DisclaimerPage() {
-  const classes = useStyles();
-
   return (
-    <div className={classes.root}>
-      <Container className={classes.container}>
-        <Typography variant="h3" component="h1" className={classes.text}>
+    <StyledRoot>
+      <StyledContainer>
+        <StyledTypography variant="h3" component="h1">
           Mentions légales
-        </Typography>
-        <Typography variant="h5" component="h2" className={classes.text}>
+        </StyledTypography>
+        <StyledTypography variant="h5" component="h2">
           Clause de non-responsabilité et politique de confidentialité
-        </Typography>
-        <Typography variant="body1" component="p" className={classes.text}>
+        </StyledTypography>
+        <StyledTypography variant="body1" component="p">
           <strong>1. Introduction</strong>
           <br />
           Bienvenue sur <i>My Little Gamebook</i> !<br />
@@ -54,10 +53,11 @@ function DisclaimerPage() {
           En utilisant notre application, vous acceptez les termes et conditions
           suivants. Veuillez les lire attentivement. Si vous n'acceptez pas ces
           termes, veuillez ne pas utiliser notre application.
-        </Typography>
-        <Typography variant="body1" component="p" className={classes.text}>
-          <strong>2. Informations sur le compte utilisateur</strong><br />
-          Lorsque vous créez un compte avec <i>My Little Gamebook</i>, nous 
+        </StyledTypography>
+        <StyledTypography variant="body1" component="p">
+          <strong>2. Informations sur le compte utilisateur</strong>
+          <br />
+          Lorsque vous créez un compte avec <i>My Little Gamebook</i>, nous
           collectons les informations suivantes :<br />
           <br />
           <ul>
@@ -82,24 +82,21 @@ function DisclaimerPage() {
               utilisant des techniques de cryptage standard de l'industrie.
             </li>
           </ul>
-        </Typography>
-        <Typography variant="body1" component="p" className={classes.text}>
+        </StyledTypography>
+        <StyledTypography variant="body1" component="p">
           <strong>3. Jetons JWT</strong>
           <br />
-          Nous utilisons des jetons JWT (JSON Web Tokens) à des fins
-          d'authentification. Les jetons JWT sont utilisés pour vérifier votre
-          identité et maintenir votre session de connexion sans utiliser de
-          cookies.
-        </Typography>
-        <Typography variant="body1" component="p" className={classes.text}>
+          Nous utilisons des jetons JWT (JSON Web Tokens) à des fins d'identité
+          et pour maintenir votre session de connexion sans utiliser de cookies.
+        </StyledTypography>
+        <StyledTypography variant="body1" component="p">
           <strong>4. Stockage des données</strong>
           <br />
           Toutes les informations utilisateur sont stockées de manière sécurisée
-          dans notre base de données PostgreSQL. Nous prenons des mesures
           appropriées pour protéger vos données contre tout accès non autorisé,
           altération, divulgation ou destruction.
-        </Typography>
-        <Typography variant="body1" component="p" className={classes.text}>
+        </StyledTypography>
+        <StyledTypography variant="body1" component="p">
           <strong>5. Images tierces</strong>
           <br />
           Notre application utilise des images et icônes gratuites provenant de
@@ -107,8 +104,8 @@ function DisclaimerPage() {
           https://www.flaticon.com/fr/). Nous respectons leurs directives
           d'utilisation et attribuons correctement les crédits lorsque
           nécessaire.
-        </Typography>
-        <Typography variant="body1" component="p" className={classes.text}>
+        </StyledTypography>
+        <StyledTypography variant="body1" component="p">
           <strong>6. Conduite de l'utilisateur</strong>
           <br />
           En utilisant <i>My Little Gamebook</i>, vous acceptez de :<br />
@@ -118,7 +115,7 @@ function DisclaimerPage() {
               Fournir des informations exactes lors de la création du compte.
             </li>
             <li>
-              Maintenir la confidentialité de votre mot de passe et de votre 
+              Maintenir la confidentialité de votre mot de passe et de votre
               compte.
             </li>
             <li>
@@ -126,16 +123,16 @@ function DisclaimerPage() {
               l'application ou à ses utilisateurs.
             </li>
           </ul>
-        </Typography>
-        <Typography variant="body1" component="p" className={classes.text}>
+        </StyledTypography>
+        <StyledTypography variant="body1" component="p">
           <strong>7. Limitation de responsabilité</strong>
           <br />
           <i>My Little Gamebook</i> est fourni "tel quel" et "selon
           disponibilité" sans aucune garantie, expresse ou implicite. Nous ne
           garantissons pas que l'application sera exempte d'erreurs ou
           ininterrompue.
-        </Typography>
-        <Typography variant="body1" component="p" className={classes.text}>
+        </StyledTypography>
+        <StyledTypography variant="body1" component="p">
           <strong>
             8. Modifications de la clause de non-responsabilité et de la
             politique de confidentialité
@@ -146,20 +143,17 @@ function DisclaimerPage() {
           tout moment. Nous vous informerons de tout changement significatif en
           publiant la nouvelle politique sur notre site web et dans
           l'application.
-        </Typography>
-        <Typography variant="body1" component="p" className={classes.text}>
+        </StyledTypography>
+        <StyledTypography variant="body1" component="p">
           <strong>9. Contactez-nous</strong>
           <br />
           Si vous avez des questions concernant cette clause de
           non-responsabilité ou nos pratiques de confidentialité, veuillez nous
           contacter via le{' '}
-          <a href="/Contact" className={classes.link}>
-            formulaire de contact
-          </a>
-          .
-        </Typography>
-      </Container>
-    </div>
+          <StyledLink href="/Contact">formulaire de contact</StyledLink>.
+        </StyledTypography>
+      </StyledContainer>
+    </StyledRoot>
   );
 }
 

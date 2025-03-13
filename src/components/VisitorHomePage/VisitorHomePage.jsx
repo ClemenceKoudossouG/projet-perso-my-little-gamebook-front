@@ -1,49 +1,43 @@
 import './VisitorHomePage.scss';
-import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Button, Container, Typography } from '@material-ui/core';
+import { useEffect } from 'react';
+import { styled } from '@mui/material/styles';
+import { Button, Container, Typography } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
-import ReviewStory from '../ReviewStory/ReviewStory';
-
 import IconButton from '@mui/material/IconButton';
-import { getCompartmentBeginning } from '@/Store/compartmentSlice';
-import { getAllStories } from '@/Store/StoriesSlice.js';
-import { useTheme } from '@mui/material/styles';
+import { getCompartmentBeginning } from '../../Store/compartmentSlice';
+import { getAllStories } from '../../Store/StoriesSlice';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    backgroundImage: 'url("public/img/bg/ile.jpg")',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-    position: 'relative',
-    minHeight: '100vh',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    textAlign: 'center',
-    padding: theme.spacing(4),
-  },
-  title: {
-    color: '#fff',
-    margin: theme.spacing(4, 0),
-    textShadow: '7px 7px 8px rgba(80, 10, 20, 0.4)',
-    fontSize: 'calc(8vw + 20px)',
-  },
-  button: {
-    backgroundColor: theme.palette.primary.main,
-    margin: theme.spacing(2),
-    minWidth: '200px',
-  },
+const Root = styled('div')(({ theme }) => ({
+  backgroundImage: 'url("/img/bg/ile.jpg")',
+  backgroundPosition: 'center',
+  backgroundRepeat: 'no-repeat',
+  backgroundSize: 'cover',
+  position: 'relative',
+  minHeight: '100vh',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flexDirection: 'column',
+  textAlign: 'center',
+  padding: theme.spacing(4),
+}));
+
+const Title = styled(Typography)(({ theme }) => ({
+  color: '#fff',
+  margin: theme.spacing(4, 0),
+  textShadow: '7px 7px 8px rgba(80, 10, 20, 0.4)',
+  fontSize: 'calc(8vw + 20px)',
+}));
+
+const StyledButton = styled(Button)(({ theme }) => ({
+  backgroundColor: theme.palette.primary.main,
+  margin: theme.spacing(2),
+  minWidth: '200px',
 }));
 
 function VisitorHomePage() {
-  const theme = useTheme();
-  const classes = useStyles();
-
   const logged = useSelector((state) => state.user.logged);
 
   const dispatch = useDispatch();
@@ -76,33 +70,25 @@ function VisitorHomePage() {
     dispatch({ type: 'FETCH_ACCOUNTFREE_COMPARTMENT_BEGINNING' });
   };
   return (
-    <div className={classes.root}>
+    <Root>
       <div className="overlay" />
 
       <Container>
-        <Typography variant="h1" className={classes.title}>
+        <Title variant="h1" component="h1">
           My Little GameBook
-        </Typography>
+        </Title>
         {!logged ? (
           <div>
             <Link to="/SignInSide">
-              <Button
-                variant="contained"
-                color="primary"
-                className={classes.button}
-              >
+              <StyledButton variant="contained" color="primary">
                 Se connecter
-              </Button>
+              </StyledButton>
             </Link>
 
             <Link to="/SignUpSide" style={{ color: '#009688' }}>
-              <Button
-                variant="contained"
-                color="primary"
-                className={classes.button}
-              >
+              <StyledButton variant="contained" color="primary">
                 S'inscrire
-              </Button>
+              </StyledButton>
             </Link>
             {/* Jouer une histoire button shown even when not logged in */}
             <div
@@ -203,7 +189,7 @@ function VisitorHomePage() {
           </div>
         )}
       </Container>
-    </div>
+    </Root>
   );
 }
 
