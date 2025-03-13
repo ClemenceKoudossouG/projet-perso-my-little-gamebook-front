@@ -8,12 +8,17 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import { useTheme } from '@mui/material/styles';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { SubmitNewUser, handleSuccessfulUserCreation } from '../../../Store/UserSlice';
+import Notification from '../../Notification';
+
+import {
+  showNotification,
+  hideNotification,
+} from '../../../Store/notificationSlice';
 
 
 const defaultTheme = createTheme();
@@ -22,11 +27,15 @@ export default function SignUpSide() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const loginError = useSelector((state) => state.user.error);
-  const aliasError = useSelector((state) => state.user.aliasError);
+  // const aliasError = useSelector((state) => state.user.aliasError);
+  // const emailError = useSelector((state) => state.user.emailError);
+  const notification = useSelector((state) => state.notification);
   const successfulCreation = useSelector(
     (state) => state.user.successfulCreation
   );
+
   const [formValues, setFormValues] = useState({
+    email: '',
     password: '',
     passwordConfirmation: '',
     alias: '',
@@ -60,6 +69,9 @@ export default function SignUpSide() {
       // Si ça ne matche pas, message d'erreur
       inputErrors.passwordMatch = 'Les mots de passe ne correspondent pas.';
     }
+    if (!formValues.email.trim()) {
+      inputErrors.email = 'Oups, tu as oublié ton email !';
+    }
     if (!formValues.alias.trim()) {
       inputErrors.alias = "N'oublie pas ton pseudo !";
     }
@@ -78,7 +90,18 @@ export default function SignUpSide() {
 
       dispatch(SubmitNewUser(formValues));
       dispatch({ type: 'SUBMIT_NEWUSER' });
-      // eslint-disable-next-line react-hooks/rules-of-hooks
+
+      if (loginError) {
+        dispatch(
+          showNotification({
+            message: loginError,
+            type: 'error',
+          })
+        );
+        setTimeout(() => {
+          dispatch(hideNotification());
+        }, 5000);
+      }
     }
   };
 
@@ -87,6 +110,14 @@ export default function SignUpSide() {
       navigate('/SignInSide');
     }
   }, [successfulCreation, navigate]);
+
+  const renderNotification = () => {
+    if (notification.message) {
+      // eslint-disable-next-line prettier/prettier
+      return <Notification message={notification.message} type={notification.type} />;
+    }
+    return null;
+  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -124,7 +155,8 @@ export default function SignUpSide() {
             <Typography component="h1" variant="h5">
               Nouvel aventurier ? Crée ton compte ici !
             </Typography>
-            {loginError && (
+            {renderNotification()}
+            {/* {loginError && (
               <Typography color="error" variant="body2">
                 {loginError}
               </Typography>
@@ -134,6 +166,11 @@ export default function SignUpSide() {
                 {aliasError}
               </Typography>
             )}
+            {emailError && (
+              <Typography color="error" variant="body2">
+                {emailError}
+              </Typography>
+            )} */}
             <Box
               component="form"
               noValidate
@@ -152,6 +189,11 @@ export default function SignUpSide() {
                 value={formValues.email}
                 onChange={handleChange}
               />
+              {errors.email && (
+                <p style={{ color: 'red', fontSize: 'small' }}>
+                  {errors.email}
+                </p>
+              )}
               <TextField
                 margin="normal"
                 required

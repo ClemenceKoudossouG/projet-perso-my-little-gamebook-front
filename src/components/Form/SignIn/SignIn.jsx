@@ -13,14 +13,22 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { SubmitLogin } from '../../../Store/UserSlice';
+import Notification from '../../Notification';
+
+import {
+  showNotification,
+  hideNotification,
+} from '../../../Store/notificationSlice';
 
 const defaultTheme = createTheme();
 
 export default function SignInSide() {
+  const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const loginError = useSelector((state) => state.user.error);
   const isLogged = useSelector((state) => state.user.logged);
+  const notification = useSelector((state) => state.notification);
   const [formValues, setFormValues] = useState({
     alias: '',
     password: '',
@@ -36,8 +44,26 @@ export default function SignInSide() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    const inputErrors = {};
+    if (!formValues.alias) {
+      inputErrors.alias = "N'oublie pas ton pseudo.";
+    }
+    if (!formValues.password) {
+      inputErrors.password = "N'oublie pas ton mot de passe";
+    }
+    if (Object.keys(inputErrors).length > 0) {
+      setErrors(inputErrors);
+      return;
+    }
     dispatch(SubmitLogin(formValues));
     dispatch({ type: 'SUBMIT_LOGIN' });
+
+    if (loginError) {
+      dispatch(showNotification({ message: loginError, type: 'error' }));
+      setTimeout(() => {
+        dispatch(hideNotification());
+      }, 5000);
+    }
   };
   // Conditionnelle pour rediriger l'utilisateur uniquement si connecté
   useEffect(() => {
@@ -45,6 +71,14 @@ export default function SignInSide() {
       navigate('/');
     }
   }, [isLogged, navigate]);
+
+  const renderNotification = () => {
+    if (notification.message) {
+      // eslint-disable-next-line prettier/prettier
+      return <Notification message={notification.message} type={notification.type} />;
+    }
+    return null;
+  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -82,11 +116,12 @@ export default function SignInSide() {
             <Typography component="h1" variant="h5">
               Connexion
             </Typography>
-            {loginError && (
+            {renderNotification()}
+            {/* {loginError && (
               <Typography color="error" variant="body2">
                 {loginError}
               </Typography>
-            )}
+            )} */}
             <Box
               component="form"
               noValidate
@@ -102,9 +137,14 @@ export default function SignInSide() {
                 name="alias"
                 autoComplete="alias"
                 autoFocus
-                value={formValues.email}
+                value={formValues.alias}
                 onChange={handleChange}
               />
+              {errors.alias && (
+                <Typography color="error" variant="body2">
+                  {errors.alias}
+                </Typography>
+              )}
               <TextField
                 margin="normal"
                 required
@@ -117,6 +157,11 @@ export default function SignInSide() {
                 value={formValues.password}
                 onChange={handleChange}
               />
+              {errors.password && (
+                <Typography color="error" variant="body2">
+                  {errors.password}
+                </Typography>
+              )}
               <Button
                 type="submit"
                 fullWidth

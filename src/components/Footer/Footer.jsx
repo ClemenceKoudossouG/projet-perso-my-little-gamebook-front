@@ -38,6 +38,12 @@ export default function Footer() {
           to="/Contact"
           sx={{ color: 'white' }}
         />
+        <BottomNavigationAction
+          label="Mentions légales"
+          component={Link}
+          to="/disclaimer"
+          sx={{ color: 'white' }}
+        />
       </BottomNavigation>
     </Box>
   );

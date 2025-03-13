@@ -16,9 +16,11 @@ import Game1 from '../Game1/Game1';
 import Game2 from '../Game2/Game2';
 import Stories from '../Stories/Stories';
 import Contact from '../Contact/Contact';
+import DisclaimerPage from '../DisclaimerPage';
 import About from '../About/About';
 import VisitorHomePage from '../VisitorHomePage/VisitorHomePage';
 import NotFoundPage from '../NotFoundPage/NotFoundPage';
+import AccountFreeGame from '../Game2/AccountFreeGame';
 
 function App() {
   const dispatch = useDispatch();
@@ -42,9 +44,11 @@ function App() {
           />
           <Route path="/game" element={<Game1 />} />
           <Route path="/gameDynamic" element={<Game2 />} />
+          <Route path="/accountFreeGame" element={<AccountFreeGame />} />
           <Route path="/" element={<VisitorHomePage />} />
           <Route path="/stories" element={<Stories />} />
           <Route path="/Contact" element={<Contact />} />
+          <Route path="/disclaimer" element={<DisclaimerPage />} />
           <Route path="/About" element={<About />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<NotFoundPage />} />
