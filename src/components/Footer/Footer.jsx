@@ -32,13 +32,18 @@ export default function Footer() {
           sx={{ color: 'white' }}
         />
 
-        {/*       <BottomNavigationAction
+        <BottomNavigationAction
           label="Contact"
           component={Link}
           to="/Contact"
           sx={{ color: 'white' }}
         />
-           */}
+        <BottomNavigationAction
+          label="Mentions légales"
+          component={Link}
+          to="/disclaimer"
+          sx={{ color: 'white' }}
+        />
       </BottomNavigation>
     </Box>
   );

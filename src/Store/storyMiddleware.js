@@ -48,6 +48,40 @@ const storyMiddleware = (store) => (next) => (action) => {
         });
       break;
     }
+    case 'FETCH_ACCOUNTFREE_COMPARTMENT': {
+      console.log(
+        "Déclencher l'appel API pour récupérer le compartment, sans authentification, pour l'accès visiteur."
+      );
+      // On récupére l'id chargé dans le state dans le composant reviewStory.jsx (getCompartment)
+      const { id } = store.getState().compartment;
+      // On appel la route la route avec l'id provenant du state
+      fetch(`http://localhost:3000/accountFreeStories/${id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          // à voir selon retour back si obligatoire
+          console.log(data);
+          // on déclenche le reducer loadCompartment qui va charger les données du compartment dans le state (compartment).
+          store.dispatch(loadCompartment(data));
+        });
+      break;
+    }
+    case 'FETCH_ACCOUNTFREE_COMPARTMENT_BEGINNING': {
+      console.log(
+        "Déclencher l'appel API pour récupérer le premier compartment, sans authentification, pour l'accès visiteur."
+      );
+      // On récupére l'id chargé dans le state dans le composant reviewStory.jsx (getCompartment)
+      //const { id } = store.getState().compartment;
+      // On appel la route la route avec l'id provenant du state
+      fetch(`http://localhost:3000/accountFreeStories/story/1/beginning`)
+        .then((res) => res.json())
+        .then((data) => {
+          // à voir selon retour back si obligatoire
+          console.log(data);
+          // on déclenche le reducer loadCompartment qui va charger les données du compartment dans le state (compartment).
+          store.dispatch(loadCompartment(data));
+        });
+      break;
+    }
     case 'FETCH_STORIES': {
       console.log("Déclencher l'appel API pour récupérer des histoires");
       // Récupérer le jeton depuis le state Redux
@@ -67,7 +101,6 @@ const storyMiddleware = (store) => (next) => (action) => {
       break;
     }
     default:
-
       return next(action);
   }
 };
