@@ -18,11 +18,13 @@ import {
   handlePasswordResetError,
 } from './UserSlice';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+
 const authMiddleware = (store) => (next) => (action) => {
   if (action.type === 'GET_USER') {
     const token = localStorage.getItem('token');
     //  const { id } = store.getState().user;
-    fetch('http://localhost:3000/user', {
+    fetch(`${API_BASE_URL}/user`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -38,7 +40,7 @@ const authMiddleware = (store) => (next) => (action) => {
         store.dispatch(getUser);
       });
   } else if (action.type === 'SUBMIT_LOGIN') {
-    fetch('http://localhost:3000/user/signin', {
+    fetch(`${API_BASE_URL}/user/signin`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -65,7 +67,7 @@ const authMiddleware = (store) => (next) => (action) => {
         store.dispatch(errorAction);
       });
   } else if (action.type === 'SUBMIT_EMAIL') {
-    fetch('http://localhost:3000/request-password-reset', {
+    fetch(`${API_BASE_URL}/request-password-reset`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -91,7 +93,7 @@ const authMiddleware = (store) => (next) => (action) => {
   } else if (action.type === 'SUBMIT_NEW_PASSWORD') {
     // console.log('Submitting new password with token:', resetToken);
     // const { password, resetToken } = store.getState().user;
-    fetch('http://localhost:3000/request-password-reset/reset-password', {
+    fetch(`${API_BASE_URL}/request-password-reset/reset-password`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -114,7 +116,7 @@ const authMiddleware = (store) => (next) => (action) => {
         store.dispatch(handlePasswordResetError({ resetError: error.message }));
       });
   } else if (action.type === 'SUBMIT_NEWUSER') {
-    fetch('http://localhost:3000/user/signup', {
+    fetch(`${API_BASE_URL}/user/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -150,7 +152,7 @@ const authMiddleware = (store) => (next) => (action) => {
   } else if (action.type === 'PATCH_PROFILE') {
     const { id } = store.getState().user;
 
-    fetch(`http://localhost:3000/user/${id}`, {
+    fetch(`${API_BASE_URL}/user/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -187,7 +189,7 @@ const authMiddleware = (store) => (next) => (action) => {
   } else if (action.type === 'DELETE_PROFILE') {
     const token = localStorage.getItem('token');
     const { id } = store.getState().user;
-    fetch(`http://localhost:3000/user/${id}`, {
+    fetch(`${API_BASE_URL}/user/${id}`, {
       method: 'DELETE',
       headers: {
         Authorization: token,
