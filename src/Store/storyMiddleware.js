@@ -1,107 +1,123 @@
 import { getAllStories } from './StoriesSlice';
-import { getCompartment, loadCompartment } from './compartmentSlice';
+import { loadCompartment } from './compartmentSlice';
+
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+
+// Helper function to handle API requests
+const fetchData = async (url, token, dispatch, actionType) => {
+  try {
+    const response = await fetch(url, {
+      headers: { Authorization: token },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log(data);
+    // Dispatch the appropriate action to update the state
+    switch (actionType) {
+      case 'FETCH_COMPARTMENT':
+      case 'FETCH_COMPARTMENT_BEGINNING':
+      case 'FETCH_ACCOUNTFREE_COMPARTMENT':
+      case 'FETCH_ACCOUNTFREE_COMPARTMENT_BEGINNING':
+        dispatch(loadCompartment(data));
+        break;
+      case 'FETCH_STORIES':
+        dispatch(getAllStories(data));
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    console.error('API request failed:', error);
+  }
+};
 
 const storyMiddleware = (store) => (next) => (action) => {
   switch (action.type) {
     case 'FETCH_COMPARTMENT': {
       console.log("Déclencher l'appel API pour récupérer le compartment");
-      // On récupére l'id chargé dans le state dans le composant reviewStory.jsx (getCompartment)
       const { id } = store.getState().compartment;
-      // Récupérer le jeton depuis le state Redux
       const token = localStorage.getItem('token');
-      // On appel la route la route avec l'id provenant du state
-      fetch(`http://localhost:3000/compartments/${id}`, {
-        // Ajouter l'en-tête d'autorisation
-        headers: {
-          Authorization: token,
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          // à voir selon retour back si obligatoire
-          console.log(data);
-          // on déclenche le reducer loadCompartment qui va charger les données du compartment dans le state (compartment).
-          store.dispatch(loadCompartment(data));
-        });
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+      fetchData(
+        `${API_BASE_URL}/compartments/${id}`,
+        token,
+        store.dispatch,
+        'FETCH_COMPARTMENT'
+      );
       break;
     }
+
     case 'FETCH_COMPARTMENT_BEGINNING': {
-      console.log("Déclencher l'appel API pour récupérer le premier compartment");
-      console.log(store.getState().compartment);
-      // On récupére l'id chargé dans le state dans le composant reviewStory.jsx (getCompartment)
+      console.log(
+        "Déclencher l'appel API pour récupérer le premier compartment"
+      );
       const { id } = store.getState().compartment;
-      // Récupérer le jeton depuis le state Redux
       const token = localStorage.getItem('token');
-      // On appel la route la route avec l'id provenant du state
-      fetch(`http://localhost:3000/compartments/story/${id}/beginning`, {
-        // Ajouter l'en-tête d'autorisation
-        headers: {
-          Authorization: token,
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          // à voir selon retour back si obligatoire
-          console.log(data);
-          // on déclenche le reducer loadCompartment qui va charger les données du compartment dans le state (compartment).
-          store.dispatch(loadCompartment(data));
-        });
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+      fetchData(
+        `${API_BASE_URL}/compartments/story/${id}/beginning`,
+        token,
+        store.dispatch,
+        'FETCH_COMPARTMENT_BEGINNING'
+      );
       break;
     }
+
     case 'FETCH_ACCOUNTFREE_COMPARTMENT': {
       console.log(
-        "Déclencher l'appel API pour récupérer le compartment, sans authentification, pour l'accès visiteur."
+        "Déclencher l'appel API pour récupérer le compartment, sans authentification"
       );
-      // On récupére l'id chargé dans le state dans le composant reviewStory.jsx (getCompartment)
       const { id } = store.getState().compartment;
-      // On appel la route la route avec l'id provenant du state
-      fetch(`http://localhost:3000/accountFreeStories/${id}`)
-        .then((res) => res.json())
-        .then((data) => {
-          // à voir selon retour back si obligatoire
-          console.log(data);
-          // on déclenche le reducer loadCompartment qui va charger les données du compartment dans le state (compartment).
-          store.dispatch(loadCompartment(data));
-        });
+      fetchData(
+        `${API_BASE_URL}/accountFreeStories/${id}`,
+        null,
+        store.dispatch,
+        'FETCH_ACCOUNTFREE_COMPARTMENT'
+      );
       break;
     }
+
     case 'FETCH_ACCOUNTFREE_COMPARTMENT_BEGINNING': {
       console.log(
-        "Déclencher l'appel API pour récupérer le premier compartment, sans authentification, pour l'accès visiteur."
+        "Déclencher l'appel API pour récupérer le premier compartment, sans authentification"
       );
-      // On récupére l'id chargé dans le state dans le composant reviewStory.jsx (getCompartment)
-      //const { id } = store.getState().compartment;
-      // On appel la route la route avec l'id provenant du state
-      fetch(`http://localhost:3000/accountFreeStories/story/1/beginning`)
-        .then((res) => res.json())
-        .then((data) => {
-          // à voir selon retour back si obligatoire
-          console.log(data);
-          // on déclenche le reducer loadCompartment qui va charger les données du compartment dans le state (compartment).
-          store.dispatch(loadCompartment(data));
-        });
+      fetchData(
+        `${API_BASE_URL}/accountFreeStories/story/1/beginning`,
+        null,
+        store.dispatch,
+        'FETCH_ACCOUNTFREE_COMPARTMENT_BEGINNING'
+      );
       break;
     }
+
     case 'FETCH_STORIES': {
       console.log("Déclencher l'appel API pour récupérer des histoires");
-      // Récupérer le jeton depuis le state Redux
       const token = localStorage.getItem('token');
-      // Utilisation du type d'action correct pour récupérer des histoires
-      fetch('http://localhost:3000/stories', {
-        // Ajouter l'en-tête d'autorisation
-        headers: {
-          Authorization: token,
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-          store.dispatch(getAllStories(data));
-        });
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+      fetchData(
+        `${API_BASE_URL}/stories`,
+        token,
+        store.dispatch,
+        'FETCH_STORIES'
+      );
       break;
     }
+
     default:
-      return next(action);
+      next(action);
   }
 };
 

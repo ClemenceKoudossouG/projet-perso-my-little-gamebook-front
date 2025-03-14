@@ -1,8 +1,10 @@
 import { handleSuccessfulContact, contactError } from './contactPageSlice';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+
 const contactPageMiddleware = (store) => (next) => (action) => {
   if (action.type === 'SUBMIT_CONTACT') {
-    fetch('http://localhost:3000/contactEmail', {
+    fetch(`${API_BASE_URL}/contactEmail`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
