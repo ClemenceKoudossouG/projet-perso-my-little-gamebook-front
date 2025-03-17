@@ -16,8 +16,7 @@ import {
   handlePasswordResetError,
 } from './UserSlice';
 
-const API_BASE_URL =
-  import.meta.env.VITE_REACT_APP_API_URL || 'http://localhost:3000';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
 const authMiddleware = (store) => (next) => (action) => {
   if (action.type === 'GET_USER') {
