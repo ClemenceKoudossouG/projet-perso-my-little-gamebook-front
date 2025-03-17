@@ -2,7 +2,7 @@ import { getAllStories } from './StoriesSlice';
 import { loadCompartment } from './compartmentSlice';
 
 const API_BASE_URL =
-  import.meta.env.REACT_APP_API_URL || 'http://localhost:3000';
+  import.meta.env.VITE_REACT_APP_API_URL || 'http://localhost:3000';
 
 // Helper function to handle API requests
 const fetchData = async (url, token, dispatch, actionType) => {
