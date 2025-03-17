@@ -11,14 +11,13 @@ import {
   handleLoginError,
   handleProfileEditionError,
   DeleteProfile,
-  SubmitEmail,
-  SUBMIT_EMAIL_SUCCESS,
   handleResetEmailError,
   SubmitPassword,
   handlePasswordResetError,
 } from './UserSlice';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+const API_BASE_URL =
+  import.meta.env.REACT_APP_API_URL || 'http://localhost:3000';
 
 const authMiddleware = (store) => (next) => (action) => {
   if (action.type === 'GET_USER') {
@@ -130,10 +129,14 @@ const authMiddleware = (store) => (next) => (action) => {
       .then(async (res) => {
         if (res.status === 409) {
           const data = await res.json();
-          if (data.error.includes("pseudo")) {
-            throw new Error('Oups ! Ce pseudo est déjà pris, tu dois en choisir un autre !');
-          } else if (data.error.includes("email")) {
-            throw new Error('Cet email est déjà utilisé, veuillez en choisir un autre ou vous connecter.');
+          if (data.error.includes('pseudo')) {
+            throw new Error(
+              'Oups ! Ce pseudo est déjà pris, tu dois en choisir un autre !'
+            );
+          } else if (data.error.includes('email')) {
+            throw new Error(
+              'Cet email est déjà utilisé, veuillez en choisir un autre ou vous connecter.'
+            );
           } else {
             throw new Error(data.error);
           }
