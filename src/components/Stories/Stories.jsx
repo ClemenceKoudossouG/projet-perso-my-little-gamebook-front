@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import './Stories.scss';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -8,7 +8,7 @@ import Grid from '@mui/material/Grid';
 import CardActions from '@mui/material/CardActions';
 import Button from '@mui/material/Button';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllStories } from '@/Store/StoriesSlice.js';
+import { getAllStories } from '@/Store/StoriesSlice';
 import { getCompartmentBeginning } from '@/Store/compartmentSlice';
 import { Link } from 'react-router-dom';
 
@@ -43,7 +43,15 @@ export default function ActionAreaCard() {
       >
         {stories.map((story) => (
           <Grid item xs={12} sm={6} md={4} key={story.id}>
-            <Card sx={{ maxWidth: 345 }}>
+            <Card
+              sx={{
+                maxWidth: 345,
+                backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                borderRadius: '10px',
+                boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+                overflow: 'hidden',
+              }}
+            >
               <CardMedia
                 component="img"
                 height="140"

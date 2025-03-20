@@ -90,20 +90,14 @@ function VisitorHomePage() {
                 S'inscrire
               </StyledButton>
             </Link>
-            {/* Jouer une histoire button shown even when not logged in */}
             <div
               style={{
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                marginTop: '20px', // Optional: Adds space between the signup button and the game button
+                marginTop: '20px',
               }}
             >
-              {/* Here, adapt the story button in order to display a clicked card leading to a specific story 
-              which can be played without an account. The card can be adapted from the stories component.
-              In the present component, a function dispatches the account free actions defined in the story middeware.
-              Not forgetting, in the story middleware, to replace the dynamic id variable with a specific story id.
-              On the backend side, an "isMember-free" compartment endpoint will have to be implemented. */}
               <IconButton
                 size="large"
                 edge="start"
@@ -122,7 +116,7 @@ function VisitorHomePage() {
                 variant="body1"
                 style={{ fontWeight: 'bold', color: 'white' }}
               >
-                Jouer une histoire
+                Jouer à l'Histoire des 4 créateurs
               </Typography>
             </div>
           </div>
@@ -183,7 +177,7 @@ function VisitorHomePage() {
                 variant="body1"
                 style={{ fontWeight: 'bold', color: 'white' }}
               >
-                Jouer une histoire
+                Histoire surprise
               </Typography>
             </div>
           </div>

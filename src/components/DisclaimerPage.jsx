@@ -7,7 +7,7 @@ const StyledRoot = styled('div')(() => ({
   alignItems: 'center',
   height: '100vh',
   width: '100vw',
-  backgroundImage: `url(public/img/bg/foret_sombre.jpg)`,
+  backgroundImage: `url(/img/bg/foret_sombre.jpg)`,
   backgroundRepeat: 'no-repeat',
   backgroundSize: 'cover',
   overflowY: 'scroll',
