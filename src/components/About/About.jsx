@@ -11,7 +11,7 @@ export default function About() {
   return (
     <div className="background">
       <ThemeProvider theme={defaultTheme}>
-        <Container component="main" maxWidth="m">
+        <Container component="main" maxWidth="md">
           <CssBaseline />
           <Box
             sx={{
@@ -26,18 +26,36 @@ export default function About() {
               variant="h3"
               sx={{
                 marginBottom: 5,
+                textAlign: 'center',
               }}
             >
               À propos de l'équipe
             </Typography>
+            <Typography
+              variant="body1"
+              gutterBottom
+              sx={{ textAlign: 'justify' }}
+            >
+              Cette application a été créée dans le cadre d'un projet de fin de
+              formation chez O'Clock et propose des histoires interactives pour
+              de jeunes aventuriers à partir de 3 ans. Notre objectif était
+              clair : concevoir une appli web à la fois sympa et fonctionnelle.
+              Avec notre dévouement, notre créativité et notre désir
+              d'apprendre, nous nous sommes engagés à créer une expérience en
+              ligne immersive et intuitive. Crée un compte et découvre toutes
+              les histoires du catalogue. Avant de t'inscrire, tu peux tester
+              une histoire directement en page d'accueil. Et bien sûr, n'oublie
+              pas de demander l'autorisation à tes parents avant de te lancer !
+            </Typography>
+            <Typography variant="h5" sx={{ marginTop: 4, marginBottom: 2 }}>
+              L'équipe de développement :
+            </Typography>
             <Typography variant="body1" gutterBottom>
-              Nous sommes une équipe passionnée de développement en formation,
-              un groupe dynamique de futurs développeurs cherchant à mettre en
-              pratique nos compétences naissantes. Notre objectif est clair :
-              concevoir un site web à la fois sympa et fonctionnel. Avec notre
-              dévouement, notre créativité et notre désir d'apprendre, nous nous
-              engageons à créer une expérience en ligne immersive et intuitive
-              pour nos utilisateurs.
+              - Clémence Koudossou-Garde: Product Owner et développeuse
+              full-stack <br />
+              - Lucien Poncet: Lead dev backend <br />
+              - Emeline Bellemin: Designer, développeuse front-end et Scrum
+              Master <br /> - Joey Augustinien: Lead dev front-end
             </Typography>
           </Box>
         </Container>
