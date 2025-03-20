@@ -86,7 +86,7 @@ export default function Contact() {
     if (contactError) {
       dispatch(showNotification({ message: contactError, type: 'error' }));
       setIsSent(false);
-      dispatch(clearContactError()); // Retirer toute trace d'erreur.
+      dispatch(clearContactError()); 
     }
     const timer = setTimeout(() => {
       dispatch(hideNotification());
@@ -125,11 +125,6 @@ export default function Contact() {
             <Typography component="h1" variant="h5">
               Une remarque ou une question ? Raconte-nous tout !{' '}
               {renderNotification()}
-              {/* {contactError && (
-                <Typography color="error" variant="body2">
-                  {contactError}
-                </Typography>
-              )} */}
             </Typography>
             <Box
               component="form"

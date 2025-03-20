@@ -129,7 +129,7 @@ export default function SignUpSide() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(public/pirate_bateau_voile.jpg)',
+            backgroundImage: 'url(/pirate_bateau_voile.jpg)',
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light'
