@@ -1,39 +1,34 @@
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-// import Link from '@mui/material/Link';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-// import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import Typography from '@mui/material/Typography';
-import Radio from '@mui/material/Radio';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import { styled } from '@mui/material/styles';
-// import Snackbar from '@mui/material/Snackbar';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-// import { useHistory } from 'react-router-dom';
-import Stack from '@mui/material/Stack';
 import { useNavigate } from 'react-router-dom';
-import { Modal } from '@mui/material';
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  Paper,
+  Box,
+  Grid,
+  Typography,
+  Radio,
+  FormControl,
+  FormLabel,
+  Stack,
+  Modal,
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 import Notification from '../../Notification';
-
 import {
   showNotification,
   hideNotification,
 } from '../../../Store/notificationSlice';
-
 import {
   PatchProfile,
   handleProfileEditionError,
   checkLoggedIn,
-  clearError,
 } from '../../../Store/UserSlice';
 
-// Create styled components using the styled API
+// Styled components
 const StyledContainer = styled('div')(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
@@ -89,103 +84,67 @@ const avatars = [
 
 export default function Profile() {
   const dispatch = useDispatch();
-  const [isReadOnly, setIsReadOnly] = useState(true);
-  const [isModified, setIsModified] = useState(false); // On garde une trace des modifications
-  const [avatarClicked, setAvatarClicked] = useState(false); // On garde une trace du clic sur l'avatar
-  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const navigate = useNavigate();
   const notification = useSelector((state) => state.notification);
+  const user = useSelector((state) => state.user);
+
+  const [isReadOnly, setIsReadOnly] = useState(true);
+  const [isModified, setIsModified] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [formValues, setFormValues] = useState({
+    alias: user.alias || '',
+    email: user.email || '',
+    avatar: user.avatar || '',
+  });
+  const [selectedValue, setSelectedValue] = useState(user.avatar);
 
   useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    if (storedUser) {
+      setFormValues({
+        alias: storedUser.alias || '',
+        email: storedUser.email || '',
+        avatar: storedUser.avatar || '',
+      });
+      setSelectedValue(storedUser.avatar);
+    }
     dispatch(checkLoggedIn());
   }, [dispatch]);
 
   useEffect(() => {
-    // On enlève l'éventuel message d'erreur login résiduel.
     dispatch(handleProfileEditionError(null));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch]);
 
-  // Condition - formulaire éditable si on est loggé
-  // const logged = useSelector((state) => state.user.logged);
-  const navigate = useNavigate();
-  const loginError = useSelector((state) => state.user.error);
-  const [errors, setErrors] = useState({});
-  // récupération & modifications du state
-  const user = useSelector((state) => state.user);
-  console.log(user);
-  const [formValues, setFormValues] = useState({
-    alias: user.alias || '',
-    avatar: user.avatar || '',
-  });
-
-  useEffect(() => {
-    const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
-    if (userFromLocalStorage) {
-      setFormValues(userFromLocalStorage);
-    }
-  }, []);
-
-  useEffect(() => {
-    // Define a function to check whether the form is modified and an avatar is clicked
-    const checkFormModification = () => {
-      // Check if either form is modified, avatar is clicked, or alias is modified
-      if (isModified || avatarClicked) {
-        // If modified or avatar clicked or alias modified, show the "Enregistrer mon profil" button
-        setIsModified(false);
-      }
-    };
-    // On appelle la fonction checkFormModification si isModified ou avatarClicked changent
-    checkFormModification();
-  }, [isModified, avatarClicked]);
-
-  // Radio group AVATAR
-  const [selectedValue, setSelectedValue] = React.useState(user.avatar);
   const handleAvatarChange = (event) => {
-    event.preventDefault();
     setSelectedValue(event.target.value);
-    setAvatarClicked(true); // état "cliqué" de l'avatar
-    setIsModified(true); // State modifié = true
-    console.log('avatar >', event.target.value);
+    setIsModified(true);
   };
-  // Modifications des inputs + spread operator
+
   const handleChange = (event) => {
-    event.preventDefault();
     const { name, value } = event.target;
-    console.log('Form element > ', name);
-    console.log('Valeur >', value);
     setFormValues({
       ...formValues,
       [name]: value,
     });
-    setIsModified(true); // State modifié = true
+    setIsModified(true);
   };
-  // Bouton MODIFIER
+
   const handleModifyClick = () => {
     setIsReadOnly(false);
   };
-  useEffect(() => {
-    if (isModified) {
-      // On évite le déclenchement de la notification de succès au clic sur le bouton modifier
-      setIsModified(false);
-    }
-  }, [isModified]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const inputErrors = {};
-    // Message d'erreur si le champ alias est vide.
     if (!formValues.alias.trim()) {
       inputErrors.alias = "N'oublie pas ton pseudo !";
     }
     setErrors(inputErrors);
     if (Object.keys(inputErrors).length > 0) {
-      console.error('Erreurs de modification: ', errors);
-      return; // S'il y a des erreurs, on ne fait rien et on return dès maintenant pour ne pas poursuivre la soumission du formulaire.
+      return;
     }
-    console.log('Patch profile > ', {
-      ...formValues,
-      avatar: selectedValue,
-    });
+
     const updatedProfile = {
       ...formValues,
       avatar: selectedValue,
@@ -193,61 +152,43 @@ export default function Profile() {
     };
     await dispatch(PatchProfile(updatedProfile));
     dispatch({ type: 'PATCH_PROFILE' });
-    localStorage.setItem('user', JSON.stringify(formValues));
-    if (isModified && !loginError) {
-      dispatch(
-        showNotification({
-          message: 'Profil bien enregistré !',
-          type: 'success',
-        })
-      );
-      // Masquer la notification après quelques secondes
-      setTimeout(() => {
-        dispatch(hideNotification());
-      }, 5000); //  = 5 secondes
-    }
-  };
 
-  useEffect(() => {
-    if (loginError) {
-      dispatch(showNotification({ message: loginError, type: 'error' }));
-      dispatch(clearError()); // Retirer toute trace d'erreur.
-      setIsModified(false);
-    }
-    const timer = setTimeout(() => {
+    setIsModified(false);
+    localStorage.setItem('user', JSON.stringify(updatedProfile));
+    dispatch(
+      showNotification({
+        message: 'Profil bien enregistré !',
+        type: 'success',
+      })
+    );
+    setTimeout(() => {
       dispatch(hideNotification());
     }, 5000);
-    return () => clearTimeout(timer);
-  }, [loginError, dispatch]);
-
-  // Fonction d'affichage de la notification après sauvegarde du profil.
-  const renderNotification = () => {
-    if (notification.message) {
-      // eslint-disable-next-line prettier/prettier
-      return <Notification message={notification.message} type={notification.type} />;
-    }
-    return null;
   };
-  // Supprimer le compte
-  // On ouvre la modale de confirmation avec le bouton supprimer mon profil
+
   const handleDeleteButtonClick = () => {
     setShowConfirmationModal(true);
   };
 
-  // On gère la fermerture de la modale de confirmation
   const handleCloseConfirmationModal = () => {
     setShowConfirmationModal(false);
   };
 
-  // On gère la suppression du profil avec la modale de confirmation
   const handleDeleteProfile = () => {
-    // Dispatch de l'action delete
     dispatch({ type: 'DELETE_PROFILE' });
-    // Fermeture de la modale de confirmation
     setShowConfirmationModal(false);
-    // Redirection vers la page d'accueil logged out
     navigate('/SignInSide');
   };
+
+  const renderNotification = () => {
+    if (notification.message) {
+      return (
+        <Notification message={notification.message} type={notification.type} />
+      );
+    }
+    return null;
+  };
+
   return (
     <StyledContainer>
       <Grid container component="main" sx={{ height: '100vh' }}>
@@ -258,7 +199,7 @@ export default function Profile() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(public/img/bg/village.jpg)',
+            backgroundImage: 'url(/img/bg/village.jpg)',
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light'
@@ -278,14 +219,9 @@ export default function Profile() {
               alignItems: 'center',
             }}
           >
-            <Avatar
-              sx={{ m: 1 }}
-              src={`../../public/img/profile/${user.avatar}.png`}
-            />
-
+            <Avatar sx={{ m: 1 }} src={`/img/profile/${user.avatar}.png`} />
             <Typography component="h1" variant="h5">
               Mon profil
-              {/* Affichage de la notification après sauvegarde du profil. */}
               {renderNotification()}
             </Typography>
             <Box
@@ -299,36 +235,27 @@ export default function Profile() {
                 required
                 fullWidth
                 id="alias"
-                label="alias"
+                label="Alias"
                 name="alias"
-                autoComplete="alias"
-                autoFocus
                 value={formValues.alias}
                 onChange={handleChange}
                 InputProps={{
                   readOnly: isReadOnly,
                   sx: {
                     '& input': {
-                      cursor: isReadOnly ? 'default' : 'text', // Style par défaut si non éditable
-                      backgroundColor: isReadOnly ? 'inherit' : '#ffffcc', // Couleur de fond si éditable
+                      cursor: isReadOnly ? 'default' : 'text',
+                      backgroundColor: isReadOnly ? 'inherit' : '#ffffcc',
                     },
                   },
                 }}
               />
-              {errors.alias && (
-                <p style={{ color: 'red', fontSize: 'small' }}>
-                  {errors.alias}
-                </p>
-              )}
-              <TextField
+              <StyledTextField
                 margin="normal"
                 required
                 fullWidth
                 id="email"
                 label="Email"
                 name="email"
-                autoComplete="email"
-                autoFocus
                 value={formValues.email}
                 onChange={handleChange}
                 InputProps={{
@@ -341,19 +268,23 @@ export default function Profile() {
                   },
                 }}
               />
+              {errors.email && (
+                <Typography color="error" variant="body2">
+                  {errors.email}
+                </Typography>
+              )}
+              {errors.alias && (
+                <Typography color="error" variant="body2">
+                  {errors.alias}
+                </Typography>
+              )}
               <FormControl>
-                <FormLabel id="demo-row-radio-buttons-group-label">
-                  Avatar
-                </FormLabel>
+                <FormLabel>Avatar</FormLabel>
               </FormControl>
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="flex-start"
-              >
+              <Stack direction="row" spacing={2}>
                 {avatars.map((avatar) => (
                   <Radio
-                    key={avatar.id} // Unique key for each radio button
+                    key={avatar.id}
                     checked={selectedValue === avatar.value}
                     onChange={handleAvatarChange}
                     value={avatar.value}
@@ -362,37 +293,26 @@ export default function Profile() {
                   />
                 ))}
               </Stack>
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="flex-start"
-              >
+              <Stack direction="row" spacing={2}>
                 {avatars.map((avatar) => (
                   <Avatar key={avatar.id} alt={avatar.alt} src={avatar.src} />
                 ))}
               </Stack>
-              {/* {loginError && (
-                <Typography variant="body2" color="error">
-                  {loginError}
-                </Typography>
-              )} */}
               <StyledButton
-                type="modify"
+                type="button"
                 color="primary"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 1 }}
                 onClick={handleModifyClick}
               >
                 Modifier mon profil
               </StyledButton>
-              {isModified && ( // Le bouton enregistrer ne s'affiche qu'en cas de modification du profil
+              {isModified && (
                 <Button
                   type="submit"
                   fullWidth
                   variant="contained"
-                  sx={{ mt: 0.5, mb: 2 }}
-                  // onClick={handleSubmit}: fonction handleSubmit appelée plus aut dans le form, onSubmit. Evite l'affichage de la notification au clic sur le bouton.
+                  sx={{ mt: 2 }}
                 >
                   Enregistrer mon profil
                 </Button>
@@ -400,16 +320,17 @@ export default function Profile() {
               <Button
                 variant="contained"
                 fullWidth
+                color="error"
                 onClick={handleDeleteButtonClick}
+                sx={{ mt: 2 }}
               >
                 Supprimer mon profil
               </Button>
-              {/* Modale de confirmation de suppression du profil */}
               <Modal
                 open={showConfirmationModal}
                 onClose={handleCloseConfirmationModal}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
+                aria-labelledby="modal-title"
+                aria-describedby="modal-description"
               >
                 <Box
                   sx={{
@@ -424,15 +345,15 @@ export default function Profile() {
                     transform: 'translate(-50%, -50%)',
                   }}
                 >
-                  <Typography
-                    id="modal-modal-title"
-                    variant="h6"
-                    component="h2"
-                  >
+                  <Typography id="modal-title" variant="h6">
                     Es-tu certain(e) de vouloir supprimer ton profil ?
                   </Typography>
-                  <Button onClick={handleDeleteProfile}>Oui !</Button>
-                  <Button onClick={handleCloseConfirmationModal}>Non !</Button>
+                  <Button onClick={handleDeleteProfile} sx={{ mt: 2 }}>
+                    Oui
+                  </Button>
+                  <Button onClick={handleCloseConfirmationModal} sx={{ mt: 2 }}>
+                    Non
+                  </Button>
                 </Box>
               </Modal>
             </Box>

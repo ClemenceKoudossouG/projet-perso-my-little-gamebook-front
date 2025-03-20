@@ -8,15 +8,11 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuBookRoundedIcon from '@mui/icons-material/MenuBookRounded';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useTheme } from '@mui/material/styles';
-import { Link } from 'react-router-dom';
-import { handleLogOut } from '@/Store/UserSlice';
-import store from '@/Store/index';
-import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { handleLogOut, checkLoggedIn } from '@/Store/UserSlice';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { checkLoggedIn } from '@/Store/UserSlice';
 
 export default function ButtonAppBar() {
   const theme = useTheme();
@@ -34,11 +30,6 @@ export default function ButtonAppBar() {
     dispatch(handleLogOut());
     navigate('/');
   };
-
-  // useEffect(() => {
-  //  console.log('render header');
-  //  const Logged = store.getState().user.logged;
-  // }, []);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -58,27 +49,10 @@ export default function ButtonAppBar() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             My Little GameBook
           </Typography>
-          {/* {!logged && (
-            <>
-              <Button color="inherit">
-                <Link to="SignInSide" style={{ color: 'white' }}>
-                  Sign In
-                </Link>
-              </Button>
-              <Button color="inherit">
-                <Link to="SignUpSide" style={{ color: 'white' }}>
-                  Sign Up
-                </Link>
-              </Button>
-            </>
-          )} */}
           {logged && (
             <>
               <Link to="/profile">
-                <Avatar
-                  sx={{ m: 1 }}
-                  src={`../../public/img/profile/${user.avatar}.png`}
-                />
+                <Avatar sx={{ m: 1 }} src={`/img/profile/${user.avatar}.png`} />
               </Link>
               <Button onClick={handleClickLogOut} color="inherit">
                 Log Out
