@@ -1,37 +1,53 @@
 import { Container, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-const StyledRoot = styled('div')(() => ({
+const StyledRoot = styled('div')(({ theme }) => ({
   display: 'flex',
-  justifyContent: 'center',
+  flexDirection: 'column',
+  justifyContent: 'flex-start',
   alignItems: 'center',
-  height: '100vh',
+  height: 'auto',
   width: '100vw',
   backgroundImage: `url(/img/bg/foret_sombre.jpg)`,
   backgroundRepeat: 'no-repeat',
   backgroundSize: 'cover',
-  overflowY: 'scroll',
-  paddingTop: '60vh',
-  paddingBottom: '10vh',
+  overflowY: 'auto',
+  [theme.breakpoints.down('sm')]: {
+    paddingTop: '20px', 
+    paddingBottom: '20px',
+  },
 }));
 
-const StyledContainer = styled(Container)(() => ({
+const StyledContainer = styled(Container)(({ theme }) => ({
   backgroundColor: 'rgba(0, 0, 0, 0.7)',
   borderRadius: '8px',
   padding: '20px',
   maxWidth: '800px',
+  marginTop: '50px',
+  marginBottom: '50px',
+  [theme.breakpoints.down('sm')]: {
+    padding: '15px',
+    maxWidth: '90%',
+  },
 }));
 
-const StyledTypography = styled(Typography)(() => ({
+const StyledTypography = styled(Typography)(({ theme }) => ({
   color: '#ffffff',
   marginBottom: '16px',
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '0.9rem',
+    marginBottom: '12px',
+  },
 }));
 
-const StyledLink = styled('a')(() => ({
+const StyledLink = styled('a')(({ theme }) => ({
   color: '#add8e6',
   textDecoration: 'none',
   '&:hover': {
     textDecoration: 'underline',
+  },
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '0.9rem',
   },
 }));
 
