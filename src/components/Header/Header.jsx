@@ -117,18 +117,18 @@ export default function ButtonAppBar() {
         >
           <List>
             <ListItem button component={Link} to="/">
-              <ListItemText primary="Home" />
+              <ListItemText primary="Accueil" />
             </ListItem>
             {logged && (
               <>
                 <ListItem button component={Link} to="/stories">
-                  <ListItemText primary="Stories" />
+                  <ListItemText primary="Histoires" />
                 </ListItem>
                 <ListItem button component={Link} to="/profile">
-                  <ListItemText primary="Profile" />
+                  <ListItemText primary="Profil" />
                 </ListItem>
                 <ListItem button onClick={handleClickLogOut}>
-                  <ListItemText primary="Log Out" />
+                  <ListItemText primary="Déconnexion" />
                 </ListItem>
               </>
             )}
