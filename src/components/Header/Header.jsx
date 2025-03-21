@@ -96,7 +96,7 @@ export default function ButtonAppBar() {
                 color="inherit"
                 className="logout-button"
               >
-                Log Out
+                Déconnexion
               </Button>
             </>
           )}
