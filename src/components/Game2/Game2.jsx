@@ -1,4 +1,4 @@
-import './Game2.css';
+import './Game2.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   getCompartment,
