@@ -16,13 +16,14 @@ export default function ActionAreaCard() {
   const dispatch = useDispatch();
   const { stories } = useSelector((state) => state.stories) || [];
 
-  // Charger les histoires lorsque le composant est monté
+  // Fetch stories only if they are not already loaded
   useEffect(() => {
-    dispatch(getAllStories());
-  }, [dispatch]);
+    if (!stories || stories.length === 0) {
+      dispatch({ type: 'FETCH_STORIES' }); 
+    }
+  }, [dispatch, stories]);
 
-  // Gérer le cas où stories est undefined
-  if (!stories) {
+  if (!stories || stories.length === 0) {
     return <div>Loading...</div>;
   }
 
