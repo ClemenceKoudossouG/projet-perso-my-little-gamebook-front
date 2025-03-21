@@ -21,7 +21,7 @@ module.exports = {
       },
     },
   },
-  plugins: ['react-refresh', 'prettier'],
+  plugins: ['react-refresh', 'prettier', 'unused-imports'],
   rules: {
     'no-param-reassign': 'off',
     'react/prop-types': 'off',
@@ -33,5 +33,15 @@ module.exports = {
     ],
     'react/no-unescaped-entities': 'off',
     'no-console': 'off',
+    'unused-imports/no-unused-imports': 'error',
+    'unused-imports/no-unused-vars': [
+      'warn',
+      {
+        vars: 'all',
+        varsIgnorePattern: '^_',
+        args: 'after-used',
+        argsIgnorePattern: '^_',
+      },
+    ],
   },
 };
